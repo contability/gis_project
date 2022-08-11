@@ -1,0 +1,18 @@
+.div_tool_manageHist { position:absolute; right:5px; bottom:3px; }
+
+.div_tool_photo_manage { position:absolute; right:5px; bottom:3px; }
+
+.div_tool_video_manage { position:absolute; right:5px; bottom:3px; }
+
+.div_tool_section_plan { position:absolute; right:5px; bottom:3px; }
+
+.div_tool_local_plan { position:absolute; right:5px; bottom:3px; }
+
+/* 계약대장 */
+.div_window_cntrct_regstr { padding:10px 10px 0 10px; }
+.div_window_cntrct_regstr .tbl_conditon { width:100%; }
+.div_window_cntrct_regstr .tbl_conditon th { padding:2px 0px; }
+.div_window_cntrct_regstr .tbl_conditon td { padding:2px 4px; text-align:left; }
+.div_window_cntrct_regstr .div_condition_tools { margin-top:5px; text-align:right; }
+.div_window_cntrct_regstr .div_content_container { margin-top:5px; }
+.div_window_cntrct_regstr .div_tools { text-align:right; margin-top:10px; }

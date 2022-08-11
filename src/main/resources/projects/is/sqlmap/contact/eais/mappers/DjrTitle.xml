@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.is.contact.eais.mappers.DjrTitleMapper">
+	
+	<resultMap id="djrTitleMap" type="djrTitle">
+		<id property="bldrgstPk" column="BLDRGST_PK"/>
+		<result property="newOldRegstrGbCd" column="NEW_OLD_REGSTR_GB_CD"/>
+		<result property="pstvYn" column="PSTV_YN"/>
+		<result property="spcmt" column="SPCMT"/>
+		<result property="platArea" column="PLAT_AREA"/>
+		<result property="archArea" column="ARCH_AREA"/>
+		<result property="bcRat" column="BC_RAT"/>
+		<result property="totarea" column="TOTAREA"/>
+		<result property="vlRatEstmTotarea" column="VL_RAT_ESTM_TOTAREA"/>
+		<result property="vlRat" column="VL_RAT"/>
+		<result property="mainPurpsCd" column="MAIN_PURPS_CD"/>
+		<result property="mainPurpsCdNm" column="MAIN_PURPS_CD_NM"/>
+		<result property="etcPurps" column="ETC_PURPS"/>
+		<result property="hhldCnt" column="HHLD_CNT"/>
+		<result property="fmlyCnt" column="FMLY_CNT"/>
+		<result property="mainBldCnt" column="MAIN_BLD_CNT"/>
+		<result property="atchBldCnt" column="ATCH_BLD_CNT"/>
+		<result property="atchBldArea" column="ATCH_BLD_AREA"/>
+		<result property="totPkngCnt" column="TOT_PKNG_CNT"/>
+		<result property="indrMechUtcnt" column="INDR_MECH_UTCNT"/>
+		<result property="indrMechArea" column="INDR_MECH_AREA"/>
+		<result property="oudrMechUtcnt" column="OUDR_MECH_UTCNT"/>
+		<result property="oudrMechArea" column="OUDR_MECH_AREA"/>
+		<result property="indrAutoUtcnt" column="INDR_AUTO_UTCNT"/>
+		<result property="indrAutoArea" column="INDR_AUTO_AREA"/>
+		<result property="oudrAutoUtcnt" column="OUDR_AUTO_UTCNT"/>
+		<result property="oudrAutoArea" column="OUDR_AUTO_AREA"/>
+		<result property="pmsDay" column="PMS_DAY"/>
+		<result property="stcnsDay" column="STCNS_DAY"/>
+		<result property="useaprDay" column="USEAPR_DAY"/>
+		<result property="pmsnoYear" column="PMSNO_YEAR"/>
+		<result property="pmsnoKikCd" column="PMSNO_KIK_CD"/>
+		<result property="pmsnoKikCdNm" column="PMSNO_KIK_CD_NM"/>
+		<result property="pmsnoGbCd" column="PMSNO_GB_CD"/>
+		<result property="pmsnoGbCdNm" column="PMSNO_GB_CD_NM"/>
+		<result property="pmsnoSeqno" column="PMSNO_SEQNO"/>
+		<result property="hoCnt" column="HO_CNT"/>
+		<result property="dongNm" column="DONG_NM"/>
+		<result property="mainAtchGbCd" column="MAIN_ATCH_GB_CD"/>
+		<result property="mainAtchGbCdNm" column="MAIN_ATCH_GB_CD_NM"/>
+		<result property="mainAtchSeqno" column="MAIN_ATCH_SEQNO"/>
+		<result property="strctCd" column="STRCT_CD"/>
+		<result property="strctCdNm" column="STRCT_CD_NM"/>
+		<result property="etcStrct" column="ETC_STRCT"/>
+		<result property="roofCd" column="ROOF_CD"/>
+		<result property="roofCdNm" column="ROOF_CD_NM"/>
+		<result property="etcRoof" column="ETC_ROOF"/>
+		<result property="heit" column="HEIT"/>
+		<result property="grndFlrCnt" column="GRND_FLR_CNT"/>
+		<result property="ugrndFlrCnt" column="UGRND_FLR_CNT"/>
+		<result property="rideUseElvtCnt" column="RIDE_USE_ELVT_CNT"/>
+		<result property="emgenUseElvtCnt" column="EMGEN_USE_ELVT_CNT"/>
+		<result property="totDongTotarea" column="TOT_DONG_TOTAREA"/>
+	</resultMap>
+	
+	<select id="selecOnetDjrRecapTitle" parameterType="Integer" resultMap="djrTitleMap">
+		SELECT
+			BLDRGST_PK,
+			NEW_OLD_REGSTR_GB_CD,			--1: 신대장
+			PSTV_YN,
+			SPCMT,
+			PLAT_AREA,
+			ARCH_AREA,
+			BC_RAT,
+			TOTAREA,
+			VL_RAT_ESTM_TOTAREA,
+			VL_RAT,
+			MAIN_PURPS_CD,					--CM024
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM024' AND SGRP_CD = MAIN_PURPS_CD) AS MAIN_PURPS_CD_NM,
+			ETC_PURPS,
+			HHLD_CNT,
+			FMLY_CNT,
+			MAIN_BLD_CNT,
+			ATCH_BLD_CNT,
+			ATCH_BLD_AREA,
+			TOT_PKNG_CNT,
+			INDR_MECH_UTCNT,
+			INDR_MECH_AREA,
+			OUDR_MECH_UTCNT,
+			OUDR_MECH_AREA,
+			INDR_AUTO_UTCNT,
+			INDR_AUTO_AREA,
+			OUDR_AUTO_UTCNT,
+			OUDR_AUTO_AREA,
+			PMS_DAY,
+			STCNS_DAY,
+			USEAPR_DAY,
+			PMSNO_YEAR,
+			PMSNO_KIK_CD,					--CM040
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM040' AND SGRP_CD = PMSNO_KIK_CD) AS PMSNO_KIK_CD_NM,
+			PMSNO_GB_CD,					--CM039
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM039' AND SGRP_CD = PMSNO_GB_CD) AS PMSNO_GB_CD_NM,
+			PMSNO_SEQNO,
+			HO_CNT
+		FROM
+			V_DJRRECAPTITLE_GIS
+		WHERE
+			BLDRGST_PK = #{bldrgstPk}
+	</select>
+	
+	<select id="selectOneDjrTitle" parameterType="Integer" resultMap="djrTitleMap">
+		SELECT
+			BLDRGST_PK,
+			DONG_NM,
+			MAIN_ATCH_GB_CD,				--CM031
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM031' AND SGRP_CD = MAIN_ATCH_GB_CD) AS MAIN_ATCH_GB_CD_NM,
+			MAIN_ATCH_SEQNO,
+			PSTV_YN,
+			SPCMT,
+			PLAT_AREA,
+			ARCH_AREA,
+			BC_RAT,
+			TOTAREA,
+			VL_RAT_ESTM_TOTAREA,
+			VL_RAT,
+			STRCT_CD,						--CM004
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM004' AND SGRP_CD = STRCT_CD) AS STRCT_CD_NM,
+			ETC_STRCT,
+			MAIN_PURPS_CD,					--CM024
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM024' AND SGRP_CD = MAIN_PURPS_CD) AS MAIN_PURPS_CD_NM,
+			ETC_PURPS,
+			ROOF_CD,						--CM036
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM036' AND SGRP_CD = ROOF_CD) AS ROOF_CD_NM,
+			ETC_ROOF,
+			HHLD_CNT,
+			FMLY_CNT,
+			HEIT,
+			GRND_FLR_CNT,
+			UGRND_FLR_CNT,
+			RIDE_USE_ELVT_CNT,
+			EMGEN_USE_ELVT_CNT,
+			ATCH_BLD_CNT,
+			ATCH_BLD_AREA,
+			TOT_DONG_TOTAREA,
+			INDR_MECH_UTCNT,
+			INDR_MECH_AREA,
+			OUDR_MECH_UTCNT,
+			OUDR_MECH_AREA,
+			INDR_AUTO_UTCNT,
+			INDR_AUTO_AREA,
+			OUDR_AUTO_UTCNT,
+			OUDR_AUTO_AREA,
+			PMS_DAY,
+			STCNS_DAY,
+			USEAPR_DAY,
+			PMSNO_YEAR,
+			PMSNO_KIK_CD,					--CM040
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM040' AND SGRP_CD = PMSNO_KIK_CD) AS PMSNO_KIK_CD_NM,
+			PMSNO_GB_CD,					--CM039
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM039' AND SGRP_CD = PMSNO_GB_CD) AS PMSNO_GB_CD_NM,
+			PMSNO_SEQNO,
+			HO_CNT
+		FROM
+			V_DJRTITLE_GIS
+		WHERE
+			BLDRGST_PK = #{bldrgstPk}
+	</select>
+</mapper>

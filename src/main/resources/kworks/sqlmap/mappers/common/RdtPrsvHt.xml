@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdtPrsvHtMapper">
+
+	<!-- 관리이력 리스트 - 도로 -->
+	<select id="listManageHistRoad" parameterType="Long" resultType="rdtPrsvHt">
+		SELECT
+			RDT.SHT_IDN,
+			RDT.FTR_CDE,
+			RDT.FTR_IDN,
+			RDT.MNH_CDE,
+			DOMN.CODE_NM AS MNH_NAM,
+			RDT.CNT_IDN,
+			RDT.SBJ_CDE,
+			RDT.RER_DES,
+			RDT.REP_DES,
+			RDT.SRE_YMD,
+			RDT.ERE_YMD,
+			RDT.OPR_NAM
+		FROM RDT_PRSV_HT RDT
+		LEFT OUTER JOIN KWS_DOMN_CODE DOMN ON RDT.MNH_CDE = DOMN.CODE_ID
+		WHERE
+			RDT.FTR_IDN = #{ftrIdn}
+		ORDER BY RDT.CNT_IDN ASC
+	</select>
+	
+	<resultMap id="rdtPrsvHtMap" type="rdtPrsvHt">
+		<id property="ftrIdn" column="FTR_IDN" />
+		<result property="shtIdn" column="SHT_IDN" />
+		<result property="ftrCde" column="FTR_CDE" />
+		<result property="mnhCde" column="MNH_CDE" />
+		<result property="cntIdn" column="CNT_IDN" />
+		<result property="sbjCde" column="SBJ_CDE" />
+		<result property="rerDes" column="RER_DES" />
+		<result property="repDes" column="REP_DES" />
+		<result property="sreYmd" column="SRE_YMD" />
+		<result property="ereYmd" column="ERE_YMD" />
+		<result property="oprNam" column="OPR_NAM" />
+	</resultMap>
+	
+	<!-- 관리이력구분 -->
+	<select id="listMnh" parameterType="String" resultType="rdtPrsvHt">
+		SELECT
+			DOMN_ID,
+			CODE_ID,
+			CODE_NM,
+			USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE DOMN_ID = #{domnId}
+	</select>
+	
+	<!-- 지형지물부호 조회 -->
+	<select id="selectOneFtrCde" resultMap="rdtPrsvHtMap">
+		SELECT
+			DOMN_ID,
+			CODE_ID,
+			CODE_NM,
+			USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE 
+			DOMN_ID = 'KWS-000'
+		AND 
+			CODE_ID = #{ftrCde, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 관리이력 상세정보 - 도로 -->
+	<select id="selectOneManageHistRoad" parameterType="Long" resultMap="rdtPrsvHtMap">
+		SELECT
+			RDT.SHT_IDN,
+			RDT.FTR_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.DOMN_ID = 'KWS-000' AND DOMN.CODE_ID = RDT.FTR_CDE) AS FTR_NAM,
+			RDT.FTR_IDN,
+			RDT.MNH_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.CODE_ID = RDT.MNH_CDE) AS MNH_NAM,
+			RDT.CNT_IDN,
+			RDT.SBJ_CDE,
+			RDT.RER_DES,
+			RDT.REP_DES,
+			RDT.SRE_YMD,
+			RDT.ERE_YMD,
+			RDT.OPR_NAM
+		FROM RDT_PRSV_HT RDT
+		WHERE
+			RDT.SHT_IDN = #{shtIdn}
+	</select>
+	
+	<!-- 관리이력 수정 - 도로 -->
+	<update id="updateManageHistRoad" parameterType="rdtPrsvHt">
+		UPDATE RDT_PRSV_HT SET
+			MNH_CDE = #{mnhCde, jdbcType=VARCHAR},
+			SBJ_CDE = #{sbjCde, jdbcType=VARCHAR},
+			RER_DES = #{rerDes, jdbcType=VARCHAR},
+			REP_DES = #{repDes, jdbcType=VARCHAR},
+			SRE_YMD = #{sreYmd, jdbcType=VARCHAR},
+			ERE_YMD = #{ereYmd, jdbcType=VARCHAR}
+		WHERE 
+			SHT_IDN = #{shtIdn}
+	</update>
+	
+	<!-- 관리이력 등록 - 도로 -->
+	<insert id="insertManageHistRoad" parameterType="rdtPrsvHt">
+		INSERT INTO RDT_PRSV_HT	(
+			SHT_IDN,
+			FTR_CDE, 
+			FTR_IDN,
+			MNH_CDE,
+			CNT_IDN,
+			SBJ_CDE,
+			RER_DES,
+			REP_DES,
+			SRE_YMD,
+			ERE_YMD
+		)
+		VALUES (
+			#{shtIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{mnhCde, jdbcType=VARCHAR},
+			(SELECT DECODE(MAX(CNT_IDN),NULL,1,MAX(CNT_IDN)+ 1) FROM RDT_PRSV_HT WHERE FTR_IDN = #{ftrIdn, jdbcType=BIGINT}),
+			#{sbjCde, jdbcType=VARCHAR},
+			#{rerDes, jdbcType=VARCHAR},
+			#{repDes, jdbcType=VARCHAR},
+			#{sreYmd, jdbcType=VARCHAR},
+			#{ereYmd, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+</mapper>

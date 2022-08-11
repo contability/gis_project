@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.DhgRepaHtMapper">
+
+	<!-- 등록 -->
+	<insert id="insert">
+		INSERT INTO DHG_REPA_HT (
+			FTR_IDN,
+			REP_SEQ,
+			REP_STR,
+			REP_END,
+			REP_DOC
+		) VALUES (
+			#{data.ftrIdn, jdbcType=BIGINT},
+			#{data.repSeq, jdbcType=BIGINT},
+			#{data.repStr, jdbcType=VARCHAR},
+			#{data.repEnd, jdbcType=VARCHAR},
+			#{data.repDoc, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 수정 -->
+	<update id="update">
+		UPDATE 
+			DHG_REPA_HT
+		SET 
+			REP_STR = #{data.repStr, jdbcType=VARCHAR},
+			REP_END = #{data.repEnd, jdbcType=VARCHAR},
+			REP_DOC = #{data.repDoc, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+			AND
+			REP_SEQ = #{repSeq}
+	</update>
+
+	<!-- 일괄 삭제 -->
+	<delete id="deleteAll">
+		DELETE FROM 
+			DHG_REPA_HT
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</delete>	
+
+	<!-- 단건 삭제 -->
+	<delete id="delete">
+		DELETE FROM 
+			DHG_REPA_HT
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+			AND
+			REP_SEQ = #{repSeq}
+	</delete>	
+
+</mapper>

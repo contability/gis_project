@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.BmlLoanAsMapper">
+
+	<select id="selectOne" resultType="BmlLoanAs" parameterType="bmlLoanAs">
+		SELECT
+			OBJECTID,
+			PRT_IDN,
+			LON_IDN,
+			PBP_KND,
+			THG_ADR,
+			CRT_DATE,
+			TNT_DATE,
+			TNT_RESN,
+			CRT_STR,
+			CRT_END,
+			LON_AREA,
+			SLON_AREA,
+			LON_PUP,
+			EMP_NAM,
+			PBP_KNDNM,
+			OWN_CDE,
+			OWN_NM,
+			MAN_CDE,
+			MAN_NM,
+			PRS_CDE,
+			MESRV_NM,
+			AMN_CDE,
+			AMN_NM,
+			ACC_CDE,
+			ACC_NM,
+			BJD_CDE,
+			BJD_NM,
+			MONUT,
+			BUN,
+			HO,
+			PER_AMT,
+			LON_START,
+			LON_END,
+			LON_DAY,
+			BL_LON_AR,
+			BL_BD_AR,
+			USE_FLR,
+			EMP_SE,
+			USR_SE_NM,
+			USRBJD_CD,
+			USRBJD_NM,
+			USR_SAN,
+			USR_BUNJI,
+			USR_HO,
+			EMP_BJD,
+			EMP_RN,
+			EMP_NUM
+		FROM
+			BML_LOAN_AS
+		<where>
+			<if test="lonIdn != null">
+				AND LON_IDN = #{lonIdn}
+			</if>
+			<if test="prtIdn != null">
+				AND PRT_IDN = #{prtIdn}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="BmlLoanAs">
+		INSERT INTO
+			BML_LOAN_AS(
+				OBJECTID,
+				PRT_IDN,
+				LON_IDN,
+				PBP_KND,
+				THG_ADR,
+				CRT_DATE,
+				TNT_DATE,
+				TNT_RESN,
+				CRT_STR,
+				CRT_END,
+				LON_AREA,
+				SLON_AREA,
+				LON_PUP,
+				EMP_NAM,
+				PBP_KNDNM,
+				OWN_CDE,
+				OWN_NM,
+				MAN_CDE,
+				MAN_NM,
+				PRS_CDE,
+				MESRV_NM,
+				AMN_CDE,
+				AMN_NM,
+				ACC_CDE,
+				ACC_NM,
+				BJD_CDE,
+				BJD_NM,
+				MONUT,
+				BUN,
+				HO,
+				PER_AMT,
+				LON_START,
+				LON_END,
+				LON_DAY,
+				BL_LON_AR,
+				BL_BD_AR,
+				USE_FLR,
+				EMP_SE,
+				USR_SE_NM,
+				USRBJD_CD,
+				USRBJD_NM,
+				USR_SAN,
+				USR_BUNJI,
+				USR_HO,
+				EMP_BJD,
+				EMP_RN,
+				EMP_NUM
+			)
+		VALUES(
+			(SELECT NVL(MAX(OBJECTID) + 1, 1) FROM BML_LOAN_AS),
+			#{prtIdn, jdbcType=INTEGER},
+			#{lonIdn, jdbcType=INTEGER},
+			#{pbpKnd, jdbcType=VARCHAR},
+			#{thgAdr, jdbcType=VARCHAR},
+			#{crtDate, jdbcType=VARCHAR},
+			#{tntDate, jdbcType=VARCHAR},
+			#{tntResn, jdbcType=VARCHAR},
+			#{crtStr, jdbcType=VARCHAR},
+			#{crtEnd, jdbcType=VARCHAR},
+			#{lonArea, jdbcType=DOUBLE},
+			#{slonArea, jdbcType=DOUBLE},
+			#{lonPup, jdbcType=VARCHAR},
+			#{empNam, jdbcType=VARCHAR},
+			#{pbpKndnm, jdbcType=VARCHAR},
+			#{ownCde, jdbcType=VARCHAR},
+			#{ownNm, jdbcType=VARCHAR},
+			#{manCde, jdbcType=VARCHAR},
+			#{manNm, jdbcType=VARCHAR},
+			#{prsCde, jdbcType=VARCHAR},
+			#{mesrvNm, jdbcType=VARCHAR},
+			#{amnCde, jdbcType=VARCHAR},
+			#{amnNm, jdbcType=VARCHAR},
+			#{accCde, jdbcType=VARCHAR},
+			#{accNm, jdbcType=VARCHAR},
+			#{bjdCde, jdbcType=VARCHAR},
+			#{bjdNm, jdbcType=VARCHAR},
+			#{monut, jdbcType=VARCHAR},
+			#{bun, jdbcType=VARCHAR},
+			#{ho, jdbcType=VARCHAR},
+			#{perAmt, jdbcType=INTEGER},
+			#{lonStart, jdbcType=VARCHAR},
+			#{lonEnd, jdbcType=VARCHAR},
+			#{lonDay, jdbcType=INTEGER},
+			#{blLonAr, jdbcType=DOUBLE},
+			#{blBdAr, jdbcType=DOUBLE},
+			#{useFlr, jdbcType=VARCHAR},
+			#{empSe, jdbcType=VARCHAR},
+			#{usrSeNm, jdbcType=VARCHAR},
+			#{usrbjdCd, jdbcType=VARCHAR},
+			#{usrbjdNm, jdbcType=VARCHAR},
+			#{usrSan, jdbcType=VARCHAR},
+			#{usrBunji, jdbcType=VARCHAR},
+			#{usrHo, jdbcType=VARCHAR},
+			#{empBjd, jdbcType=VARCHAR},
+			#{empRn, jdbcType=VARCHAR},
+			#{empNum, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="remove">
+		TRUNCATE TABLE BML_LOAN_AS
+	</delete>
+	
+	<update id="geomUpdate">
+		UPDATE
+			BML_LOAN_AS
+		SET
+			BML_LOAN_AS.GEOM = LP_PA_CBND.GEOM FROM LP_PA_CBND WHERE LP_PA_CBND.PNU = BML_LOAN_AS.BJD_CDE||BML_LOAN_AS.MONUT||LPAD(BML_LOAN_AS.BUN,4,0)||LPAD(BML_LOAN_AS.HO,4,0) 
+	</update>
+</mapper>

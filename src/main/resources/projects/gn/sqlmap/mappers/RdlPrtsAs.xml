@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.RdlPrtsAsMapper">
+
+	<sql id="where">
+		<where>
+			<if test="ftrCde != null and ftrCde != ''">
+				AND FTR_CDE = #{ftrCde}
+			</if>
+			<if test="bjdCde != null and bjdCde != ''">
+				AND BJD_CDE = #{bjdCde}
+			</if>
+			<if test="facNum != null and facNum != ''">
+				AND FAC_NUM = #{facNum}
+			</if>
+			<if test="fadNum != null and fadNum != ''">
+				AND FAD_NUM = #{fadNum}
+			</if>
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+			<if test="rodNam != null and rodNam != ''">
+				AND ROD_NAM LIKE #{rodNam}
+			</if>
+		</where>
+	</sql>
+	
+	<resultMap type="RdlPrtsAs" id="rdlPrtsAsMap">
+		<id column="OBJECTID" property="objectId"/>
+		<result column="FTR_CDE" property="ftrCde"/>
+		<result column="FTR_IDN" property="ftrIdn"/>
+		<result column="ROD_NAM" property="rodNam"/>
+		<result column="DJS_CDE" property="djsCde"/>
+		<result column="RDL_IDN" property="rdlIdn"/>
+		<result column="BJD_CDE" property="bjdCde"/>
+		<result column="SHT_NUM" property="shtNum"/>
+		<result column="ADA_CDE" property="adaCde"/>
+		<result column="MNG_CDE" property="mngCde"/>
+		<result column="FAC_NUM" property="facNum"/>
+		<result column="FAD_NUM" property="fadNum"/>
+		<result column="RMK_EXP" property="rmkExp"/>
+		<result column="NEW_NAM" property="newNam"/>
+		<result column="HJD_CDE" property="hjdCde"/>
+		<result column="LOD_YMD" property="lodYmd"/>
+		<result column="SCH_NAM" property="schNam"/>
+		<result column="POL_NAM" property="polNam"/>
+		<result column="RNK_CDE" property="rnkCde"/>
+		<result column="CHR_NAM" property="chrNam"/>
+		<result column="POT_CDE" property="potCde"/>
+		<result column="SPD_NUM" property="spdNum"/>
+		<result column="SCH_YMD" property="schYmd"/>
+	</resultMap>
+	
+	<select id="listCount" parameterType="PrtsAreaDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			RDL_PRTS_AS
+		<include refid="where" />
+	</select>
+	
+	<select id="selectList" parameterType="PrtsAreaDTO" resultMap="rdlPrtsAsMap">
+		SELECT 
+			T2.*
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM
+				(SELECT
+					OBJECTID,
+					FTR_CDE,
+					FTR_IDN,
+					ROD_NAM,
+					DJS_CDE,
+					RDL_IDN,
+					BJD_CDE,
+					SHT_NUM,
+					ADA_CDE,
+					MNG_CDE,
+					FAC_NUM,
+					FAD_NUM,
+					RMK_EXP,
+					NEW_NAM,
+					HJD_CDE,
+					LOD_YMD,
+					SCH_NAM,
+					POL_NAM,
+					RNK_CDE,
+					CHR_NAM,
+					POT_CDE,
+					SPD_NUM,
+					SCH_YMD
+				FROM
+					RDL_PRTS_AS
+				<include refid="where" />
+				) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+	</select>
+	
+</mapper>

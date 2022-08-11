@@ -1,0 +1,32 @@
+#div_menubar {
+	width : 740px;
+}
+
+#div_map {
+	top : 40px;
+	width : 740px;
+	height : 515px;
+}
+
+#div_info {
+	top : 560px;
+}
+
+#div_scale {
+	top : 760px;
+	width : 220px;
+	height : 70px;
+}
+/* /////////////////// */
+#div_type {
+	top : 765px;
+	width : 210px;
+	height : 65px;
+}
+
+#div_legend {
+	top : 560px;
+	left : 230px;
+	width : 515px;
+	height : 270px;
+}

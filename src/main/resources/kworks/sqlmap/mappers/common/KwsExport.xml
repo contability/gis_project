@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="rqesterId != null and rqesterId != ''">
+				AND RQESTER_ID = #{rqesterId}
+			</if>
+			<if test="progrsSttus != null and progrsSttus != ''">
+				AND PROGRS_STTUS = #{progrsSttus}
+			</if>
+			<if test="deptCode != null and deptCode != ''">
+				AND RQESTER_ID IN (SELECT USER_ID FROM KWS_USER WHERE DEPT_CODE = #{deptCode})
+			</if>
+			<if test="requstDt != null">
+				AND REQUST_DT &lt; #{requstDt}
+			</if>
+			<if test="deletePrearngeDt != null">
+				AND DELETE_PREARNGE_DT &lt; #{deletePrearngeDt}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsExportMap" type="kwsExport">
+		<id property="exportNo" column="EXPORT_NO" />
+		<result property="exportNm" column="EXPORT_NM"/>
+		<result property="exportTy" column="EXPORT_TY"/>
+		<result property="exportFilterTy" column="EXPORT_FILTER_TY"/>
+		<result property="exportCntmId" column="EXPORT_CNTM_ID"/>
+		<result property="exportDtaSe" column="EXPORT_DTA_SE"/>
+		<result property="exportResn" column="EXPORT_RESN"/>
+		<result property="centerLon" column="CENTER_LON"/>
+		<result property="centerLat" column="CENTER_LAT"/>
+		<result property="progrsSttus" column="PROGRS_STTUS"/>
+		<result property="rqesterId" column="RQESTER_ID"/>
+		<result property="requstDt" column="REQUST_DT"/>
+		<result property="wdtbDt" column="WDTB_DT"/>
+		<result property="deletePrearngeDt" column="DELETE_PREARNGE_DT"/>
+		<association property="kwsUser" column="RQESTER_ID" javaType="kwsUser" select="kr.co.gitt.kworks.mappers.KwsUserMapper.selectOne" />
+		<association property="kwsExportConfm" column="EXPORT_NO" javaType="kwsExportConfm" select="kr.co.gitt.kworks.mappers.KwsExportConfmMapper.selectOne" />
+	</resultMap>
+	
+	<!-- selectOne 용 결과 맵 -->
+	<resultMap id="kwsExportSelectOneMap" type="kwsExport">
+		<id property="exportNo" column="EXPORT_NO" />
+		<result property="exportNm" column="EXPORT_NM"/>
+		<result property="exportTy" column="EXPORT_TY"/>
+		<result property="exportFilterTy" column="EXPORT_FILTER_TY"/>
+		<result property="exportCntmId" column="EXPORT_CNTM_ID"/>
+		<result property="exportDtaSe" column="EXPORT_DTA_SE"/>
+		<result property="exportResn" column="EXPORT_RESN"/>
+		<result property="centerLon" column="CENTER_LON"/>
+		<result property="centerLat" column="CENTER_LAT"/>
+		<result property="progrsSttus" column="PROGRS_STTUS"/>
+		<result property="rqesterId" column="RQESTER_ID"/>
+		<result property="requstDt" column="REQUST_DT"/>
+		<result property="wdtbDt" column="WDTB_DT"/>
+		<result property="deletePrearngeDt" column="DELETE_PREARNGE_DT"/>
+		<association property="kwsUser" column="RQESTER_ID" javaType="kwsUser" select="kr.co.gitt.kworks.mappers.KwsUserMapper.selectOne" />
+		<association property="kwsExportConfm" column="EXPORT_NO" javaType="kwsExportConfm" select="kr.co.gitt.kworks.mappers.KwsExportConfmMapper.selectOne" />
+		<collection property="kwsExportDatas" column="EXPORT_NO" javaType="java.util.ArrayList" ofType="kwsExportData" select="kr.co.gitt.kworks.mappers.KwsExportDataMapper.listAll" />
+		<collection property="kwsExportFiles" column="EXPORT_NO" javaType="java.util.ArrayList" ofType="kwsExportFile" select="kr.co.gitt.kworks.mappers.KwsExportFileMapper.listAll" />
+	</resultMap>
+	
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="searchDTO" resultMap="kwsExportMap">
+		SELECT
+			EXPORT_NO,
+			EXPORT_NM,
+			EXPORT_TY,
+			EXPORT_FILTER_TY,
+			EXPORT_CNTM_ID,
+			EXPORT_DTA_SE,
+			EXPORT_RESN,
+			CENTER_LON,
+			CENTER_LAT,
+			PROGRS_STTUS,
+			RQESTER_ID,
+			REQUST_DT,
+			WDTB_DT,
+			DELETE_PREARNGE_DT
+		FROM KWS_EXPORT
+		<include refid="where"/>
+	</select>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+			KWS_EXPORT
+		<include refid="where"/>
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultMap="kwsExportMap">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				EXPORT_NO,
+				EXPORT_NM,
+				EXPORT_TY,
+				EXPORT_FILTER_TY,
+				EXPORT_CNTM_ID,
+				EXPORT_DTA_SE,
+				EXPORT_RESN,
+				CENTER_LON,
+				CENTER_LAT,
+				PROGRS_STTUS,
+				RQESTER_ID,
+				REQUST_DT,
+				WDTB_DT,
+				DELETE_PREARNGE_DT
+			FROM KWS_EXPORT EXPORT
+			<include refid="where"/>
+			ORDER BY EXPORT_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="kwsExportSelectOneMap">
+		SELECT
+			EXPORT_NO,
+			EXPORT_NM,
+			EXPORT_TY,
+			EXPORT_FILTER_TY,
+			EXPORT_CNTM_ID,
+			EXPORT_DTA_SE,
+			EXPORT_RESN,
+			CENTER_LON,
+			CENTER_LAT,
+			PROGRS_STTUS,
+			RQESTER_ID,
+			REQUST_DT,
+			WDTB_DT,
+			DELETE_PREARNGE_DT
+		FROM KWS_EXPORT
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</select>
+	
+	<!-- 마지막 건 검색 -->
+	<select id="selectOneExportNo" resultType="kwsExport">
+		SELECT
+			EXPORT_NO,
+			EXPORT_NM,
+			EXPORT_TY,
+			EXPORT_FILTER_TY,
+			EXPORT_CNTM_ID,
+			EXPORT_DTA_SE,
+			EXPORT_RESN,
+			CENTER_LON,
+			CENTER_LAT,
+			PROGRS_STTUS,
+			RQESTER_ID,
+			REQUST_DT,
+			WDTB_DT,
+			DELETE_PREARNGE_DT
+		FROM KWS_EXPORT
+		ORDER BY EXPORT_NO DESC
+		LIMIT 1
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExport">
+		INSERT INTO KWS_EXPORT (
+			EXPORT_NO,
+			EXPORT_NM,
+			EXPORT_TY,
+			EXPORT_FILTER_TY,
+			EXPORT_CNTM_ID,
+			EXPORT_DTA_SE,
+			EXPORT_RESN,
+			CENTER_LON,
+			CENTER_LAT,
+			PROGRS_STTUS,
+			RQESTER_ID
+		) 
+		VALUES (
+			#{exportNo, jdbcType=BIGINT},
+			#{exportNm, jdbcType=VARCHAR},
+			#{exportTy, jdbcType=VARCHAR},
+			#{exportFilterTy, jdbcType=VARCHAR},
+			#{exportCntmId, jdbcType=VARCHAR},
+			#{exportDtaSe, jdbcType=VARCHAR},
+			#{exportResn, jdbcType=VARCHAR},
+			#{centerLon, jdbcType=DOUBLE},
+			#{centerLat, jdbcType=DOUBLE},
+			#{progrsSttus, jdbcType=VARCHAR},
+			#{rqesterId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 삭제 예정 일시 수정 -->
+	<update id="updateDeletePrearngeDt" parameterType="kwsExport">
+		UPDATE KWS_EXPORT SET 
+			DELETE_PREARNGE_DT = #{deletePrearngeDt}
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</update>
+	
+	<!-- 진행 상태 수정 -->
+	<update id="updateProgrsSttus" parameterType="kwsExport">
+		UPDATE KWS_EXPORT SET 
+			PROGRS_STTUS = #{progrsSttus}
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</update>
+	
+	<!-- 중심 경위도 수정 -->
+	<update id="updateCenterLonLat" parameterType="kwsExport">
+		UPDATE KWS_EXPORT SET 
+			CENTER_LON = #{centerLon},
+			CENTER_LAT = #{centerLat}
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</update>
+
+</mapper>

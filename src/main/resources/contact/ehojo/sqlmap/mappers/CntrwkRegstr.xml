@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.contact.ehojo.mappers.CntrwkRegstrMapper">
+	
+	<!-- ehojo 조회 -->
+	<select id="selectOne" parameterType="String" resultType="ehojoCntrwkRegstrDTO">
+		SELECT
+			  BS.CTRT_ACCT_BOOK_MNG_NO AS CTT_NUM  				/* e호조번호 */
+			, BS.CTRT_NM AS CNT_NAM  							/* 공사명 */
+			, CB.LOCAT_NM AS CNT_LOC  							/* 공사위치 */
+			, BS.BIZ_CONT AS CNT_DES  							/* 공사개요 */
+			, CL.SUPERV_USER_NM AS SVS_NAM  					/* 감독자 */
+			, CB.START_WORK_YMD AS BEG_YMD  					/* 착공일자 */
+			, ISL.INSP_USER_NM AS FCH_NAM  						/* 준공검사자 */
+			, BS.COMPLT_SCHD_YMD AS FNS_YMD  					/* 준공예정일 */
+			, ISL.INSP_YMD AS FCH_YMD  							/* 준공검사일 */
+			, BS.COMPLT_YMD AS RFN_YMD  						/* 실준공일 */
+			, NTL.BID_YMD AS BID_YMD  							/* 입찰일자 */
+			, BS.CTRT_YMD AS CTT_YMD  							/* 계약일자 */
+			, 'CTT10' || BS.CTRT_METH_CD AS CTT_CDE 			/* 계약방법 */
+			, BS.SCHD_AMT AS EST_AMT  							/* 예정금액 */
+			, BS.CTRT_AMT AS TCT_AMT  							/* 계약총액 */
+			, CCL.CUST_NM  AS GCN_NAM  							/*상호*/
+			, CCL.REPREVE_HG_NM  AS POC_NAM  					/*대표자*/
+			, CCL.BASIC_ADDR ||' '|| CCL.DETL_ADDR  AS GCN_ADR  /*주소*/
+			, CCL.TEL_NO  AS GCN_TEL  							/*전화번호*/
+		FROM V_TCM_CTRTBOOKS_LINK CB
+		    INNER JOIN V_TCM_BIZSUMMARY BS ON CB.CTRT_ACCT_BOOK_MNG_NO = BS.CTRT_ACCT_BOOK_MNG_NO
+		    LEFT OUTER JOIN V_TCM_CTRTSUPERV_LINK CL ON CB.CTRT_ACCT_BOOK_MNG_NO = CL.CTRT_ACCT_BOOK_MNG_NO
+		    LEFT OUTER JOIN V_TCM_INSPECTIONDETL_LINK ISL ON CB.CTRT_ACCT_BOOK_MNG_NO = ISL.CTRT_ACCT_BOOK_MNG_NO
+		  	LEFT OUTER JOIN V_TCM_NOTICE_LINK NTL ON CB.CTRT_ACCT_BOOK_MNG_NO = NTL.CTRT_ACCT_BOOK_MNG_NO
+			LEFT OUTER JOIN V_TCM_COCTRT_LINK CCL ON CB.CTRT_ACCT_BOOK_MNG_NO = CCL.CTRT_ACCT_BOOK_MNG_NO
+		WHERE CB.CTRT_ACCT_BOOK_MNG_NO = #{cttNum}
+	</select>
+		
+</mapper>

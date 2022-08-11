@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.LgstrStatsMapper">
+
+	<resultMap id="lgstrStatsMap" type="lgstrStats">
+		<id property="lgstrStatsNo" column="LGSTRSTATS_NO" />
+		<result property="lgstrStatsSj" column="LGSTRSTATS_SJ"/>
+		<result property="lgstrStatsCn" column="LGSTRSTATS_CN"/>
+		<result property="wrterId" column="WRTER_ID"/>
+		<collection property="lgstrStatsFile" column="LGSTRSTATS_NO" ofType="lgstrStatsFile" select="kr.co.gitt.kworks.projects.yy.mappers.LgstrStatsFileMapper.listAll" ></collection>
+	</resultMap>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM
+			LGSTR_STATS
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="lgstrStats">
+			SELECT
+				LGSTRSTATS_NO,
+				LGSTRSTATS_SJ,
+				LGSTRSTATS_CN,
+				WRTER_ID
+			FROM LGSTR_STATS
+			ORDER BY LGSTRSTATS_NO DESC
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="lgstrStatsMap">
+		SELECT
+			LGSTRSTATS_NO,
+			LGSTRSTATS_SJ,
+			LGSTRSTATS_CN,
+			WRTER_ID
+		FROM 
+			LGSTR_STATS
+		WHERE
+			LGSTRSTATS_NO = #{lgstrStatsNo}
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="lgstrStats">
+		INSERT INTO LGSTR_STATS (
+			LGSTRSTATS_NO,
+			LGSTRSTATS_SJ,
+			LGSTRSTATS_CN,
+			WRTER_ID
+		) 
+		VALUES (
+			#{lgstrStatsNo, jdbcType=BIGINT},
+			#{lgstrStatsSj, jdbcType=VARCHAR},
+			#{lgstrStatsCn, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="lgstrStats">
+		UPDATE LGSTR_STATS
+		SET 
+			LGSTRSTATS_SJ = #{lgstrStatsSj, jdbcType=BIGINT},
+			LGSTRSTATS_CN = #{lgstrStatsCn, jdbcType=VARCHAR}
+		WHERE
+			LGSTRSTATS_NO = #{lgstrStatsNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM LGSTR_STATS
+		WHERE LGSTRSTATS_NO = #{lgstrStatsNo}
+	</delete>
+	
+</mapper>

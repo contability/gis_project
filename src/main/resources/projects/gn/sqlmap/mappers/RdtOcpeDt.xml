@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.RdtOcpeDtMapper">
+	
+	<!-- 전체 선택 -->
+	<select id="selectAll" resultType="rdtOcpeDt">
+		SELECT 
+			FTR_IDN,
+			FTR_CDE,
+			PMT_NUM,
+			PMT_YMD,
+			PRS_NAM,
+			AESDECRYPT(REG_ENC, #{keyStr}) AS REG_NUM,
+			PRS_ADR,
+			JYG_LOC,
+			JYG_PUR,
+			JYG_ARA,
+			JYG_ULM,
+			JYS_YMD,
+			JYE_YMD,
+			JYG_CMT,
+			JYG_PAY,
+			JYG_TEL,
+			ROD_TYP,
+			ROT_NAM,
+			UMD_NAM,
+			PNU,
+			ROT_IDN,
+			SEC_IDN,
+			RMK_EXP
+		FROM
+			RDT_OCPE_DT
+		ORDER BY
+			FTR_IDN
+	</select>
+
+	<!-- 단일 선택 -->
+	<select id="selectOneById" resultType="rdtOcpeDt">
+		SELECT 
+			FTR_IDN,
+			FTR_CDE,
+			PMT_NUM,
+			PMT_YMD,
+			PRS_NAM,
+			AESDECRYPT(REG_ENC, #{keyStr}) AS REG_NUM,
+			PRS_ADR,
+			JYG_LOC,
+			JYG_PUR,
+			JYG_ARA,
+			JYG_ULM,
+			JYS_YMD,
+			JYE_YMD,
+			JYG_CMT,
+			JYG_PAY,
+			JYG_TEL,
+			ROD_TYP,
+			ROT_NAM,
+			UMD_NAM,
+			PNU,
+			ROT_IDN,
+			SEC_IDN,
+			RMK_EXP
+		FROM
+			RDT_OCPE_DT
+		WHERE 
+			FTR_CDE = #{ftrCde}
+			AND 
+			FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<select id="selectOne" resultType="rdtOcpeDt">
+		SELECT 
+			FTR_IDN,
+			FTR_CDE,
+			PMT_NUM,
+			PMT_YMD,
+			PRS_NAM,
+			AESDECRYPT(REG_ENC, #{keyStr}) AS REG_NUM,
+			PRS_ADR,
+			JYG_LOC,
+			JYG_PUR,
+			JYG_ARA,
+			JYG_ULM,
+			JYS_YMD,
+			JYE_YMD,
+			JYG_CMT,
+			JYG_PAY,
+			JYG_TEL,
+			ROD_TYP,
+			ROT_NAM,
+			UMD_NAM,
+			PNU,
+			ROT_IDN,
+			SEC_IDN,
+			RMK_EXP
+		FROM
+			RDT_OCPE_DT
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert">
+		INSERT INTO RDT_OCPE_DT (
+			FTR_IDN,
+			FTR_CDE,
+			PMT_NUM,
+			PMT_YMD,
+			PRS_NAM,
+			<if test="ocpeDt.regNum != null and ocpeDt.regNum != ''">
+				REG_ENC,
+			</if>
+			PRS_ADR,
+			JYG_LOC,
+			JYG_PUR,
+			JYG_ARA,
+			JYG_ULM,
+			JYS_YMD,
+			JYE_YMD,
+			JYG_CMT,
+			JYG_PAY,
+			JYG_TEL,
+			ROD_TYP,
+			ROT_NAM,
+			UMD_NAM,
+			PNU,
+			ROT_IDN,
+			SEC_IDN,
+			RMK_EXP
+		) VALUES (
+			#{ocpeDt.ftrIdn, jdbcType=BIGINT},
+			#{ocpeDt.ftrCde, jdbcType=VARCHAR},
+			#{ocpeDt.pmtNum, jdbcType=VARCHAR},
+			#{ocpeDt.pmtYmd, jdbcType=VARCHAR},
+			#{ocpeDt.prsNam, jdbcType=VARCHAR},
+			<if test="ocpeDt.regNum != null and ocpeDt.regNum != ''">
+				AESENCRYPT(#{ocpeDt.regNum, jdbcType=VARCHAR}, #{keyStr}),
+			</if>
+			#{ocpeDt.prsAdr, jdbcType=VARCHAR},
+			#{ocpeDt.jygLoc, jdbcType=VARCHAR},
+			#{ocpeDt.jygPur, jdbcType=VARCHAR},
+			#{ocpeDt.jygAra, jdbcType=VARCHAR},
+			#{ocpeDt.jygUlm, jdbcType=VARCHAR},
+			#{ocpeDt.jysYmd, jdbcType=VARCHAR},
+			#{ocpeDt.jyeYmd, jdbcType=VARCHAR},
+			#{ocpeDt.jygCmt, jdbcType=VARCHAR},
+			#{ocpeDt.jygPay, jdbcType=VARCHAR},
+			#{ocpeDt.jygTel, jdbcType=VARCHAR},
+			#{ocpeDt.rodTyp, jdbcType=VARCHAR},
+			#{ocpeDt.rotNam, jdbcType=VARCHAR},
+			#{ocpeDt.umdNam, jdbcType=VARCHAR},
+			#{ocpeDt.pnu, jdbcType=VARCHAR},
+			#{ocpeDt.rotIdn, jdbcType=VARCHAR},
+			#{ocpeDt.secIdn, jdbcType=VARCHAR},
+			#{ocpeDt.rmkExp, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateUmdNam">
+		UPDATE RDT_OCPE_DT SET
+			UMD_NAM = #{umdNam, jdbcType=VARCHAR}
+		WHERE 
+			FTR_CDE = #{ftrCde}
+			AND 
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 수정 -->
+	<update id="update">
+		UPDATE 
+			RDT_OCPE_DT
+		SET 
+			PMT_NUM = #{ocpeDt.pmtNum, jdbcType=VARCHAR},
+			PMT_YMD = #{ocpeDt.pmtYmd, jdbcType=VARCHAR},
+			PRS_NAM = #{ocpeDt.prsNam, jdbcType=VARCHAR},
+			<if test="ocpeDt.regNum != null and ocpeDt.regNum != ''">
+				REG_ENC = AESENCRYPT(#{ocpeDt.regNum, jdbcType=VARCHAR}, #{keyStr}),
+			</if>			
+			PRS_ADR = #{ocpeDt.prsAdr, jdbcType=VARCHAR},
+			JYG_LOC = #{ocpeDt.jygLoc, jdbcType=VARCHAR},
+			JYG_PUR = #{ocpeDt.jygPur, jdbcType=VARCHAR},		
+			JYG_ARA = #{ocpeDt.jygAra, jdbcType=VARCHAR},
+			JYG_ULM = #{ocpeDt.jygUlm, jdbcType=VARCHAR},
+			JYS_YMD = #{ocpeDt.jysYmd, jdbcType=VARCHAR},
+			JYE_YMD = #{ocpeDt.jyeYmd, jdbcType=VARCHAR},
+			JYG_CMT = #{ocpeDt.jygCmt, jdbcType=VARCHAR},
+			JYG_PAY = #{ocpeDt.jygPay, jdbcType=VARCHAR},
+			JYG_TEL = #{ocpeDt.jygTel, jdbcType=VARCHAR},
+			ROD_TYP = #{ocpeDt.rodTyp, jdbcType=VARCHAR},
+			ROT_NAM = #{ocpeDt.rotNam, jdbcType=VARCHAR},
+			UMD_NAM = #{ocpeDt.umdNam, jdbcType=VARCHAR},
+			PNU = #{ocpeDt.pnu, jdbcType=VARCHAR},
+			ROT_IDN = #{ocpeDt.rotIdn, jdbcType=VARCHAR},
+			SEC_IDN = #{ocpeDt.secIdn, jdbcType=VARCHAR},
+			RMK_EXP = #{ocpeDt.rmkExp, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ocpeDt.ftrIdn}
+		AND
+			FTR_CDE = #{ocpeDt.ftrCde}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="rdtOcpeDt">
+		DELETE FROM 
+			RDT_OCPE_DT
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</delete>
+</mapper>

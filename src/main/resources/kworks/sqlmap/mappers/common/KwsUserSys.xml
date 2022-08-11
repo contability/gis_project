@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsUserSysMapper">
+	<!-- 전체 목록 검색 -->
+	<select id="list" parameterType="kwsUserSys" resultType="kwsUserSys">
+		SELECT 
+			T1.*
+		FROM 
+		KWS_SYS T1
+		INNER JOIN
+		(
+		  SELECT * FROM KWS_USER_SYS WHERE USER_ID = #{userId}
+		)T2
+		ON T2.SYS_ID = T1.SYS_ID
+		WHERE T1.SYS_TY = 'USER'
+	</select>
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="kwsUserSys" resultType="kwsUserSys">
+		SELECT 
+			T1.*
+		FROM 
+		KWS_SYS T1
+		LEFT OUTER JOIN
+		(
+		  SELECT * FROM KWS_USER_SYS WHERE USER_ID = #{userId}
+		)T2
+		ON T2.SYS_ID = T1.SYS_ID
+		WHERE T1.SYS_TY = 'USER'
+			AND T1.SYS_ID = #{sysId}
+	</select>
+	
+	<insert id="insert" parameterType="kwsUserSys">
+		INSERT INTO KWS_USER_SYS
+		(
+			USER_ID,
+			SYS_ID
+		)
+		VALUES
+		(
+			#{userId},
+			#{sysId}
+		)	
+	</insert>
+	
+	<delete id="delete" parameterType="kwsUserSys">
+		DELETE FROM KWS_USER_SYS
+		WHERE 
+			SYS_ID = #{sysId}
+			AND USER_ID = #{userId}
+	</delete>
+	
+	<delete id="deleteByUserId" parameterType="String">
+		DELETE FROM KWS_USER_SYS
+		WHERE 
+			USER_ID = #{userId}
+	</delete>
+</mapper>

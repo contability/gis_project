@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsOcpatRegMapper">
+
+	<!-- 전체 검색 -->
+	<select id="listAll" resultType="kwsOcpatReg">
+		SELECT
+			OCPAT_IDN,
+			OCPAT_ALIAS,
+			OCPAT_LAYER_ID,
+			OCPAT_PROP_FIELD,
+			OCPAT_PROP_VALUE,
+			OCPAT_PS_LAYER,
+			OCPAT_LS_LAYER,
+			OCPAT_AS_LAYER,
+			OCPAT_CDE_FIELD,
+			OCPAT_IDN_FIELD,
+			USE_AT
+		FROM
+			KWS_OCPAT_REG
+		ORDER BY OCPAT_IDN
+	</select>
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsOcpatRegMap" type="kwsOcpatReg">
+		<id property="ocpatIdn" column="OCPAT_IDN" />
+		<result property="ocpatAlias" column="OCPAT_ALIAS"/>
+		<result property="ocpatLayerId" column="OCPAT_LAYER_ID"/>
+		<result property="ocpatPropField" column="OCPAT_PROP_FIELD"/>
+		<result property="ocpatPropValue" column="OCPAT_PROP_VALUE"/>
+		<result property="ocpatPsLayer" column="OCPAT_PS_LAYER"/>
+		<result property="ocpatLsLayer" column="OCPAT_LS_LAYER"/>
+		<result property="ocpatAsLayer" column="OCPAT_AS_LAYER"/>
+		<result property="ocpatCdeField" column="OCPAT_CDE_FIELD"/>
+		<result property="ocpatIdnField" column="OCPAT_IDN_Field"/>
+		<result property="useAt" column="USE_AT"/>
+	</resultMap>
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultMap="kwsOcpatRegMap">
+		SELECT
+			OCPAT_IDN,
+			OCPAT_ALIAS,
+			OCPAT_LAYER_ID,
+			OCPAT_PROP_FIELD,
+			OCPAT_PROP_VALUE,
+			OCPAT_PS_LAYER,
+			OCPAT_LS_LAYER,
+			OCPAT_AS_LAYER,
+			OCPAT_CDE_FIELD,
+			OCPAT_IDN_FIELD,
+			USE_AT
+		FROM
+			KWS_OCPAT_REG
+		WHERE
+			OCPAT_IDN = #{ocpatIdn}
+		ORDER BY OCPAT_IDN
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOneByFtrCde" parameterType="String" resultMap="kwsOcpatRegMap">
+		SELECT
+			OCPAT_IDN,
+			OCPAT_ALIAS,
+			OCPAT_LAYER_ID,
+			OCPAT_PROP_FIELD,
+			OCPAT_PROP_VALUE,
+			OCPAT_PS_LAYER,
+			OCPAT_LS_LAYER,
+			OCPAT_AS_LAYER,
+			OCPAT_CDE_FIELD,
+			OCPAT_IDN_FIELD,
+			USE_AT
+		FROM
+			KWS_OCPAT_REG
+		WHERE
+			OCPAT_PROP_VALUE = #{ftrCde}
+		ORDER BY OCPAT_IDN
+	</select>
+	
+</mapper>

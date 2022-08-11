@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.BmlAcexAsMapper">
+	
+	<resultMap type="BmlAcexAs" id="bmlAcexAsMap">
+		<id property="prtIdn" column="PRT_IDN"/>
+		<result property="srchYmd" column="SRCH_YMD"/>
+		<result property="prpNo" column="PRP_NO"/>
+		<result property="cfpNm" column="CFP_NM"/>
+		<result property="confmYmd" column="CONFM_YMD"/>
+		<result property="srchpNm" column="SRCHP_NM"/>
+		<result property="mgtGbn" column="MGT_GBN"/>
+		<result property="mgtYn" column="MGT_YN"/>
+		<result property="unusedStt" column="UNUSED_STT"/>
+		<result property="srvRegn" column="SRV_REGN"/>
+		<result property="srvZone" column="SRV_ZONE"/>
+		<result property="ctPlnFc" column="CT_PLN_FC"/>
+		<result property="lntrdPrm" column="LNTRD_PRM"/>
+		<result property="env" column="ENV"/>
+		<result property="cnveFcl" column="CNVE_FCL"/>
+		<result property="pbLcmtn" column="PB_LCMTN"/>
+		<result property="rdSrfc" column="RD_SRFC"/>
+		<result property="mrdDist" column="MRD_DIST"/>
+		<result property="highLw" column="HIGH_LW"/>
+		<result property="shape" column="SHAPE"/>
+		<result property="direction" column="DIRECTION"/>
+		<result property="useLimit" column="USE_LIMIT"/>
+		<result property="useSituJimk" column="USE_SITU_JIMK"/>
+		<result property="useSitu" column="USE_SITU"/>
+		<result property="useMeansNm" column="USE_MEANS_NM"/>
+		<result property="useNearFiljiNum" column="USE_NEAR_FILJI_NUM"/>
+		<result property="useTotAr" column="USE_TOT_AR"/>
+		<result property="useRepFilji" column="USE_REP_FILJI"/>
+		<result property="useMuseMbd" column="USE_MUSE_MBD"/>
+		<result property="useBdngStc" column="USE_BDNG_STC"/>
+		<result property="useStcRof" column="USE_STC_ROF"/>
+		<result property="useSrv" column="USE_SRV"/>
+		<result property="useBdngLayer" column="USE_BDNG_LAYER"/>
+		<result property="useYarea" column="USE_YAREA"/>
+		<result property="useCnstD" column="USE_CNST_D"/>
+		<result property="useThirdpBdng" column="USE_THIRDP_BDNG"/>
+		<result property="useBdngOwnerNm" column="USE_BDNG_OWNER_NM"/>
+		<result property="useAbdngRegstYn" column="USE_ABDNG_REGST_YN"/>
+		<result property="etcSrvRegn" column="ETC_SRV_REGN"/>
+		<result property="etcCnt" column="ETC_CNT"/>
+		<result property="etcAm" column="ETC_AM"/>
+		<result property="etcShaQuota" column="ETC_SHA_QUOTA"/>
+		<result property="etcUseForm" column="ETC_USE_FORM"/>
+		<result property="etcUseCanSrv" column="ETC_USE_CAN_SRV"/>
+		<result property="etcUseCanAr" column="ETC_USE_CAN_AR"/>
+		<result property="etcLoc" column="ETC_LOC"/>
+		<result property="etcNearSitu" column="ETC_NEAR_SITU"/>
+		<result property="etcItem" column="ETC_ITEM"/>
+		<result property="etcRm" column="ETC_RM"/>
+		<result property="manCde" column="MAN_CDE"/>
+		<result property="manNm" column="MAN_NM"/>
+		<result property="mndNm" column="MND_NM"/>
+		<result property="pbpKnd" column="PBP_KND"/>
+		<result property="bjdCde" column="BJD_CDE"/>
+		<result property="locPlc" column="LOC_PLC"/>
+		<result property="monut" column="MONUT"/>
+		<result property="bun" column="BUN"/>
+		<result property="ho" column="HO"/>
+		<result property="ptyPc" column="PTY_PC"/>
+		<result property="accNm" column="ACC_NM"/>
+		<result property="mesrvNm" column="MESRV_NM"/>
+		<result property="acqDept" column="ACQ_DEPT"/>
+		<result property="acqDate" column="ACQ_DATE"/>
+		<result property="acqCde" column="ACQ_CDE"/>
+		<result property="acqPc" column="ACQ_PC"/>
+		<result property="rstYn" column="RST_YN"/>
+		<result property="pstNum" column="PST_NUM"/>
+		<result property="loanYn" column="LOAN_YN"/>
+	</resultMap>
+	
+	<select id="selectOne" resultMap="bmlAcexAsMap" parameterType="Long">
+		SELECT
+			PRT_IDN,
+			SRCH_YMD,
+			PRP_NO,
+			CFP_NM,
+			CONFM_YMD,
+			SRCHP_NM,
+			MGT_GBN,
+			MGT_YN,
+			UNUSED_STT,
+			SRV_REGN,
+			SRV_ZONE,
+			CT_PLN_FC,
+			LNTRD_PRM,
+			ENV,
+			CNVE_FCL,
+			PB_LCMTN,
+			RD_SRFC,
+			MRD_DIST,
+			HIGH_LW,
+			SHAPE,
+			DIRECTION,
+			USE_LIMIT,
+			USE_SITU_JIMK,
+			USE_SITU,
+			USE_MEANS_NM,
+			USE_NEAR_FILJI_NUM,
+			USE_TOT_AR,
+			USE_REP_FILJI,
+			USE_MUSE_MBD,
+			USE_BDNG_STC,
+			USE_STC_ROF,
+			USE_SRV,
+			USE_BDNG_LAYER,
+			USE_YAREA,
+			USE_CNST_D,
+			USE_THIRDP_BDNG,
+			USE_BDNG_OWNER_NM,
+			USE_ABDNG_REGST_YN,
+			ETC_SRV_REGN,
+			ETC_CNT,
+			ETC_AM,
+			ETC_SHA_QUOTA,
+			ETC_USE_FORM,
+			ETC_USE_CAN_SRV,
+			ETC_USE_CAN_AR,
+			ETC_LOC,
+			ETC_NEAR_SITU,
+			ETC_ITEM,
+			ETC_RM,
+			MAN_CDE,
+			MAN_NM,
+			MND_NM,
+			PBP_KND,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			PTY_PC,
+			ACC_NM,
+			MESRV_NM,
+			ACQ_DEPT,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PC,
+			RST_YN,
+			PST_NUM,
+			LOAN_YN
+		FROM
+			V_BML_ACEX_AS
+		WHERE
+			PRT_IDN = #{prtIdn}
+	</select>
+	
+	<select id="areaList" resultMap="bmlAcexAsMap" parameterType="UseAreaSearchDTO">
+		SELECT
+			PRT_IDN,
+			SRCH_YMD,
+			PRP_NO,
+			CFP_NM,
+			CONFM_YMD,
+			SRCHP_NM,
+			MGT_GBN,
+			MGT_YN,
+			UNUSED_STT,
+			SRV_REGN,
+			SRV_ZONE,
+			CT_PLN_FC,
+			LNTRD_PRM,
+			ENV,
+			CNVE_FCL,
+			PB_LCMTN,
+			RD_SRFC,
+			MRD_DIST,
+			HIGH_LW,
+			SHAPE,
+			DIRECTION,
+			USE_LIMIT,
+			USE_SITU_JIMK,
+			USE_SITU,
+			USE_MEANS_NM,
+			USE_NEAR_FILJI_NUM,
+			USE_TOT_AR,
+			USE_REP_FILJI,
+			USE_MUSE_MBD,
+			USE_BDNG_STC,
+			USE_STC_ROF,
+			USE_SRV,
+			USE_BDNG_LAYER,
+			USE_YAREA,
+			USE_CNST_D,
+			USE_THIRDP_BDNG,
+			USE_BDNG_OWNER_NM,
+			USE_ABDNG_REGST_YN,
+			ETC_SRV_REGN,
+			ETC_CNT,
+			ETC_AM,
+			ETC_SHA_QUOTA,
+			ETC_USE_FORM,
+			ETC_USE_CAN_SRV,
+			ETC_USE_CAN_AR,
+			ETC_LOC,
+			ETC_NEAR_SITU,
+			ETC_ITEM,
+			ETC_RM,
+			MAN_CDE,
+			MAN_NM,
+			MND_NM,
+			PBP_KND,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			PTY_PC,
+			ACC_NM,
+			MESRV_NM,
+			ACQ_DEPT,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PC,
+			RST_YN,
+			PST_NUM,
+			LOAN_YN
+		FROM
+			V_BML_ACEX_AS
+		WHERE
+			BJD_CDE = #{bjdCde}
+			AND
+			MONUT = #{monut}
+			AND
+			BUN = #{bun}
+			AND
+			HO = #{ho}
+	</select>
+	
+	<insert id="insert" parameterType="BmlAcexDt">
+		INSERT INTO
+			BML_ACEX_DT(
+				PRT_IDN,
+				SRCH_YMD,
+				PRP_NO,
+				CFP_NM,
+				CONFM_YMD,
+				SRCHP_NM,
+				MGT_GBN,
+				MGT_YN,
+				UNUSED_STT,
+				SRV_REGN,
+				SRV_ZONE,
+				CT_PLN_FC,
+				LNTRD_PRM,
+				ENV,
+				CNVE_FCL,
+				PB_LCMTN,
+				RD_SRFC,
+				MRD_DIST,
+				HIGH_LW,
+				SHAPE,
+				DIRECTION,
+				USE_LIMIT,
+				USE_SITU_JIMK,
+				USE_SITU,
+				USE_MEANS_NM,
+				USE_NEAR_FILJI_NUM,
+				USE_TOT_AR,
+				USE_REP_FILJI,
+				USE_MUSE_MBD,
+				USE_BDNG_STC,
+				USE_STC_ROF,
+				USE_SRV,
+				USE_BDNG_LAYER,
+				USE_YAREA,
+				USE_CNST_D,
+				USE_THIRDP_BDNG,
+				USE_BDNG_OWNER_NM,
+				USE_ABDNG_REGST_YN,
+				ETC_SRV_REGN,
+				ETC_CNT,
+				ETC_AM,
+				ETC_SHA_QUOTA,
+				ETC_USE_FORM,
+				ETC_USE_CAN_SRV,
+				ETC_USE_CAN_AR,
+				ETC_LOC,
+				ETC_NEAR_SITU,
+				ETC_ITEM,
+				ETC_RM
+			)
+		VALUES(
+			#{prtIdn, jdbcType=BIGINT},
+			#{srchYmd, jdbcType=VARCHAR},
+			#{prpNo, jdbcType=VARCHAR},
+			#{cfpNm, jdbcType=VARCHAR},
+			#{confmYmd, jdbcType=VARCHAR},
+			#{srchpNm, jdbcType=VARCHAR},
+			#{mgtGbn, jdbcType=VARCHAR},
+			#{mgtYn, jdbcType=VARCHAR},
+			#{unusedStt, jdbcType=VARCHAR},
+			#{srvRegn, jdbcType=VARCHAR},
+			#{srvZone, jdbcType=VARCHAR},
+			#{ctPlnFc, jdbcType=VARCHAR},
+			#{lntrdPrm, jdbcType=VARCHAR},
+			#{env, jdbcType=VARCHAR},
+			#{cnveFcl, jdbcType=VARCHAR},
+			#{pbLcmtn, jdbcType=VARCHAR},
+			#{rdSrfc, jdbcType=VARCHAR},
+			#{mrdDist, jdbcType=VARCHAR},
+			#{highLw, jdbcType=VARCHAR},
+			#{shape, jdbcType=VARCHAR},
+			#{direction, jdbcType=VARCHAR},
+			#{useLimit, jdbcType=VARCHAR},
+			#{useSituJimk, jdbcType=VARCHAR},
+			#{useSitu, jdbcType=VARCHAR},
+			#{useMeansNm, jdbcType=VARCHAR},
+			#{useNearFiljiNum, jdbcType=VARCHAR},
+			#{useTotAr, jdbcType=DOUBLE},
+			#{useRepFilji, jdbcType=VARCHAR},
+			#{useMuseMbd, jdbcType=VARCHAR},
+			#{useBdngStc, jdbcType=VARCHAR},
+			#{useStcRof, jdbcType=VARCHAR},
+			#{useSrv, jdbcType=VARCHAR},
+			#{useBdngLayer, jdbcType=INTEGER},
+			#{useYarea, jdbcType=DOUBLE},
+			#{useCnstD, jdbcType=VARCHAR},
+			#{useThirdpBdng, jdbcType=VARCHAR},
+			#{useBdngOwnerNm, jdbcType=VARCHAR},
+			#{useAbdngRegstYn, jdbcType=VARCHAR},
+			#{etcSrvRegn, jdbcType=VARCHAR},
+			#{etcCnt, jdbcType=VARCHAR},
+			#{etcAm, jdbcType=BIGINT},
+			#{etcShaQuota, jdbcType=VARCHAR},
+			#{etcUseForm, jdbcType=VARCHAR},
+			#{etcUseCanSrv, jdbcType=VARCHAR},
+			#{etcUseCanAr, jdbcType=VARCHAR},
+			#{etcLoc, jdbcType=VARCHAR},
+			#{etcNearSitu, jdbcType=VARCHAR},
+			#{etcItem, jdbcType=VARCHAR},
+			#{etcRm, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="remove">
+		TRUNCATE TABLE BML_ACEX_DT
+	</delete>
+</mapper>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdlPcbsPsMapper">
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="objectid != null and objectid != ''">
+				AND OBJECTID = #{objectid}
+			</if>
+			<if test="ftrCde != null and ftrCde != ''">
+				AND FTR_CDE = #{ftrCde}
+			</if>
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+			<if test="hjdCde != null and hjdCde != ''">
+				AND HJD_CDE = #{hjdCde}
+			</if>
+			<if test="shtNum != null and shtNum != ''">
+				AND SHT_NUM = #{shtNum}
+			</if>
+			<if test="mngCde != null and mngCde != ''">
+				AND MNG_CDE = #{mngCde}
+			</if>
+			<if test="pcbCde != null and pcbCde != ''">
+				AND PCB_CDE = #{pcbCde}
+			</if>
+			<if test="serIdn != null and serIdn != ''">
+				<if test="searchCondition == 'serIdn'">
+					AND SER_IDN LIKE '%' || #{serIdn} || '%'
+				</if>
+				<if test="searchCondition == null or searchCondition == '' or searchCondition != 'serIdn'">
+					AND SER_IDN = #{serIdn}
+				</if>
+			</if>
+			<if test="pcbDes != null and pcbDes != ''">
+				AND PCB_DES = #{pcbDes}
+			</if>
+			<if test="insYmd != null and insYmd != ''">
+				AND INS_YMD = #{insYmd}
+			</if>
+			<if test="srvYmd != null and srvYmd != ''">
+				AND SRV_YMD = #{srvYmd}
+			</if>
+			<if test="pyoGoh != null and pyoGoh != ''">
+				AND PYO_GOH = #{pyoGoh}
+			</if>
+			<if test="srtPnt != null and srtPnt != ''">
+				AND SRT_PNT = #{srtPnt}
+			</if>
+			<if test="abrDes != null and abrDes != ''">
+				AND ABR_DES = #{abrDes}
+			</if>
+			<if test="sysChk != null and sysChk != ''">
+				AND SYS_CHK = #{sysChk}
+			</if>
+			<if test="srvChk != null and srvChk != ''">
+				AND SRV_CHK = #{srvChk}
+			</if>
+		</where>
+	</sql>
+	<sql id="whereKey">
+		<where>
+			<if test="objectid != null and objectid != ''">
+				AND OBJECTID = #{objectid}
+			</if>
+			<if test="ftrCde != null and ftrCde != ''">
+				AND FTR_CDE = #{ftrCde}
+			</if>
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+			<if test="serIdn != null and serIdn != ''">
+				AND SER_IDN = #{serIdn}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 전체 검색 -->
+	<select id="listAll" resultType="rdlPcbsPs">
+		SELECT
+			T1.OBJECTID,
+			T1.FTR_CDE,
+			T1.FTR_IDN,
+			T1.HJD_CDE,
+			T2.HJD_CDE_NM,
+			T1.SHT_NUM,
+			T1.MNG_CDE,
+			T3.MNG_CDE_NM,
+			T1.PCB_CDE,
+			T4.PCB_CDE_NM,
+			T1.SER_IDN,
+			T1.PCB_DES,
+			T1.INS_YMD,
+			T1.SRV_YMD,
+			T1.PYO_GOH,
+			T1.BSL_XCO,
+			T1.BSL_YCO,
+			T1.GRS_XCO,
+			T1.GRS_YCO,
+			T1.SRT_PNT,
+			T1.ABR_DES,
+			T1.SYS_CHK,
+			T1.SRV_CHK,
+			T1.INS_USER,
+			T1.SRV_USER,
+			T1.PLAN_CDE,
+			T5.PLAN_CDE_NM,
+			T1.SHT_NUM_NM,
+			T1.GRAD,
+			T1.BSNS_NM,
+			T1.NTFC_NO,
+			T1.WRK_ORG,
+			T1.RSLT_SE,
+			T1.LVL_PNT_SE,
+			T1.LO,
+			T1.LA
+		FROM RDL_PCBS_PS T1
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS HJD_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-059') T2 ON T1.HJD_CDE = T2.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS MNG_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-078') T3 ON T1.MNG_CDE = T3.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS PCB_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-302') T4 ON T1.PCB_CDE = T4.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS PLAN_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-078') T5 ON T1.PLAN_CDE = T5.CODE_ID
+		ORDER BY T1.SER_IDN
+	</select>
+	
+	<!-- 조건 검색 -->
+	<select id="list" parameterType="rdlPcbsPs" resultType="rdlPcbsPs">
+		SELECT
+			T1.OBJECTID,
+			T1.FTR_CDE,
+			T1.FTR_IDN,
+			T1.HJD_CDE,
+			T2.HJD_CDE_NM,
+			T1.SHT_NUM,
+			T1.MNG_CDE,
+			T3.MNG_CDE_NM,
+			T1.PCB_CDE,
+			T4.PCB_CDE_NM,
+			T1.SER_IDN,
+			T1.PCB_DES,
+			T1.INS_YMD,
+			T1.SRV_YMD,
+			T1.PYO_GOH,
+			T1.BSL_XCO,
+			T1.BSL_YCO,
+			T1.GRS_XCO,
+			T1.GRS_YCO,
+			T1.SRT_PNT,
+			T1.ABR_DES,
+			T1.SYS_CHK,
+			T1.SRV_CHK,
+			T1.INS_USER,
+			T1.SRV_USER,
+			T1.PLAN_CDE,
+			T5.PLAN_CDE_NM,
+			T1.SHT_NUM_NM,
+			T1.GRAD,
+			T1.BSNS_NM,
+			T1.NTFC_NO,
+			T1.WRK_ORG,
+			T1.RSLT_SE,
+			T1.LVL_PNT_SE,
+			T1.LO,
+			T1.LA
+		FROM RDL_PCBS_PS T1
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS HJD_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-059') T2 ON T1.HJD_CDE = T2.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS MNG_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-078') T3 ON T1.MNG_CDE = T3.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS PCB_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-302') T4 ON T1.PCB_CDE = T4.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS PLAN_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-078') T5 ON T1.PLAN_CDE = T5.CODE_ID		
+		<include refid="where" />
+		ORDER BY T1.SER_IDN
+	</select>
+	
+	<!-- 단 건 조회 -->
+	<select id="selectOne" parameterType="String" resultType="rdlPcbsPs">
+		SELECT
+			T1.OBJECTID,
+			T1.FTR_CDE,
+			T1.FTR_IDN,
+			T1.HJD_CDE,
+			T2.HJD_CDE_NM,
+			T1.SHT_NUM,
+			T1.MNG_CDE,
+			T3.MNG_CDE_NM,
+			T1.PCB_CDE,
+			T4.PCB_CDE_NM,
+			T1.SER_IDN,
+			T1.PCB_DES,
+			T1.INS_YMD,
+			T1.SRV_YMD,
+			T1.PYO_GOH,
+			T1.BSL_XCO,
+			T1.BSL_YCO,
+			T1.GRS_XCO,
+			T1.GRS_YCO,
+			T1.SRT_PNT,
+			T1.ABR_DES,
+			T1.SYS_CHK,
+			T1.SRV_CHK,
+			T1.INS_USER,
+			T1.SRV_USER,
+			T1.PLAN_CDE,
+			T5.PLAN_CDE_NM,
+			T1.SHT_NUM_NM,
+			T1.GRAD,
+			T1.BSNS_NM,
+			T1.NTFC_NO,
+			T1.WRK_ORG,
+			T1.RSLT_SE,
+			T1.LVL_PNT_SE,
+			T1.LO,
+			T1.LA
+		FROM RDL_PCBS_PS T1
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS HJD_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-059') T2 ON T1.HJD_CDE = T2.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS MNG_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-078') T3 ON T1.MNG_CDE = T3.CODE_ID
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS PCB_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-302') T4 ON T1.PCB_CDE = T4.CODE_ID	
+		LEFT OUTER JOIN (SELECT CODE_ID, CODE_NM AS PLAN_CDE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-078') T5 ON T1.PLAN_CDE = T5.CODE_ID	
+		<include refid="whereKey" />
+	</select>
+
+	<insert id="add" parameterType="rdlPcbsPs">
+		INSERT INTO RDL_PCBS_PS
+		(
+			GEOM,
+			OBJECTID,
+			FTR_CDE,
+			FTR_IDN,
+			HJD_CDE,
+			SHT_NUM,
+			MNG_CDE,
+			PCB_CDE,
+			SER_IDN,
+			PCB_DES,
+			INS_YMD,
+			SRV_YMD,
+			<if test="pyoGoh != null">
+			PYO_GOH,
+			</if>
+			<if test="bslXco != null">
+			BSL_XCO,
+			</if>
+			<if test="bslYco != null">
+			BSL_YCO,
+			</if>
+			<if test="grsXco != null">
+			GRS_XCO,
+			</if>
+			<if test="grsYco != null">
+			GRS_YCO,
+			</if>
+			SRT_PNT,
+			ABR_DES,
+			SYS_CHK,
+			SRV_CHK,
+			INS_USER,
+			SRV_USER,
+			PLAN_CDE,
+			SHT_NUM_NM,
+			GRAD,
+			BSNS_NM,
+			NTFC_NO,
+			WRK_ORG,
+			RSLT_SE,
+			LVL_PNT_SE,
+			LO,
+			LA
+		)	
+		VALUES
+		(
+			SDO_UTIL.FROM_WKTGEOMETRY(#{geom}),
+			#{objectid, jdbcType=INTEGER},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=INTEGER},
+			#{hjdCde, jdbcType=VARCHAR},
+			#{shtNum, jdbcType=VARCHAR},
+			#{mngCde, jdbcType=VARCHAR},
+			#{pcbCde, jdbcType=VARCHAR},
+			#{serIdn, jdbcType=VARCHAR},
+			#{pcbDes, jdbcType=VARCHAR},
+			#{insYmd, jdbcType=VARCHAR},
+			#{srvYmd, jdbcType=VARCHAR},
+			<if test="pyoGoh != null">
+			#{pyoGoh, jdbcType=DOUBLE}, 
+			</if>
+			<if test="bslXco != null">
+			#{bslXco, jdbcType=DOUBLE},
+			</if>
+			<if test="bslYco != null">
+			#{bslYco, jdbcType=DOUBLE},
+			</if>
+			<if test="grsXco != null">
+			#{grsXco, jdbcType=DOUBLE},
+			</if>
+			<if test="grsYco != null">
+			#{grsYco, jdbcType=DOUBLE},
+			</if>
+			#{srtPnt, jdbcType=VARCHAR},
+			#{abrDes, jdbcType=VARCHAR},
+			#{sysChk, jdbcType=VARCHAR},
+			#{srvChk, jdbcType=VARCHAR},
+			#{insUser, jdbcType=VARCHAR},
+			#{srvUser, jdbcType=VARCHAR},
+			#{planCde, jdbcType=VARCHAR},
+			#{shtNumNm, jdbcType=VARCHAR},
+			#{grad, jdbcType=VARCHAR},
+			#{bsnsNm, jdbcType=VARCHAR},
+			#{ntfcNo, jdbcType=VARCHAR},
+			#{wrkOrg, jdbcType=VARCHAR},
+			#{rsltSe, jdbcType=VARCHAR},
+			#{lvlPntSe, jdbcType=VARCHAR},
+			#{lo, jdbcType=VARCHAR},
+			#{la, jdbcType=VARCHAR}
+		)	
+	</insert>
+	
+	<update id="modify" parameterType="rdlPcbsPs">
+		UPDATE RDL_PCBS_PS SET
+			HJD_CDE = #{hjdCde, jdbcType=VARCHAR},
+			SHT_NUM = #{shtNum, jdbcType=VARCHAR},
+			MNG_CDE = #{mngCde, jdbcType=VARCHAR},
+			PCB_CDE = #{pcbCde, jdbcType=VARCHAR},
+			SER_IDN = #{serIdn, jdbcType=VARCHAR},
+			PCB_DES = #{pcbDes, jdbcType=VARCHAR},
+			INS_YMD = #{insYmd, jdbcType=VARCHAR},
+			SRV_YMD = #{srvYmd, jdbcType=VARCHAR},
+			PYO_GOH = #{pyoGoh, jdbcType=DOUBLE},
+			BSL_XCO = #{bslXco, jdbcType=DOUBLE},
+			BSL_YCO = #{bslYco, jdbcType=DOUBLE},
+			GRS_XCO = #{grsXco, jdbcType=DOUBLE},
+			GRS_YCO = #{grsYco, jdbcType=DOUBLE},
+			SRT_PNT = #{srtPnt, jdbcType=VARCHAR},
+			ABR_DES = #{abrDes, jdbcType=VARCHAR},
+			INS_USER = #{insUser, jdbcType=VARCHAR},
+			SRV_USER = #{srvUser, jdbcType=VARCHAR},
+			PLAN_CDE = #{planCde, jdbcType=VARCHAR},
+			SHT_NUM_NM = #{shtNumNm, jdbcType=VARCHAR},
+			GRAD = #{grad, jdbcType=VARCHAR},
+			BSNS_NM = #{bsnsNm, jdbcType=VARCHAR},
+			NTFC_NO = #{ntfcNo, jdbcType=VARCHAR},
+			WRK_ORG = #{wrkOrg, jdbcType=VARCHAR},
+			RSLT_SE = #{rsltSe, jdbcType=VARCHAR},
+			LVL_PNT_SE = #{lvlPntSe, jdbcType=VARCHAR},
+			LO = #{lo, jdbcType=VARCHAR},
+			LA = #{la, jdbcType=VARCHAR}
+		WHERE FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<delete id="remove" parameterType="rdlPcbsPs">
+		DELETE RDL_PCBS_PS
+		WHERE SER_IDN = #{serIdn}
+	</delete>
+</mapper>

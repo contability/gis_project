@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsBaseMapMapper">
+	
+	<!-- 기본 지도 맵 -->
+	<resultMap id="kwsBaseMapMap" type="kwsBaseMap">
+		<id property="mapNo" column="MAP_NO" />
+		<result property="title" column="TITLE" />
+		<result property="description" column="DESCRIPTION" />
+		<result property="srs" column="SRS" />
+		<result property="originX" column="ORIGIN_X" />
+		<result property="originY" column="ORIGIN_Y" />
+		<result property="mapMode" column="MAP_MODE" />
+		<result property="extension" column="EXTENSION" />
+		<result property="height" column="HEIGHT" />
+		<result property="width" column="WIDTH" />
+		<result property="requestFormat" column="REQUEST_FORMAT" />
+		<result property="baseMapYn" column="BASE_MAP_YN" />
+		<result property="layerYn" column="LAYER_YN" />
+		<result property="photographyYear" column="PHOTOGRAPHY_YEAR" />
+		<result property="photographyInstitution" column="PHOTOGRAPHY_INSTITUTION" />
+		<result property="resolution" column="RESOLUTION" />
+		<result property="minX" column="MIN_X" />
+		<result property="minY" column="MIN_Y" />
+		<result property="maxX" column="MAX_X" />
+		<result property="maxY" column="MAX_Y" />
+		<result property="cm" column="CM" />
+		<collection property="kwsBaseMapHosts" column="MAP_NO" javaType="java.util.ArrayList" ofType="kwsBaseMapHost" select="kr.co.gitt.kworks.mappers.KwsBaseMapHostMapper.listAll" ></collection>
+		<collection property="kwsBaseMapLevels" column="MAP_NO" javaType="java.util.ArrayList" ofType="kwsBaseMapLevel" select="kr.co.gitt.kworks.mappers.KwsBaseMapLevelMapper.listAll" ></collection>
+	</resultMap>
+	
+	<!-- 목록 검색 -->
+	<select id="listAll" parameterType="baseMapSearchDTO" resultMap="kwsBaseMapMap">
+		SELECT 
+			MAP_NO,
+			MAP_TYPE,
+			TITLE,
+			DESCRIPTION,
+			SRS,
+			ORIGIN_X + OFFSET_X AS ORIGIN_X,
+			ORIGIN_Y + OFFSET_Y AS ORIGIN_Y,
+			MAP_MODE,
+			EXTENSION,
+			HEIGHT,
+			WIDTH,
+			REQUEST_FORMAT,
+			BASE_YN,
+			BASE_MAP_YN,
+			LAYER_YN,
+			PHOTOGRAPHY_YEAR,
+			PHOTOGRAPHY_INSTITUTION,
+			RESOLUTION,
+			MIN_X + OFFSET_X AS MIN_X,
+			MIN_Y + OFFSET_Y AS MIN_Y,
+			MAX_X + OFFSET_X AS MAX_X,
+			MAX_Y + OFFSET_Y AS MAX_Y,
+			CM
+		FROM
+			KWS_BASE_MAP
+		<where>
+			<if test="baseMaps != null and baseMaps.size > 0">
+				AND TITLE IN 
+				<foreach collection="baseMaps" item="baseMap" open="(" close=")" separator=",">
+					#{baseMap}
+				</foreach>
+			</if>
+			<if test="mapType != null">
+				AND MAP_TYPE = 'FLIGHT'
+			</if>
+		</where>
+		ORDER BY TITLE DESC
+	</select>
+	
+	<!-- LAYER_YN의 값이 Y인 배경지도만 LIST 호출 -->
+	<select id="listLayerY" parameterType="baseMapSearchDTO" resultMap="kwsBaseMapMap">
+		SELECT 
+			MAP_NO,
+			MAP_TYPE,
+			TITLE,
+			DESCRIPTION,
+			SRS,
+			ORIGIN_X + OFFSET_X AS ORIGIN_X,
+			ORIGIN_Y + OFFSET_Y AS ORIGIN_Y,
+			MAP_MODE,
+			EXTENSION,
+			HEIGHT,
+			WIDTH,
+			REQUEST_FORMAT,
+			BASE_YN,
+			BASE_MAP_YN,
+			LAYER_YN,
+			PHOTOGRAPHY_YEAR,
+			PHOTOGRAPHY_INSTITUTION,
+			RESOLUTION,
+			MIN_X + OFFSET_X AS MIN_X,
+			MIN_Y + OFFSET_Y AS MIN_Y,
+			MAX_X + OFFSET_X AS MAX_X,
+			MAX_Y + OFFSET_Y AS MAX_Y,
+			CM
+		FROM
+			KWS_BASE_MAP
+		<where>
+			<if test="baseMaps != null and baseMaps.size > 0">
+				AND TITLE IN 
+				<foreach collection="baseMaps" item="baseMap" open="(" close=")" separator=",">
+					#{baseMap}
+				</foreach>
+			</if>
+			<if test="mapType != null">
+				AND MAP_TYPE = 'FLIGHT'
+			</if>
+			AND LAYER_YN = 'Y'
+		</where>
+		ORDER BY TITLE DESC
+	</select>
+			
+	<!-- 배경지도 사용여부 수정 -->
+	<update id="updateBcrnMapBaseN" parameterType="kwsBaseMap">
+		UPDATE KWS_BASE_MAP SET 
+			BASE_YN = 'N'
+		WHERE MAP_TYPE = 'FLIGHT'
+	</update>
+		
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="kwsBaseMapMap">
+		SELECT 
+			MAP_NO,
+			MAP_TYPE,
+			TITLE,
+			DESCRIPTION,
+			SRS,
+			ORIGIN_X + OFFSET_X AS ORIGIN_X,
+			ORIGIN_Y + OFFSET_Y AS ORIGIN_Y,
+			MAP_MODE,
+			EXTENSION,
+			HEIGHT,
+			WIDTH,
+			REQUEST_FORMAT,
+			BASE_YN,
+			BASE_MAP_YN,
+			LAYER_YN,
+			PHOTOGRAPHY_YEAR,
+			PHOTOGRAPHY_INSTITUTION,
+			RESOLUTION,
+			MIN_X + OFFSET_X AS MIN_X,
+			MIN_Y + OFFSET_Y AS MIN_Y,
+			MAX_X + OFFSET_X AS MAX_X,
+			MAX_Y + OFFSET_Y AS MAX_Y,
+			CM
+		FROM
+			KWS_BASE_MAP
+		WHERE
+			MAP_NO = #{mapNo}
+	</select>
+	
+	<!-- 배경지도 정보 수정 -->
+	<update id="updateBcrnMapInfo" parameterType="kwsBaseMap">
+		UPDATE KWS_BASE_MAP SET 
+			<if test="title != null and title != ''">
+				TITLE = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="baseMapYn != null and baseMapYn != ''">
+				BASE_MAP_YN = #{baseMapYn, jdbcType=VARCHAR},
+			</if>
+			<if test="layerYn != null and layerYn != ''">
+				LAYER_YN = #{layerYn, jdbcType=VARCHAR},
+			</if>
+			<if test="photographyYear != null and photographyYear != ''">
+				PHOTOGRAPHY_YEAR = #{photographyYear, jdbcType=VARCHAR},
+			</if>
+			<if test="photographyInstitution != null and photographyInstitution != ''">
+				PHOTOGRAPHY_INSTITUTION = #{photographyInstitution, jdbcType=VARCHAR},
+			</if>
+			<if test="resolution != null and resolution != ''">
+				RESOLUTION = #{resolution, jdbcType=VARCHAR},
+			</if>
+			DESCRIPTION = #{description, jdbcType=VARCHAR},
+			REQUEST_FORMAT = #{requestFormat, jdbcType=VARCHAR},
+			BASE_YN = #{baseYn, jdbcType=VARCHAR}
+		WHERE
+			MAP_NO = #{mapNo}
+	</update>
+	
+</mapper>

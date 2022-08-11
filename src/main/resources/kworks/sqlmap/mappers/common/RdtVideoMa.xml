@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdtVideoMaMapper">
+
+	<!-- 영상관리 파일 결과 맵 -->
+	<resultMap id="rdtVideoMaMap" type="rdtVideoMa">
+		<id property="ftrIdn" column="FTR_IDN"/>
+		<result property="upNo" column="UP_NO"/>
+		<result property="upFile" column="UP_FILE"/>
+		<result property="downNo" column="DOWN_NO"/>
+		<result property="downFile" column="DOWN_FILE"/>
+	</resultMap>
+
+	<!-- 검색조건 -->
+	<sql id="where">
+		<where>
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+			<if test="upNo != null and upNo != ''">
+				AND UP_NO = #{upNo}
+			</if>
+			<if test="upFile != null and upFile != ''">
+				AND UP_FILE = #{upFile}
+			</if>
+			<if test="downNo != null and downNo != ''">
+				AND DOWN_NO = #{downNo}
+			</if>
+			<if test="downFile != null and downFile != ''">
+				AND DOWN_FILE = #{downFile}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="list" parameterType="rdtVideoMa" resultType="rdtVideoMa">
+		SELECT
+			VIDEO.FTR_IDN,
+			VIDEO.UP_NO,
+			VIDEO.UP_FILE,
+			VIDEO.DOWN_NO,
+			VIDEO.DOWN_FILE,
+			LS.ROT_NAM,
+			LS.ROT_IDN,
+			LS.SEC_IDN
+		FROM
+			RDT_VIDEO_MA VIDEO
+		LEFT OUTER JOIN
+			RDL_SECT_LS LS
+		ON
+			VIDEO.FTR_IDN = LS.FTR_IDN
+		WHERE
+			VIDEO.FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<select id="selectOne" parameterType="Long" resultMap="rdtVideoMaMap">
+		SELECT
+			VIDEO.FTR_IDN,
+			VIDEO.UP_NO,
+			VIDEO.UP_FILE,
+			VIDEO.DOWN_NO,
+			VIDEO.DOWN_FILE,
+			LS.ROT_NAM,
+			LS.ROT_IDN,
+			LS.SEC_IDN
+		FROM
+			RDT_VIDEO_MA VIDEO
+		LEFT OUTER JOIN
+			RDL_SECT_LS LS
+		ON
+			VIDEO.FTR_IDN = LS.FTR_IDN
+		WHERE
+			VIDEO.FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<update id="updateVideoUp" parameterType="rdtVideoMa">
+		UPDATE RDT_VIDEO_MA SET
+			UP_NO = #{upNo, jdbcType=BIGINT},
+			UP_FILE = #{upFile, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}	
+	</update>
+	
+	<update id="updateVideoDown" parameterType="rdtVideoMa">
+		UPDATE RDT_VIDEO_MA SET
+			DOWN_NO = #{downNo, jdbcType=BIGINT},
+			DOWN_FILE = #{downFile, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}	
+	</update>
+	
+</mapper>

@@ -1,0 +1,133 @@
+
+/* main_button */
+.btn_go{width:63px; height:20px; background:url(../../../images/kworks/main/btnGo.png) no-repeat; border:0; display:inline-block;}
+.btn_system01_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_01off.png) no-repeat; border:0; display:inline-block;}
+.btn_system02_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_02off.png) no-repeat; border:0; display:inline-block;}
+.btn_system03_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_03off.png) no-repeat; border:0; display:inline-block;}
+.btn_system04_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_04off.png) no-repeat; border:0; display:inline-block;}
+.btn_system05_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_05off.png) no-repeat; border:0; display:inline-block;}
+.btn_system06_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_06off.png) no-repeat; border:0; display:inline-block;}
+.btn_system07_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_07off.png) no-repeat; border:0; display:inline-block;}
+.btn_system08_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_08off.png) no-repeat; border:0; display:inline-block;}
+.btn_system09_off{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_09off.png) no-repeat; border:0; display:inline-block;}
+.btn_system01_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_01on.png) no-repeat; border:0; display:inline-block;}
+.btn_system02_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_02on.png) no-repeat; border:0; display:inline-block;}
+.btn_system03_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_03on.png) no-repeat; border:0; display:inline-block;}
+.btn_system04_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_04on.png) no-repeat; border:0; display:inline-block;}
+.btn_system05_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_05on.png) no-repeat; border:0; display:inline-block;}
+.btn_system06_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_06on.png) no-repeat; border:0; display:inline-block;}
+.btn_system07_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_07on.png) no-repeat; border:0; display:inline-block;}
+.btn_system08_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_08on.png) no-repeat; border:0; display:inline-block;}
+.btn_system09_ov{width:145px; height:240px; background:url(../../../images/kworks/main/centerBtn_09on.png) no-repeat; border:0; display:inline-block;}
+
+
+/* gnb_button */
+.btn_logout{width:79px; height:26px; background:url(../../../images/kworks/map/common/btn_logout.png) no-repeat; border:0; display:inline-block;}
+.btn_portal{width:24px; height:24px; background:url(../../../images/kworks/map/common/btn_portal.png) no-repeat; border:0; display:inline-block;}
+
+/* popup_button */
+.btn_print2		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_print2.png) no-repeat; display:inline-block;}
+.btn_print3		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_print3.png) no-repeat; display:inline-block;}
+.btn_cons_ma	{width:72px; height:27px; background:url(../../../images/kworks/map/skin2/btn_cons_ma.png) no-repeat; display:inline-block;}
+.btn_edit		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_edit.png) no-repeat; display:inline-block;}
+.btn_del		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_del.png) no-repeat; display:inline-block;}
+.btn_close		{width:52px; height:27px; background:url(../../../images/kworks/map/common/btn_close.png) no-repeat; display:inline-block;}
+.btn_print4		{width:52px; height:27px; background:url(../../../images/kworks/map/common/btn_print4.png) no-repeat; display:inline-block;}
+.btn_popSet		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_set.png) no-repeat; display:inline-block;}
+.btn_save2		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_save2.png) no-repeat; display:inline-block;}
+.btn_add		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_add.png) no-repeat; display:inline-block;}
+.btn_clear		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_clear.png) no-repeat; display:inline-block;}
+.btn_del		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_del.png) no-repeat; display:inline-block;}
+.btn_change		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_change.png) no-repeat; display:inline-block;}
+.btn_register	{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_register.png) no-repeat; display:inline-block;}
+.btn_preview	{width:80px; height:27px; background:url(../../../images/kworks/map/skin2/btn_preview.png) no-repeat; display:inline-block;}
+.btn_down		{width:80px; height:27px; background:url(../../../images/kworks/map/skin2/btn_down.gif) no-repeat; display:inline-block;}
+.btn_modify2	{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_modify.png) no-repeat; display:inline-block;}
+.btn_list		{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_list.png) no-repeat; display:inline-block;}
+.btn_listPlus	{width:64px; height:27px; background:url(../../../images/kworks/map/skin2/btn_listPlus.png) no-repeat; display:inline-block;}
+.btn_newSet 	{width:64px; height:27px; background:url(../../../images/kworks/map/skin2/btn_newSet.png) no-repeat; display:inline-block;}
+.btn_popSelect	{width:64px; height:27px; background:url(../../../images/kworks/map/skin2/btn_select.png) no-repeat; display:inline-block;}
+.btn_popSelect2	{width:64px; height:27px; background:url(../../../images/kworks/map/skin2/btn_select2.png) no-repeat; display:inline-block;}
+.btn_search4	{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_search2.png) no-repeat; display:inline-block;}
+.btn_init4		{width:56px; height:27px; background:url(../../../images/kworks/map/skin2/btn_init4.png) no-repeat; display:inline-block;}
+.btn_popCancel	{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_cancel.png) no-repeat; display:inline-block;}
+.btn_constru	{width:72px; height:27px; background:url(../../../images/kworks/map/skin2/btn_constru.png) no-repeat; display:inline-block;}
+.btn_crosswalk	{width:94px; height:27px; background:url(../../../images/kworks/map/skin2/btn_crosswalk.png) no-repeat; display:inline-block;}
+.btn_photo		{width:33px; height:18px; background:url(../../../images/kworks/map/skin2/popBtn_photo_on.png) no-repeat; display:inline-block;}
+.btn_constru2	{width:33px; height:18px; background:url(../../../images/kworks/map/skin2/popBtn_constru_on.png) no-repeat; display:inline-block;}
+.btn_area		{width:30px; height:30px; background:url(../../../images/kworks/map/skin2/popBtn_area_on.png) no-repeat; display:inline-block;}
+.btn_distance	{width:30px; height:30px; background:url(../../../images/kworks/map/skin2/popBtn_distance_on.png) no-repeat; display:inline-block;}
+.btn_radius		{width:30px; height:30px; background:url(../../../images/kworks/map/skin2/popBtn_radius_on.png) no-repeat; display:inline-block;}
+.btn_position2	{width:30px; height:30px; background:url(../../../images/kworks/map/skin2/popBtn_position_on.png) no-repeat; display:inline-block;}
+.btn_popOpen	{width:19px; height:19px; background:url(../../../images/kworks/map/skin2/popBtn_open.png) no-repeat; display:inline-block;}
+.btn_popClose	{width:19px; height:19px; background:url(../../../images/kworks/map/skin2/popBtn_close.png) no-repeat; display:inline-block;}
+.btn_popPlus	{width:26px; height:24px; background:url(../../../images/kworks/map/skin2/layer_plus.png) no-repeat; display:inline-block;}
+.btn_popMinus	{width:26px; height:24px; background:url(../../../images/kworks/map/skin2/layer_minus.png) no-repeat; display:inline-block;}
+.btn_popPaint01	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn01_off.png) no-repeat; display:inline-block;}
+.btn_popPaint02	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn02_off.png) no-repeat; display:inline-block;}
+.btn_popPaint03	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn03_off.png) no-repeat; display:inline-block;}
+.btn_popPaint04	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn04_off.png) no-repeat; display:inline-block;}
+.btn_popPaint05	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn05_off.png) no-repeat; display:inline-block;}
+.btn_popPaint06	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn06_off.png) no-repeat; display:inline-block;}
+.btn_popPaint07	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn07_off.png) no-repeat; display:inline-block;}
+.btn_popPaint08	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn08_off.png) no-repeat; display:inline-block;}
+.btn_popPaint09	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn09_off.png) no-repeat; display:inline-block;}
+.btn_popPaint10	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn10_off.png) no-repeat; display:inline-block;}
+.btn_popPaint11	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn11_off.png) no-repeat; display:inline-block;}
+.btn_popPaint12	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn12_off.png) no-repeat; display:inline-block;}
+.btn_popPaint13	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn13_off.png) no-repeat; display:inline-block;}
+.btn_popPaint14	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn14_off.png) no-repeat; display:inline-block;}
+.btn_popPaint15	{width:24px; height:22px; background:url(../../../images/kworks/map/skin2/popPaint_btn15_off.png) no-repeat; display:inline-block;}
+.btn_popSearch	{width:52px; height:27px; background:url(../../../images/kworks/map/skin2/btn_search2.png) no-repeat; display:inline-block;}
+.btnBlue {display:inline-block; min-width:32px; padding:0 10px; color:#fff !important; text-align:center; height:25px; line-height:27px; border:1px solid #c0c0c0 !important; background:url("../../../images/kworks/map/common/bg_btnBlue.gif") repeat-x;}
+.btn_allCheck	{width:64px; height:27px; background:url(../../../images/kworks/map/skin2/btn_allCheck.png) no-repeat; display:inline-block;}
+.btn_allCheckout{width:64px; height:27px; background:url(../../../images/kworks/map/skin2/btn_allCheckout.png) no-repeat; display:inline-block;}
+
+/* panel_button */
+.btn_print		{width:40px; height:20px; background:url(../../../images/kworks/map/skin2/btn_print.png) no-repeat; display:inline-block;}
+.btn_regist		{width:40px; height:20px; background:url(../../../images/kworks/map/skin2/btn_regist.png) no-repeat; display:inline-block;}
+.btn_search		{width:40px; height:20px; background:url(../../../images/kworks/map/skin2/btn_search.png) no-repeat; display:inline-block;}
+.btn_all		{width:33px; height:18px; background:url(../../../images/kworks/map/skin2/layerBtn_all_on.png) no-repeat; display:inline-block;}
+.btn_on			{width:33px; height:18px; background:url(../../../images/kworks/map/skin2/layerBtn_on_on.png) no-repeat; display:inline-block;}
+.btn_screen		{width:33px; height:18px; background:url(../../../images/kworks/map/skin2/layerBtn_screen_on.png) no-repeat; display:inline-block;}
+.btn_call		{width:63px; height:20px; background:url(../../../images/kworks/map/skin2/btn_call.png) no-repeat; display:inline-block;}
+.btn_save		{width:40px; height:20px; background:url(../../../images/kworks/map/skin2/btn_save.png) no-repeat; display:inline-block;}
+.btn_apply		{width:40px; height:20px; background:url(../../../images/kworks/map/skin2/btn_apply.png) no-repeat; display:inline-block;}
+.btn_cancel		{width:40px; height:20px; background:url(../../../images/kworks/map/common/btn_cancel.png) no-repeat; display:inline-block;}
+.btn_layerTop01	{width:32px; height:32px; background:url(../../../images/kworks/map/skin2/layer2depBtn_01off.png) no-repeat; display:inline-block;}
+.btn_layerTop02	{width:32px; height:32px; background:url(../../../images/kworks/map/skin2/layer2depBtn_02off.png) no-repeat; display:inline-block;}
+.btn_layerTop03	{width:32px; height:32px; background:url(../../../images/kworks/map/skin2/layer2depBtn_03off.png) no-repeat; display:inline-block;}
+.btn_layerTop04	{width:32px; height:32px; background:url(../../../images/kworks/map/skin2/layer2depBtn_04off.png) no-repeat; display:inline-block;}
+.btn_layerTop05	{width:32px; height:32px; background:url(../../../images/kworks/map/skin2/layer2depBtn_05off.png) no-repeat; display:inline-block;}
+.btn_layerTop06	{width:32px; height:32px; background:url(../../../images/kworks/map/skin2/layer2depBtn_06off.png) no-repeat; display:inline-block;}
+
+/* slideBox */
+.btn_search1	{width:61px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_search1.png) no-repeat; display:inline-block;}
+.btn_set		{width:100px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_set.png) no-repeat; display:inline-block;}
+.btn_search2	{width:70px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_search2.png) no-repeat; display:inline-block;}
+.btn_modify		{width:74px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_modify.png) no-repeat; display:inline-block;}
+.btn_position	{width:104px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_position.png) no-repeat; display:inline-block;}
+.btn_excel		{width:54px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_excel.png) no-repeat; display:inline-block;}
+.btn_set2		{width:77px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_set2.png) no-repeat; display:inline-block;}
+.btn_search3	{width:73px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_search3.png) no-repeat; display:inline-block;}
+.btn_select		{width:73px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_select.png) no-repeat; display:inline-block;}
+.btn_delete		{width:73px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_delete.png) no-repeat; display:inline-block;}
+.btn_area1		{width:74px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_area1.png) no-repeat; display:inline-block;}
+.btn_area2		{width:74px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_area2.png) no-repeat; display:inline-block;}
+.btn_send1		{width:99px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_send1.png) no-repeat; display:inline-block;}
+.btn_send2		{width:99px; height:24px; background:url(../../../images/kworks/map/common/btn_slide_send2.png) no-repeat; display:inline-block;}
+
+/* foot_button */
+.btn_point		{width:56px; height:19px; background:url(../../../images/kworks/map/common/btn_point.png); background-repeat:no-repeat; display:inline-block;}
+
+.btn_textBold {display:inline-block; width:50px; height:25px; background:url(../../../images/kworks/map/drawTool/drawText_style_bold_off.png) no-repeat;}
+.btn_textBold.on {background:url(../../../images/kworks/map/drawTool/drawText_style_bold_on.png) no-repeat;}
+.btn_textItalic {display:inline-block; width:50px; height:25px; background:url(../../../images/kworks/map/drawTool/drawText_style_italic_off.png) no-repeat;}
+.btn_textItalic.on {background:url(../../../images/kworks/map/drawTool/drawText_style_italic_on.png) no-repeat;}
+
+
+.img_set		{width:50px; height:50px; background:url(../../../images/kworks/map/skin2/img_set.png) no-repeat; display:inline-block;}
+.img_stats_info	{width:50px; height:50px; background:url(../../../images/kworks/map/skin2/img_stats_info.png) no-repeat; display:inline-block;}
+.img_map_save	{width:50px; height:50px; background:url(../../../images/kworks/map/skin2/img_map_save.png) no-repeat; display:inline-block;}
+
+

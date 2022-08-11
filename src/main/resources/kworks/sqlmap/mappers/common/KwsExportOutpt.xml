@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportOutptMapper">
+	
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="deptCode != null">
+				(SELECT DEPT_CODE FROM KWS_DEPT WHERE DEPT_CODE = (SELECT DEPT_CODE FROM KWS_USER WHERE USER_ID = OUTPT.USER_ID)) = #{deptCode}
+			</if>
+			<if test="searchStartDt != null and searchStartDt != ''">
+				AND OUTPT.OUTPT_DT <![CDATA[>]]> CAST(#{searchStartDt} AS DATE)
+			</if>
+			<if test="searchEndDt != null and searchEndDt != ''">
+				AND OUTPT.OUTPT_DT <![CDATA[<]]> CAST(#{searchEndDt} AS DATE)
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+	  		KWS_EXPORT_OUTPT OUTPT
+	  		INNER JOIN KWS_EXPORT EXPO ON OUTPT.EXPORT_NO = EXPO.EXPORT_NO
+	  		LEFT OUTER JOIN KWS_EXPORT_CONFM CONFM ON OUTPT.EXPORT_NO = CONFM.EXPORT_NO
+	  	<include refid="where"/>
+	</select>
+	
+	<!-- 목록 조회 -->
+	<select id="list" parameterType="searchDTO" resultType="exportHistoryResultDTO">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+			  	TO_CHAR(OUTPT.OUTPT_DT, 'YYYY-MM-DD HH24:MI:SS') AS OUTPT_DT,
+			  	CASE 
+				  	WHEN EXPO.EXPORT_DTA_SE = 'CLOSED_DOOR' THEN '비공개' 
+				  	WHEN EXPO.EXPORT_DTA_SE = 'OPEN_LIMITATION' THEN '공개제한' 
+				  	WHEN EXPO.EXPORT_DTA_SE = 'OPEN' THEN '공개' 
+				  	ELSE '' END EXPORT_DTA_SE_NM,
+			  	'X : ' || EXPO.CENTER_LAT AS CENTER_LAT,
+			  	'Y : ' || EXPO.CENTER_LON AS CENTER_LON,
+			  	CASE 
+				    WHEN EXPO.EXPORT_TY = 'DXF' THEN 'DXF' 
+				    WHEN EXPO.EXPORT_TY = 'EXCEL' THEN '엑셀'
+				    WHEN EXPO.EXPORT_TY = 'SHAPE' THEN 'SHAPE' 
+				    WHEN EXPO.EXPORT_TY = 'IMAGE' THEN '이미지' 
+				    WHEN EXPO.EXPORT_TY = 'OUTPUT' THEN '고급 출력'
+				    ELSE '' END EXPORT_TY_NM,
+			   	'1' AS CNT,
+			  	USR_OUTPT.USER_NM AS OUTPT_USER_NM,
+			  	DEPT.DEPT_NM AS READNG_DEPT_NM,
+			  	USER_READNG.USER_NM AS READNG_USER_NM,
+			  	EXPORT_RESN,
+			  	'활용 후 즉시 완전 삭제(세단 등)' AS PRVNTC_DOC,
+			  	USER_CONFMER.USER_NM AS CONFMER_NM
+			FROM        
+				KWS_EXPORT_OUTPT OUTPT       
+				INNER JOIN KWS_EXPORT EXPO ON OUTPT.EXPORT_NO = EXPO.EXPORT_NO       
+				LEFT OUTER JOIN KWS_EXPORT_CONFM CONFM ON OUTPT.EXPORT_NO = CONFM.EXPORT_NO
+				LEFT OUTER JOIN KWS_USER USR_OUTPT ON OUTPT.USER_ID = USR_OUTPT.USER_ID
+				LEFT OUTER JOIN KWS_USER USER_READNG ON OUTPT.USER_ID = USER_READNG.USER_ID
+				LEFT OUTER JOIN KWS_DEPT DEPT ON USER_READNG.DEPT_CODE = DEPT.DEPT_CODE
+				LEFT OUTER JOIN KWS_USER USER_CONFMER ON CONFM.CONFMER_ID = USER_CONFMER.USER_ID
+		  	<include refid="where"/>
+			ORDER BY OUTPT.OUTPT_DT DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExportOutpt">
+		INSERT INTO KWS_EXPORT_OUTPT (
+			OUTPT_NO,
+			EXPORT_NO,
+			USER_ID
+		)
+		VALUES (
+			#{outptNo, jdbcType=BIGINT},
+			#{exportNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

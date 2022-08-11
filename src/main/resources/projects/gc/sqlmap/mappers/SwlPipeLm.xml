@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gc.mappers.SwlPipeLmMapper">
+
+	<insert id = "insert">
+	INSERT INTO 
+		SWL_PIPE_LM_CLOSE 
+	SELECT 
+			OBJECTID,
+			FTR_CDE,
+			FTR_IDN,
+			IST_YMD,
+			SBA_CDE,
+			MOP_CDE,
+			LIT_CDE,
+			FOR_CDE,
+			PIP_DIP,
+			PIP_HOL,
+			PIP_VEL,
+			PIP_LIN,
+			PIP_LEN,
+			PIP_SLP,
+			BEG_DEP,
+			END_DEP,
+			SBK_ALT,
+			SBL_ALT,
+			PIP_SBO,
+			PIP_SBP,
+			PIP_SBQ,
+			PIP_SBR,
+			EXP_CDE,
+			BOM_IDN,
+			EOM_IDN,
+			SHT_NUM,
+			MNG_CDE,
+			HJD_CDE,
+			BJD_CDE,
+			PIP_LBL,
+			LOD_YMD,
+			EOM_CDE,
+			BOM_CDE,
+			ETC_DES,
+			DIP_ERR,
+			MOP_ERR,
+			LEN_ERR,
+			EXP_ERR,
+			CNN_ERR,
+			BLD_ERR,
+			RD_ERR,
+			DEP_ERR,
+			SHAPE,
+			USE_AT
+	FROM SWL_PIPE_LM
+	WHERE USE_AT = 'N'
+	</insert>
+	
+	<delete id = "delete">
+	DELETE FROM
+		SWL_PIPE_LM
+	WHERE USE_AT ='N'
+	</delete>
+	
+</mapper>

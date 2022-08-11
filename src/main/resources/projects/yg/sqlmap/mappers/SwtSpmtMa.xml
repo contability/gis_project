@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yg.mappers.SwtSpmtMaMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 인허가일자 -->
+			<if test="pmtYmdMin != null and pmtYmdMin != '' and pmtYmdMax != null and pmtYmdMax != ''">
+				AND PMT_YMD <![CDATA[>=]]> TO_DATE(#{pmtYmdMin}, 'YYYY-MM-DD')
+				AND PMT_YMD <![CDATA[<=]]> TO_DATE(#{pmtYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 인허가구분 -->
+			<if test="pmsCde != null and pmsCde != ''">
+				AND PMS_CDE = #{pmsCde}
+			</if>
+			<!-- 하수처리구분 -->
+			<if test="brcCde != null and brcCde != ''">
+				AND BRC_CDE = #{brcCde}
+			</if>
+			<!-- 민원지법정동 -->
+			<if test="aplBjd != null and aplBjd != ''">
+				AND APL_BJD = #{aplBjd}
+			</if>
+			<!-- 민원인성명 -->
+			<if test="aplNam != null and aplNam != ''">
+				AND APL_NAM = #{aplNam}
+			</if>
+			<!-- 처리자성명 -->
+			<if test="proNam != null and proNam != ''">
+				AND PRO_NAM = #{proNam}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 배수설비인허가 리스트 -->
+	<select id="list" parameterType="swtSpmtMa" resultType="swtSpmtMa">
+		SELECT
+			FTR_IDN
+		FROM SWT_SPMT_MA
+		<include refid="where" />
+		ORDER BY FTR_IDN DESC
+	</select>
+	
+	<!-- 배수설비인허가 단 건 조회 -->
+	<select id="selectOne" parameterType="Long" resultType="swtSpmtMa">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			FTF_CDE,
+			PMT_YMD,
+			APL_BJD,
+			APL_SAN,
+			APL_BON,
+			APL_BUB,
+			APL_NAM,
+			APL_ADR,
+			APL_TEL,
+			CNT_YMD,
+			SDR_VOL,
+			BLD_USE,
+			BLD_ARA,
+			FTF_IDN,
+			BRC_CDE,
+			PRO_NAM,
+			PMS_CDE,
+			BLD_STR
+		FROM SWT_SPMT_MA
+		WHERE FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 배수설비인허가 등록 -->
+	<insert id="insert" parameterType="swtSpmtMa">
+		INSERT INTO SWT_SPMT_MA (
+			FTR_CDE,
+			FTR_IDN,
+			FTF_CDE,
+			PMT_YMD,
+			APL_BJD,
+			APL_SAN,
+			APL_BON,
+			APL_BUB,
+			APL_NAM,
+			APL_ADR,
+			APL_TEL,
+			CNT_YMD,
+			SDR_VOL,
+			BLD_USE,
+			BLD_ARA,
+			FTF_IDN,
+			BRC_CDE,
+			PRO_NAM,
+			PMS_CDE,
+			BLD_STR
+		) VALUES (
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ftfCde, jdbcType=VARCHAR},
+			#{pmtYmd, jdbcType=VARCHAR},
+			#{aplBjd, jdbcType=VARCHAR},
+			#{aplSan, jdbcType=VARCHAR},
+			#{aplBon, jdbcType=VARCHAR},
+			#{aplBub, jdbcType=VARCHAR},
+			#{aplNam, jdbcType=VARCHAR},
+			#{aplAdr, jdbcType=VARCHAR},
+			#{aplTel, jdbcType=VARCHAR},
+			#{cntYmd, jdbcType=VARCHAR},
+			#{sdrVol, jdbcType=DOUBLE},
+			#{bldUse, jdbcType=VARCHAR},
+			#{bldAra, jdbcType=DOUBLE},
+			#{ftfIdn, jdbcType=BIGINT},
+			#{brcCde, jdbcType=VARCHAR},
+			#{proNam, jdbcType=VARCHAR},
+			#{pmsCde, jdbcType=VARCHAR},
+			#{bldStr, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 배수설비인허가 수정 -->
+	<update id="update" parameterType="swtSpmtMa">
+		UPDATE SWT_SPMT_MA SET
+			PMT_YMD = #{pmtYmd, jdbcType=VARCHAR},
+			APL_BJD = #{aplBjd, jdbcType=VARCHAR},
+			APL_SAN = #{aplSan, jdbcType=VARCHAR},
+			APL_BON = #{aplBon, jdbcType=VARCHAR},
+			APL_BUB = #{aplBub, jdbcType=VARCHAR},
+			APL_NAM = #{aplNam, jdbcType=VARCHAR},
+			APL_ADR = #{aplAdr, jdbcType=VARCHAR},
+			APL_TEL = #{aplTel, jdbcType=VARCHAR},
+			CNT_YMD = #{cntYmd, jdbcType=VARCHAR},
+			SDR_VOL = #{sdrVol, jdbcType=DOUBLE},
+			BLD_USE = #{bldUse, jdbcType=VARCHAR},
+			BLD_ARA = #{bldAra, jdbcType=DOUBLE},
+			FTF_IDN = #{ftfIdn, jdbcType=BIGINT},
+			BRC_CDE = #{brcCde, jdbcType=VARCHAR},
+			PRO_NAM = #{proNam, jdbcType=VARCHAR},
+			PMS_CDE = #{pmsCde, jdbcType=VARCHAR},
+			BLD_STR = #{bldStr, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+</mapper>

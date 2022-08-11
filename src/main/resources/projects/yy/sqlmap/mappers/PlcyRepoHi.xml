@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.PlcyRepoHiMapper">
+	
+	<select id ="listCount" resultType="Integer">
+		SELECT
+			COUNT(*) AS HIST_COUNT
+		FROM PLCY_REPO_HI
+	</select>
+	
+		<!-- 등록 -->
+	<insert id="insert" parameterType="plcyRepoHi">
+		INSERT INTO PLCY_REPO_HI (
+			HIST_NO,
+			USER_ID,
+			FTR_IDN,
+			PLCY_TIT,
+			REPO_TIT,
+			REPO_IDN,
+			REPO_VER,
+			EDIT_TYPE
+			) VALUES (
+			#{histNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{plcyTit, jdbcType=VARCHAR},
+			#{repoTit, jdbcType=VARCHAR},
+			#{repoIdn, jdbcType=BIGINT},
+			#{repoVer, jdbcType=BIGINT},
+			#{editType, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="list" resultType="plcyRepoHi" parameterType="searchDTO">
+		SELECT T1.*, (ROW_NUMBER() OVER()) AS ROWNUM 
+		FROM (
+			SELECT
+				HIST_NO,
+				USER_ID,
+				(SELECT USER_NM FROM KWS_USER WHERE USER_ID = A.USER_ID) AS USER_NM,
+				A.FTR_IDN,
+				REPO_IDN,
+				REPO_VER,
+				EDIT_DT,
+				REPO_TIT,
+				(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE CODE_ID = EDIT_TYPE) as EDIT_TYPE,
+				B.PLCY_TIT
+			FROM 
+				PLCY_REPO_HI A 
+			LEFT OUTER JOIN
+				PLCY_STAT_AS B
+			ON
+				A.FTR_IDN = B.FTR_IDN
+			ORDER BY 
+				HIST_NO 
+			DESC
+		)T1
+		offset #{firstIndex} limit 10
+	</select>
+	
+</mapper>

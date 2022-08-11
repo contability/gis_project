@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yg.mappers.LdConsAtchmnflMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 공사번호 -->
+			<if test="cntIdn != null and cntIdn != ''">
+				AND CNT_IDN = #{cntIdn}
+			</if>
+			<!-- 파일번호 -->
+			<if test="fileNo != null and fileNo != ''">
+				AND FILE_NO = #{fileNo}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 토지공사대장 첨부파일 목록 -->
+	<select id="list" resultType="LdConsAtchmnfl">
+		SELECT
+			FILE_NO,
+			CNT_IDN,
+			DOC_CDE,
+			STRE_FILE_NM,
+			ORIGNL_FILE_NM,
+			FILE_EXTSN,
+			REGISTER_ID,
+			LOD_YMD
+		FROM LD_CONS_ATCHMNFL
+		ORDER BY FILE_NO DESC
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 전체목록 -->
+	<select id="listAll" parameterType="LdConsAtchmnfl" resultType="LdConsAtchmnfl">
+		SELECT
+			FILE_NO,
+			CNT_IDN,
+			DOC_CDE,
+			STRE_FILE_NM,
+			ORIGNL_FILE_NM,
+			FILE_EXTSN,
+			REGISTER_ID,
+			LOD_YMD
+		FROM LD_CONS_ATCHMNFL
+		<include refid="where" />
+		ORDER BY FILE_NO DESC
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 단건조회 -->
+	<select id="selectOne" parameterType="Long" resultType="LdConsAtchmnfl">
+		SELECT
+			FILE_NO,
+			CNT_IDN,
+			DOC_CDE,
+			STRE_FILE_NM,
+			ORIGNL_FILE_NM,
+			FILE_EXTSN,
+			REGISTER_ID,
+			LOD_YMD
+		FROM LD_CONS_ATCHMNFL
+		WHERE FILE_NO = #{fileNo}
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 수정 -->
+	<update id="update" parameterType="LdConsAtchmnfl">
+		UPDATE LD_CONS_ATCHMNFL SET	
+			CNT_IDN  = #{cntIdn, jdbcType=BIGINT},
+			DOC_CDE = #{docCde, jdbcType=VARCHAR},
+			STRE_FILE_NM = #{streFileNm, jdbcType=VARCHAR},
+			ORIGNL_FILE_NM = #{orignlFileNm, jdbcType=VARCHAR},
+			FILE_EXTSN = #{fileExtsn, jdbcType=VARCHAR},
+			REGISTER_ID = #{registerId, jdbcType=VARCHAR},
+			LOD_YMD = #{lodYmd, jdbcType=VARCHAR}
+		WHERE
+			FILE_NO = #{fileNo}
+	</update>
+	
+	<!-- 토지공사대장 첨부파일 등록 -->
+	<insert id="insert" parameterType="LdConsAtchmnfl">
+		INSERT INTO LD_CONS_ATCHMNFL (
+			FILE_NO,
+			CNT_IDN,
+			DOC_CDE,
+			STRE_FILE_NM,
+			ORIGNL_FILE_NM,
+			FILE_EXTSN,
+			REGISTER_ID,
+			LOD_YMD
+		) VALUES (
+			#{fileNo, jdbcType=BIGINT},
+			#{cntIdn, jdbcType=BIGINT},
+			#{docCde, jdbcType=VARCHAR},
+			#{streFileNm, jdbcType=VARCHAR},
+			#{orignlFileNm, jdbcType=VARCHAR},
+			#{fileExtsn, jdbcType=VARCHAR},
+			#{registerId, jdbcType=VARCHAR},
+			#{lodYmd, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 토지공사대장 첨부파일 삭제 -->
+	<delete id="delete" parameterType="LdConsAtchmnfl">
+		DELETE FROM LD_CONS_ATCHMNFL
+		WHERE
+			FILE_NO = #{fileNo}
+	</delete>
+	
+</mapper>

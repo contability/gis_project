@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yg.mappers.LdlConsPsMapper">
+
+	<!-- 토지중심공사명 전체리스트 -->
+	<select id="listAllConsName" resultType="ldlConsPs">
+		SELECT
+			CNT_NAM,
+			CNT_IDN
+		FROM LDL_CONS_PS
+		ORDER BY CNT_IDN DESC
+	</select>
+		
+	
+	<!-- 토지중심공사명 단 건 검색 -->
+	<select id="cntSelectOne" parameterType="long" resultType="ldlConsPs">
+		SELECT
+			CNT_NAM,
+			CNT_IDN
+		FROM LDL_CONS_PS
+		WHERE CNT_IDN = #{cntIdn}
+	</select>
+	
+	<!-- 토지중심공사대장 전체검색 -->
+	<select id="listAll" resultType="LandCenterCntrwkRegstrDTO">
+		SELECT
+			ST_ASTEXT(GEOM) AS WKT,
+			OBJECTID,
+			CNT_IDN,
+			CNT_NAM,
+			CNT_KND,
+			BJD_CDE,
+			SAN_CDE,
+			FAC_NUM,
+			FAD_NUM,
+			PNU,
+			LOC_DES,
+			GCN_NAM,
+			POC_NAM,
+			GCN_ADR,
+			CNT_DEPT,
+			SVS_NAM,
+			FCH_NAM,
+			TOT_AMT,
+			CTT_YMD,
+			FNS_YMD,
+			BEG_YMD,
+			RFN_YMD,
+			FCH_YMD,
+			REMARK
+		FROM LDL_CONS_PS
+	</select>
+	
+	<!-- 토지중심공사대장 단 건 검색 -->
+	<select id="selectOne" parameterType="landCenterCntrwkRegstrDTO" resultType="ldlConsPs">
+		SELECT
+			OBJECTID,
+			CNT_IDN,
+			CNT_NAM,
+			CNT_KND,
+			BJD_CDE,
+			SAN_CDE,
+			FAC_NUM,
+			FAD_NUM,
+			PNU,
+			LOC_DES,
+			GCN_NAM,
+			POC_NAM,
+			GCN_ADR,
+			CNT_DEPT,
+			SVS_NAM,
+			FCH_NAM,
+			TOT_AMT,
+			CTT_YMD,
+			FNS_YMD,
+			BEG_YMD,
+			RFN_YMD,
+			FCH_YMD,
+			REMARK
+		FROM LDL_CONS_PS T
+		WHERE
+		<choose>
+		<when test="cntIdn != null and cntIdn != ''">
+			CNT_IDN = ${cntIdn}
+		</when>
+		<otherwise>
+			OBJECTID = ${objectid}
+		</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 토지중심공사대장 수정 -->
+	<update id="update" parameterType="landCenterCntrwkRegstrDTO">
+		UPDATE LDL_CONS_PS SET
+			<if test="lcinfoUpdtAt != null and lcinfoUpdtAt != '' and lcinfoUpdtAt == true">
+				GEOM = (SELECT ST_CENTROID(B.GEOM) FROM LP_PA_CBND B WHERE B.PNU = #{pnu, jdbcType=VARCHAR}),
+			</if>	
+			CNT_NAM = #{cntNam, jdbcType=VARCHAR},
+			CNT_KND = #{cntKnd, jdbcType=VARCHAR},
+			BJD_CDE = #{bjdCde, jdbcType=VARCHAR},
+			SAN_CDE = #{sanCde, jdbcType=VARCHAR},
+			FAC_NUM = #{facNum, jdbcType=VARCHAR},
+			FAD_NUM = #{fadNum, jdbcType=VARCHAR},
+			PNU = #{pnu, jdbcType=VARCHAR},
+			LOC_DES = #{locDes, jdbcType=VARCHAR},
+			GCN_NAM = #{gcnNam, jdbcType=VARCHAR},
+			POC_NAM = #{pocNam, jdbcType=VARCHAR},
+			GCN_ADR = #{gcnAdr, jdbcType=VARCHAR},
+			CNT_DEPT = #{cntDept, jdbcType=VARCHAR},
+			SVS_NAM = #{svsNam, jdbcType=VARCHAR},
+			FCH_NAM = #{fchNam, jdbcType=VARCHAR},
+			TOT_AMT = #{totAmt, jdbcType=BIGINT},
+			CTT_YMD = #{cttYmd, jdbcType=VARCHAR},
+			FNS_YMD = #{fnsYmd, jdbcType=VARCHAR},
+			BEG_YMD = #{begYmd, jdbcType=VARCHAR},
+			RFN_YMD = #{rfnYmd, jdbcType=VARCHAR},
+			FCH_YMD = #{fchYmd, jdbcType=VARCHAR},
+			REMARK = #{remark, jdbcType=VARCHAR}
+		WHERE
+			CNT_IDN = #{cntIdn}
+	</update>
+	
+	<!-- 토지중심공사대장 등록 -->
+	<insert id="insert" parameterType="landCenterCntrwkRegstrDTO">
+		INSERT INTO LDL_CONS_PS (
+			GEOM,
+			OBJECTID,
+			CNT_IDN,
+			CNT_NAM,
+			CNT_KND,
+			BJD_CDE,
+			SAN_CDE,
+			FAC_NUM,
+			FAD_NUM,
+			PNU,
+			LOC_DES,
+			GCN_NAM,
+			POC_NAM,
+			GCN_ADR,
+			CNT_DEPT,
+			SVS_NAM,
+			FCH_NAM,
+			TOT_AMT,
+			CTT_YMD,
+			FNS_YMD,
+			BEG_YMD,
+			RFN_YMD,
+			FCH_YMD,
+			REMARK
+		) VALUES (
+			<choose>
+			<when test="lcX != null and lcX != '' and lcY != null and lcY != ''">
+				<![CDATA[
+				ST_GEOMFROMTEXT('POINT(${lcX} ${lcY})'),
+				]]>
+			</when>
+			<otherwise>
+				(SELECT ST_CENTROID(B.GEOM) FROM LP_PA_CBND B WHERE B.PNU = #{pnu, jdbcType=VARCHAR}),
+			</otherwise>
+			</choose>
+			(SELECT MAX(OBJECTID) + 1 FROM LDL_CONS_PS),
+			#{cntIdn, jdbcType=BIGINT},
+			#{cntNam, jdbcType=VARCHAR},
+			#{cntKnd, jdbcType=VARCHAR},
+			#{bjdCde, jdbcType=VARCHAR},
+			#{sanCde, jdbcType=VARCHAR},
+			#{facNum, jdbcType=VARCHAR},
+			#{fadNum, jdbcType=VARCHAR},
+			#{pnu, jdbcType=VARCHAR},
+			#{locDes, jdbcType=VARCHAR},
+			#{gcnNam, jdbcType=VARCHAR},
+			#{pocNam, jdbcType=VARCHAR},
+			#{gcnAdr, jdbcType=VARCHAR},
+			#{cntDept, jdbcType=VARCHAR},
+			#{svsNam, jdbcType=VARCHAR},
+			#{fchNam, jdbcType=VARCHAR},
+			#{totAmt, jdbcType=BIGINT},
+			#{cttYmd, jdbcType=VARCHAR},
+			#{fnsYmd, jdbcType=VARCHAR},
+			#{begYmd, jdbcType=VARCHAR},
+			#{rfnYmd, jdbcType=VARCHAR},
+			#{fchYmd, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 토지중심공사대장 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM LDL_CONS_PS
+		WHERE
+			CNT_IDN = #{cntIdn}
+	</delete>	
+</mapper>

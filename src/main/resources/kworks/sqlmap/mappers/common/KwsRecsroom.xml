@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsRecsroomMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND RECSROOM_SJ LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND RECSROOM_CN LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>		
+		</where>
+	</sql>
+
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM
+			KWS_RECSROOM
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="kwsRecsroom">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				RECSROOM_NO,
+				RECSROOM_SJ,
+				RECSROOM_CN,
+				RDCNT,
+				WRTER_ID,
+				FRST_RGSDE,
+				UPDUSR_ID,
+				LAST_UPDDE
+			FROM KWS_RECSROOM
+			ORDER BY FRST_RGSDE DESC
+			<include refid="where"/>
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsRecsroomMap" type="kwsRecsroom">
+		<id property="recsroomNo" column="RECSROOM_NO" />
+		<result property="recsroomSj" column="RECSROOM_SJ"/>
+		<result property="recsroomCn" column="RECSROOM_CN"/>
+		<result property="rdCnt" column="RDCNT"/>
+		<result property="wrterId" column="WRTER_ID"/>
+		<result property="frstRgsde" column="FRST_RGSDE"/>
+		<result property="updusrId" column="UPDUSR_ID"/>
+		<result property="lastUpdde" column="LAST_UPDDE"/>
+		<collection property="kwsRecsroomFiles" column="RECSROOM_NO" javaType="java.util.ArrayList" ofType="kwsRecsroomFile" select="kr.co.gitt.kworks.mappers.KwsRecsroomFileMapper.listAll" ></collection>
+	</resultMap>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="kwsRecsroomMap">
+		SELECT
+			RECSROOM_NO,
+			RECSROOM_SJ,
+			RECSROOM_CN,
+			RDCNT,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE
+		FROM KWS_RECSROOM
+		WHERE
+			RECSROOM_NO = #{recsroomNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsRecsroom">
+		INSERT INTO KWS_RECSROOM (
+			RECSROOM_NO,
+			RECSROOM_SJ,
+			RECSROOM_CN,
+			WRTER_ID,
+			UPDUSR_ID
+		) 
+		VALUES (
+			#{recsroomNo, jdbcType=BIGINT},
+			#{recsroomSj, jdbcType=VARCHAR},
+			#{recsroomCn, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			#{updusrId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="kwsRecsroom">
+		UPDATE KWS_RECSROOM SET 
+			RECSROOM_SJ = #{recsroomSj, jdbcType=VARCHAR},
+			RECSROOM_CN = #{recsroomCn, jdbcType=VARCHAR},
+			UPDUSR_ID = #{updusrId, jdbcType=VARCHAR},
+			LAST_UPDDE = <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />
+		WHERE
+			RECSROOM_NO = #{recsroomNo}
+	</update>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateRdcnt" parameterType="Long">
+		UPDATE KWS_RECSROOM
+		SET
+			RDCNT = RDCNT + 1
+		WHERE RECSROOM_NO = #{recsroomNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_RECSROOM
+		WHERE
+			RECSROOM_NO = #{recsroomNo}
+	</delete>
+
+</mapper>

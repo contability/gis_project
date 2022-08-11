@@ -1,0 +1,154 @@
+/* 고급 출력 미리보기 */
+body {
+	width:100%;
+	overflow:hidden;
+}
+
+#container {
+	position : relative;
+	width : 100%;
+	height : 100%;
+	display : block;
+	padding : 5px 0 0 5px;
+}
+#container > div {
+	border : 1px solid #ccc;
+	position : absolute;
+}
+
+
+#div_menubar {
+	padding-top : 1px;
+	height : 29px;
+	clear : both;
+}
+ #div_menubar *:not(.span_area_text, .span_scale_text) {
+	vertical-align:middle;
+}
+
+#div_menubar > span {
+	margin-left : 10px;
+}
+#div_menubar #sel_print_name {
+	margin-left : 5px;
+	width : 200px;
+}
+#div_menubar span.span_paper {
+	margin-left : 20px;
+}
+#div_menubar span.span_check {
+	margin-left : 10px;
+}
+#div_menubar #sel_paper {
+	margin-left : 5px;
+	width : 100px;
+}
+#div_menubar span.span_execute {
+	margin-right : 4px;
+	float : right;
+}
+
+#div_map {
+	display : block;
+	border : 1px solid #ccc;
+}
+#div_map #div_compass {
+	position : absolute;
+	top : 5px;
+	right : 5px;
+	z-index : 999;
+}
+
+#div_info {
+	width : 220px;
+	height : 270px;
+}
+ 
+
+#div_info table {
+	text-align : center;
+	margin-left: 8px;
+}
+
+#div_info table tr {
+	height : 46px;
+}
+
+#div_info table tr td {
+	border : 1px solid #ccc;
+}
+
+#div_scale {
+	height : 70px;
+	text-align : center;
+}
+
+#div_scale .span_scale_text {
+	display : inline-block;
+	margin-top : 20px;
+}
+#div_scale .span_scale_text * {
+	vertical-align : middle;
+}
+#div_scale #txt_scale {
+	width : 60px;
+}
+
+/* /////////////////// */
+#div_type {
+	height : 70px;
+	text-align : left;
+	padding : 0px 5px 0px 5px;
+}
+
+#div_type .span_scale_text {
+	display : inline-block;
+	margin-top : 10px;
+}
+#div_type .span_scale_text * {
+	vertical-align : middle;
+}
+#div_type #txt_scale {
+	width : 60px;
+}
+/* /////////////////// */
+#div_legend {
+	overflow-y : auto;
+}
+#div_legend ul {
+	list-style : none;
+	margin : 0;
+	padding : 5px;
+	clear : both;
+}
+#div_legend ul li {
+	margin : 0;
+	padding : 0px 5px 0px 3px;
+	border : 0;
+	float : left;
+	width : 130px;
+}
+#div_legend ul li canvas {
+	vertical-align : bottom;
+	margin-right : 3px;
+}
+
+#div_index {
+	display : none;
+}
+
+.div_modal * { vertical-align : middle; }
+.div_modal { text-align:center; }
+.div_modal form fieldset > div .content textarea { width : 460px; }
+.div_modal form fieldset > div .content { width:480px; display:inline-table; text-align:left;  }
+.div_modal form fieldset > div .content span.span_warn { color:#ff0000; margin-top:3px; display:block; }
+.div_modal form fieldset > div span.title { width : 150px; display:inline-block; }
+.div_modal div > div span.title { width : 150px; display:inline-block; }
+
+/* 승인 반려 창 */
+#div_export_return { display:none; }
+#div_export_return .div_export_return_prvonsh { padding:10px; }
+#div_export_return .div_export_return_prvonsh span { vertical-align:middle; text-align:center; display:inline-block; }
+#div_export_return .div_export_return_prvonsh span.title { width:100px; }
+#txa_export_detail_return_prvonsh { width:350px; }
+#div_export_return .div_button_container { padding:10px; text-align:right; }

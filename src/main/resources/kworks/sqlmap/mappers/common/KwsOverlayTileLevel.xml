@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsOverlayTileLevelMapper">
+
+	<!-- 목록 검색 -->
+	<select id="selectByTileNo" parameterType="java.util.Map" resultType="kwsOverlayTileLevel">
+		SELECT
+			LEVEL_NO,
+			TILE_NO,
+			LEVEL,
+			RESOLUTION
+		FROM
+			KWS_OVERLAY_TILE_LEVEL
+		WHERE
+			TILE_NO = #{tileNo}
+		ORDER BY 
+			LEVEL
+	</select>
+
+</mapper>

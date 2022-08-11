@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.CtyParkAsMapper">
+	
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 공원 종류 -->
+			<if test="prkCde != null and prkCde != ''">
+				AND PRK_CDE = #{prkCde}
+			</if>
+			<!-- 법정동 코드 -->
+			<if test="bjdCde != null and bjdCde != ''">
+				AND BJD_CDE = #{bjdCde}
+			</if>
+			<!-- 명칭 -->
+			<if test="prkNam != null and prkNam != ''">
+				AND PRK_NAM LIKE '%' || #{prkNam} || '%'
+			</if>
+			<!-- 위치 -->
+			<if test="prkLoc != null and prkLoc != ''">
+				AND PRK_LOC LIKE '%' || #{prkLoc} || '%'
+			</if>
+			<!-- 위치 -->
+			<if test="wkt != null and wkt != ''">
+				AND ST_INTERSECTS(GEOM, #{wkt}) = 1
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" resultType="ctyParkAs">
+		SELECT
+			OBJECTID,
+			FTR_CDE,
+			FTR_IDN,
+			PRK_CDE,
+			PRK_NAM,
+			MNG_CDE,
+			PRK_LOC,
+			PKM_CDE,
+			MNG_NAM,
+			MNG_ADD,
+			CTP_YMD,
+			MKP_YMD,
+			CTP_LAW,
+			MKP_LAW,
+			PMS_YMD,
+			RFN_YMD,
+			PRK_ARA,
+			REMARK,
+			BJD_CDE,
+			HJD_CDE,
+			REG_NAM,
+			LOD_YMD,
+			UPD_NAM,
+			UDP_YMD,
+			ST_ASTEXT(ST_CENTROID(GEOM)) AS CENTROID
+		FROM 	
+			CTY_PARK_AS
+	</select>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="cityParkSearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			CTY_PARK_AS
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="cityParkSearchDTO" resultType="ctyParkAs">
+		SELECT 
+			T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+				SELECT
+					OBJECTID,
+					FTR_CDE,
+					FTR_IDN,
+					PRK_CDE,
+					PRK_NAM,
+					MNG_CDE,
+					PRK_LOC,
+					PKM_CDE,
+					MNG_NAM,
+					MNG_ADD,
+					CTP_YMD,
+					MKP_YMD,
+					CTP_LAW,
+					MKP_LAW,
+					PMS_YMD,
+					RFN_YMD,
+					PRK_ARA,
+					REMARK,
+					BJD_CDE,
+					HJD_CDE,
+					REG_NAM,
+					LOD_YMD,
+					UPD_NAM,
+					UDP_YMD
+				FROM 	
+					CTY_PARK_AS
+				<include refid="where" />				
+				ORDER BY PRK_NAM
+			) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+				
+	</select>
+	
+</mapper>

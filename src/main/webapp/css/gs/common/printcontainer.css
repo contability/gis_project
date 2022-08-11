@@ -1,0 +1,24 @@
+/* 	출력 양식 컨테이너 : 미리보기 화면(div_preview_board)과 
+	도구바(div_preview_toolbar)를 포함 				*/
+.div_print_container { width:100%; height:100%; overflow:hidden;}
+
+/*	미리보기 화면 : 배경  */
+/* .div_print_container .div_preview_board { width:100%; height:93%; vertical-align:middle; text-align:center; background-color:#BBBBBB; } */
+.div_print_container .div_preview_board { width:100%; height:93%; background-color:#BBBBBB; }
+
+/*	미리보기 화면 : 용지모양 틀 */
+/*	미리보기 : A4 세로방향 */ 
+.div_print_container .div_preview_board .div_preview_portrait { transform-origin:10% 10%; transform:scale(0.5); width:210mm; height:297mm; background-color:#FFFFFF; position:relative; }
+
+/*	미리보기 : A4 가로방향 */ 
+.div_print_container .div_preview_board .div_preview_landscape { margin:0 auto; width:100%; height:65.548%; transform:scale(0.9); background-color:#FFFF; }
+
+/*	미리보기 화면 : 실제 출력될 용지의 크기를 정의 */
+/*	A4 세로방향 */ 
+.div_print_container .div_preview_board .div_preview_portrait .div_a4_portrait { transform:scale(0.95); width:210mm; height:297mm; vertical-align:middle; text-align:center; }
+
+/*	A4 가로방향 */
+.div_print_container .div_preview_board .div_preview_landscape .div_a4_landscape { width:297mm; height:210mm; }
+
+/* 출력 도구바 */
+.div_print_container .div_preview_toolbar { width:100%; height:7%; text-align:center; background-color:#BBBBBB;}

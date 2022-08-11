@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.MngGrphinfoManageRegstrMapper">
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where> 
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND T.BSNS_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND T.GRPHINFO_MNFCT_YEAR = #{searchKeyword}
+				</if>
+			</if>
+			<if test="searchCondition == 3">
+				AND T.GRPHINFO_MNFCT_YEAR <![CDATA[>=]]> #{searchStartDt} AND T.GRPHINFO_MNFCT_YEAR <![CDATA[<=]]> #{searchEndDt}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 총개수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			MNG_GRPHINFO_MANAGE_REGSTR T
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록검색 -->
+	<select id="list" parameterType="searchDTO" resultType="mngGrphinfoManageRegstrDTO">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				REGSTR_SN
+				, MANAGE_NO
+				, BSNS_NM
+				, GRPHINFO_MNFCT_YEAR
+				, SUBSTRING(GRPHINFO_UPLOAD_DE, 1, 4)||'.'||SUBSTRING(GRPHINFO_UPLOAD_DE, 5, 2)||'.'||SUBSTRING(GRPHINFO_UPLOAD_DE, 7, 2) AS GRPHINFO_UPLOAD_DE
+			FROM 
+				MNG_GRPHINFO_MANAGE_REGSTR T
+			<include refid="where" />
+			ORDER BY REGSTR_SN DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<select id="selectOne" parameterType="long" resultType="mngGrphinfoManageRegstrDTO">
+			SELECT
+				REGSTR_SN
+				, MANAGE_NO
+				, BSNS_NM
+				, BSNS_SUMRY
+				, GRPHINFO_MNFCT_YEAR
+				, SUBSTRING(GRPHINFO_UPLOAD_DE, 1, 4)||'.'||SUBSTRING(GRPHINFO_UPLOAD_DE, 5, 2)||'.'||SUBSTRING(GRPHINFO_UPLOAD_DE, 7, 2) AS GRPHINFO_UPLOAD_DE
+				, MANAGE_RSPNBER
+				, GRPHINFO_NM
+				, SERVC_ENTRPS_NM
+			FROM 
+				MNG_GRPHINFO_MANAGE_REGSTR T
+			WHERE
+				REGSTR_SN = #{regstrSn}
+	</select>
+	
+	<select id="selectMngGrphinfoUploadDtls" parameterType="long" resultType="mngGrphinfoUploadDtlsDTO">
+			SELECT
+				REGSTR_SN
+				, DTLS_SN
+				, DATA_ID
+				, (SELECT DATA_ALIAS FROM KWS_DATA A WHERE A.DATA_ID = T.DATA_ID) AS DATA_ALIAS
+				, BFE_UPLOAD_CO
+				, BFE_UPLOAD_ET
+				, AFE_UPLOAD_CO
+				, AFE_UPLOAD_ET
+			FROM 
+				MNG_GRPHINFO_UPLOAD_DTLS T
+			WHERE
+				REGSTR_SN = #{regstrSn}
+	</select>
+	
+	<update id="update" parameterType="mngGrphinfoManageRegstr">
+			UPDATE MNG_GRPHINFO_MANAGE_REGSTR
+			SET
+				MANAGE_NO = #{manageNo, jdbcType=VARCHAR}
+				, BSNS_NM = #{bsnsNm, jdbcType=VARCHAR}
+				, BSNS_SUMRY = #{bsnsSumry, jdbcType=VARCHAR}
+				, GRPHINFO_MNFCT_YEAR = #{grphinfoMnfctYear, jdbcType=VARCHAR}
+				, GRPHINFO_UPLOAD_DE = #{grphinfoUploadDe, jdbcType=VARCHAR}
+				, MANAGE_RSPNBER = #{manageRspnber, jdbcType=VARCHAR}
+				, GRPHINFO_NM = #{grphinfoNm, jdbcType=VARCHAR}
+				, SERVC_ENTRPS_NM = #{servcEntrpsNm, jdbcType=VARCHAR}
+			WHERE
+				REGSTR_SN = #{regstrSn}
+	</update>
+</mapper>

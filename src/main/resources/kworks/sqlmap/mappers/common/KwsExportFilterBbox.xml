@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportFilterBboxMapper">
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="kwsExportFilterBbox">
+		SELECT
+			EXPORT_NO,
+			MIN_X,
+			MIN_Y,
+			MAX_X,
+			MAX_Y
+		FROM KWS_EXPORT_FILTER_BBOX
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExportFilterBbox">
+		INSERT INTO KWS_EXPORT_FILTER_BBOX (
+			EXPORT_NO,
+			MIN_X,
+			MIN_Y,
+			MAX_X,
+			MAX_Y
+		) 
+		VALUES (
+			#{exportNo, jdbcType=BIGINT},
+			#{minX, jdbcType=DOUBLE},
+			#{minY, jdbcType=DOUBLE},
+			#{maxX, jdbcType=DOUBLE},
+			#{maxY, jdbcType=DOUBLE}
+		)
+	</insert>
+
+</mapper>

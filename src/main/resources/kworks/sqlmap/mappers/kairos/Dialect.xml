@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.DialectMapper">
+
+	<sql id="pagingPrefix">
+		SELECT T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+	</sql>
+	
+	<sql id="pagingPostfix">
+			) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+	</sql>
+	
+	<sql id="now">
+		SYSDATE
+	</sql>
+
+</mapper>

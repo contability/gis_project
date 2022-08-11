@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.MngKrasDataPvsnRegstrMapper">
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where> 
+			<if test="searchStartDt != null and searchStartDt != '' and searchEndDt != null and searchEndDt != ''">
+				<if test="searchCondition == 1">
+					AND TO_DATE(REPLACE(#{searchStartDt},'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(T.RPT_DT,'-','')) AND TO_DATE(REPLACE(T.RPT_DT,'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(#{searchEndDt},'-',''))
+				</if>
+				<if test="searchCondition == 2">
+					AND TO_DATE(REPLACE(#{searchStartDt},'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(T.PROVD_DT,'-','')) AND TO_DATE(REPLACE(T.PROVD_DT,'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(#{searchEndDt},'-',''))
+				</if>
+			</if>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 3">
+					AND T.DMND_INST_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+		</where>
+	</sql>
+
+	<!-- 총개수 -->
+	<select id="listCount" parameterType="SearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			MNG_KRAS_DATA_PVSN_REGSTR T
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록검색 -->
+	<select id="list" parameterType="SearchDTO" resultType="KrasDataPvsnRegstrVO">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				DTA_NO
+				, MANAGE_NO
+				, RPT_DT
+				, PROVD_DT
+				, DMND_INST_NM
+				, DMND_PIC_NM
+			FROM 
+				MNG_KRAS_DATA_PVSN_REGSTR T
+			<include refid="where" />
+			ORDER BY MANAGE_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<select id="selectOne" parameterType="long" resultType="KrasDataPvsnRegstrVO">
+			SELECT
+				DTA_NO
+				, MANAGE_NO
+				, RPT_DT
+				, PROVD_DT
+				, DMND_INST_NM
+				, DMND_OFLDC_NO
+				, DMND_BASIS_RESN
+				, DMND_CN
+				, DMND_PIC_NM
+				, DMND_PIC_TELNO
+				, PVSN_OFLDC_NO
+				, PVSN_CN
+				, PVSN_MTH
+				, PVSN_PIC_NM
+				, PVSN_RSPNBER_NM
+			FROM
+				MNG_KRAS_DATA_PVSN_REGSTR
+			WHERE
+				DTA_NO = #{dtaNo}
+	</select>
+	
+	<insert id="insert" parameterType="MngKrasDataPvsnRegstr">
+		INSERT INTO MNG_KRAS_DATA_PVSN_REGSTR (
+			DTA_NO
+			, RPT_DT
+			, PROVD_DT
+			, DMND_INST_NM
+			, DMND_OFLDC_NO
+			, DMND_BASIS_RESN
+			, DMND_CN
+			, DMND_PIC_NM
+			, DMND_PIC_TELNO
+			, PVSN_OFLDC_NO
+			, PVSN_CN
+			, PVSN_MTH
+			, PVSN_PIC_NM
+			, PVSN_RSPNBER_NM
+		)
+		VALUES (
+			#{dtaNo, jdbcType=BIGINT}
+			, #{rptDt, jdbcType=VARCHAR}
+			, #{provdDt, jdbcType=VARCHAR}
+			, #{dmndInstNm, jdbcType=VARCHAR}
+			, #{dmndOfldcNo, jdbcType=VARCHAR}
+			, #{dmndBasisResn, jdbcType=VARCHAR}
+			, #{dmndCn, jdbcType=VARCHAR}
+			, #{dmndPicNm, jdbcType=VARCHAR}
+			, #{dmndPicTelno, jdbcType=VARCHAR}
+			, #{pvsnOfldcNo, jdbcType=VARCHAR} 
+			, #{pvsnCn, jdbcType=VARCHAR}
+			, #{pvsnMth, jdbcType=VARCHAR} 
+			, #{pvsnPicNm, jdbcType=VARCHAR}
+			, #{pvsnRspnberNm, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateManageNo">
+		UPDATE 
+			MNG_KRAS_DATA_PVSN_REGSTR
+		SET 
+			MNG_KRAS_DATA_PVSN_REGSTR.MANAGE_NO = ZZ.RN
+		FROM 
+			(SELECT 
+				ROWNUM AS RN, 
+				Z.DTA_NO 
+			FROM 
+				(SELECT DTA_NO 
+				FROM MNG_KRAS_DATA_PVSN_REGSTR 
+				ORDER BY RPT_DT ASC NULLS FIRST, RPT_DT ASC) Z
+			) ZZ
+		WHERE 
+			MNG_KRAS_DATA_PVSN_REGSTR.DTA_NO = ZZ.DTA_NO
+	</update>
+		
+	<update id="update" parameterType="MngKrasDataPvsnRegstr">
+			UPDATE MNG_KRAS_DATA_PVSN_REGSTR
+			SET
+				RPT_DT = #{rptDt, jdbcType=VARCHAR}
+				, PROVD_DT = #{provdDt, jdbcType=VARCHAR}
+				, DMND_INST_NM = #{dmndInstNm, jdbcType=VARCHAR}
+				, DMND_OFLDC_NO = #{dmndOfldcNo, jdbcType=VARCHAR}
+				, DMND_BASIS_RESN = #{dmndBasisResn, jdbcType=VARCHAR}
+				, DMND_CN = #{dmndCn, jdbcType=VARCHAR}
+				, DMND_PIC_NM = #{dmndPicNm, jdbcType=VARCHAR}
+				, DMND_PIC_TELNO = #{dmndPicTelno, jdbcType=VARCHAR}
+				, PVSN_OFLDC_NO = #{pvsnOfldcNo, jdbcType=VARCHAR}
+				, PVSN_CN = #{pvsnCn, jdbcType=VARCHAR}
+				, PVSN_MTH = #{pvsnMth, jdbcType=VARCHAR}
+				, PVSN_PIC_NM = #{pvsnPicNm, jdbcType=VARCHAR}
+				, PVSN_RSPNBER_NM = #{pvsnRspnberNm, jdbcType=VARCHAR}
+			WHERE
+				DTA_NO = #{dtaNo}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM MNG_KRAS_DATA_PVSN_REGSTR
+		WHERE DTA_NO = #{dtaNo}
+	</delete>
+</mapper>

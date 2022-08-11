@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.SpatialInfoDataMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			 <if test="searchKeyword != null and searchKeyword != ''"> 
+					<if test="searchCondition== 1"> 
+						AND RECPTR_PSITN LIKE '%' || #{searchKeyword} || '%' 
+					</if> 
+					<if test="searchCondition == 2"> 
+						AND RECPTR_BRTHDY LIKE '%' || #{searchKeyword} || '%' 
+					</if> 
+					<if test="searchCondition == 3"> 
+						AND RECPTR_NM LIKE '%' || #{searchKeyword} || '%' 
+					</if> 
+				</if> 
+				<if test="startDate != null and startDate !='' and endDate != null and endDate != ''"> 
+					<if test="searchCondition == 4"> 
+						AND TO_DATE(REPLACE(#{startDate},'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(RPT_DT,'-','')) AND TO_DATE(REPLACE(RPT_DT,'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(#{endDate},'-','')) 
+					</if> 
+					<if test="searchCondition == 5"> 
+						AND TO_DATE(REPLACE(#{startDate},'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(PROVD_DT,'-','')) AND TO_DATE(REPLACE(PROVD_DT,'-','')) <![CDATA[<=]]> TO_DATE(REPLACE(#{endDate},'-','')) 
+					</if> 
+				</if>
+		</where>
+	</sql>
+	
+
+	<resultMap id="spatialInfoDataMap" type="SpatialInfoData">
+		<id column="DTA_NO" property="dtaNo"></id>
+		<result column="MANAGE_NO" property="manageNo"></result>
+		<result column="RPT_DT" property="rptDt"></result>
+		<result column="PROVD_DT" property="provdDt"></result>
+		<result column="INFO_GRAD" property="infoGrad"></result>
+		<result column="DTLS_DTA_KND" property="dtlsDtaKnd"></result>
+		<result column="DTLS_INFO_SIZE" property="dtlsInfoSize"></result>
+		<result column="DTLS_USE_PURPS" property="dtlsUsePurps"></result>
+		<result column="DTLS_PROVD_TYPE" property="dtlsProvdType"></result>
+		<result column="DTLS_FEE" property="dtlsFee"></result>
+		<result column="RECPTR_PSITN" property="recptrPsitn"></result>
+		<result column="RECPTR_BRTHDY" property="recptrBrthdy"></result>
+		<result column="RECPTR_NM" property="recptrNm"></result>
+		<result column="RECPT_METH" property="recptMeth"></result>
+		<result column="IPTT_INFO" property="ipttInfo"></result>
+	</resultMap>
+	
+	<select id="listCount" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*)
+		FROM
+			SPATIAL_INFO_DATA
+		<include refid="where"/>
+	</select>
+	
+	<select id="list" parameterType="hashmap" resultMap="spatialInfoDataMap">
+		SELECT T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+				SELECT
+					DTA_NO,
+					MANAGE_NO,
+					RPT_DT,
+					PROVD_DT,
+					INFO_GRAD,
+					DTLS_DTA_KND,
+					DTLS_INFO_SIZE,
+					DTLS_USE_PURPS,
+					DTLS_PROVD_TYPE,
+					DTLS_FEE, 
+					RECPTR_PSITN, 
+					RECPTR_BRTHDY,
+					RECPTR_NM, 
+					RECPT_METH,
+					IPTT_INFO
+				FROM
+					SPATIAL_INFO_DATA
+				<include refid="where"/>
+				ORDER BY MANAGE_NO DESC
+				) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 
+		WHERE RNUM > #{firstIndex}
+	</select>
+	
+	<select id="select" resultMap="spatialInfoDataMap">
+		SELECT
+			DTA_NO,
+			MANAGE_NO,
+			RPT_DT,
+			PROVD_DT,
+			INFO_GRAD,
+			DTLS_DTA_KND,
+			DTLS_INFO_SIZE,
+			DTLS_USE_PURPS,
+			DTLS_PROVD_TYPE,
+			DTLS_FEE, 
+			RECPTR_PSITN, 
+			RECPTR_BRTHDY,
+			RECPTR_NM, 
+			RECPT_METH,
+			IPTT_INFO
+		FROM
+			SPATIAL_INFO_DATA
+		WHERE
+			DTA_NO = #{dtaNo}
+	</select>
+	
+	<insert id="insert" parameterType="SpatialInfoData">
+		INSERT INTO SPATIAL_INFO_DATA(
+			DTA_NO,
+			RPT_DT,
+			PROVD_DT,
+			INFO_GRAD,
+			DTLS_DTA_KND,
+			DTLS_INFO_SIZE,
+			DTLS_USE_PURPS,
+			DTLS_PROVD_TYPE,
+			DTLS_FEE, 
+			RECPTR_PSITN, 
+			RECPTR_BRTHDY,
+			RECPTR_NM, 
+			RECPT_METH,
+			IPTT_INFO
+		)
+		VALUES(
+			#{dtaNo, jdbcType=BIGINT},
+			#{rptDt, jdbcType=VARCHAR},
+			#{provdDt, jdbcType=VARCHAR},
+			#{infoGrad, jdbcType=VARCHAR},
+			#{dtlsDtaKnd, jdbcType=VARCHAR},
+			#{dtlsInfoSize, jdbcType=BIGINT},
+			#{dtlsUsePurps, jdbcType=VARCHAR},
+			#{dtlsProvdType, jdbcType=VARCHAR},
+			#{dtlsFee, jdbcType=VARCHAR},
+			#{recptrPsitn, jdbcType=VARCHAR}, 
+			#{recptrBrthdy, jdbcType=VARCHAR},
+			#{recptrNm, jdbcType=VARCHAR}, 
+			#{recptMeth, jdbcType=VARCHAR},
+			#{ipttInfo, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="SpatialInfoData">
+		UPDATE SPATIAL_INFO_DATA
+		SET 
+			RPT_DT = #{rptDt, jdbcType=VARCHAR},
+			PROVD_DT = #{provdDt, jdbcType=VARCHAR},
+			INFO_GRAD = #{infoGrad, jdbcType=VARCHAR},
+			DTLS_DTA_KND = #{dtlsDtaKnd, jdbcType=VARCHAR},
+			DTLS_INFO_SIZE = #{dtlsInfoSize, jdbcType=BIGINT},
+			DTLS_USE_PURPS = #{dtlsUsePurps, jdbcType=VARCHAR},
+			DTLS_PROVD_TYPE = #{dtlsProvdType, jdbcType=VARCHAR},
+			DTLS_FEE = #{dtlsFee, jdbcType=VARCHAR},
+			RECPTR_PSITN = #{recptrPsitn, jdbcType=VARCHAR}, 
+			RECPTR_BRTHDY = #{recptrBrthdy, jdbcType=VARCHAR},
+			RECPTR_NM = #{recptrNm, jdbcType=VARCHAR}, 
+			RECPT_METH = #{recptMeth, jdbcType=VARCHAR},
+			IPTT_INFO = #{ipttInfo, jdbcType=VARCHAR}
+		WHERE DTA_NO = #{dtaNo}
+	</update>
+	
+	<delete id="delete" parameterType="SpatialInfoData">
+		DELETE FROM SPATIAL_INFO_DATA
+		WHERE DTA_NO = #{dtaNo}
+	</delete>
+	
+	<update id="updateManageNo">
+		UPDATE 
+			SPATIAL_INFO_DATA
+		SET 
+			SPATIAL_INFO_DATA.MANAGE_NO = ZZ.RN
+		FROM 
+			(SELECT 
+				ROWNUM AS RN, 
+				Z.DTA_NO 
+			FROM 
+				(SELECT DTA_NO 
+				FROM SPATIAL_INFO_DATA 
+				ORDER BY RPT_DT ASC NULLS FIRST, RPT_DT ASC) Z
+			) ZZ
+		WHERE 
+			SPATIAL_INFO_DATA.DTA_NO = ZZ.DTA_NO
+	</update>
+</mapper>

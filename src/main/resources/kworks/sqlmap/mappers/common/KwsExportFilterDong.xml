@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportFilterDongMapper">
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="kwsExportFilterDong">
+		SELECT
+			EXPORT_NO,
+			DONG_ID
+		FROM KWS_EXPORT_FILTER_DONG
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExportFilterDong">
+		INSERT INTO KWS_EXPORT_FILTER_DONG (
+			EXPORT_NO,
+			DONG_ID
+		) 
+		VALUES (
+			#{exportNo, jdbcType=BIGINT},
+			#{dongId, jdbcType=BIGINT}
+		)
+	</insert>
+
+</mapper>

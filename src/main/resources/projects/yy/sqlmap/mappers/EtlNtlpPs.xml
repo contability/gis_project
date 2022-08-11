@@ -1,0 +1,167 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.EtlNtlpPsMapper">
+
+	<resultMap id="etlNtlpPsMap" type="etlNtlpPs">
+		<id property="ftrIdn" column="FTR_IDN" />
+		<result property="ftrCde" column="FTR_CDE" />
+		<result property="bjdCde" column="BJD_CDE" />
+		<result property="hjdCde" column="HJD_CDE" />
+		<result property="bseName" column="BSE_NAME" />
+		<result property="pntNam" column="PNT_NAM" />
+		<result property="nbgX" column="NBG_X" />
+		<result property="nbgY" column="NBG_Y" />
+		<result property="nggX" column="NGG_X" />
+		<result property="nggY" column="NGG_Y" />
+		<result property="ngwB" column="NGW_B" />
+		<result property="ngwL" column="NGW_L" />
+		<result property="bseHgt" column="BSE_HGT" />
+		<result property="merCon" column="MER_CON" />
+		<result property="setLoc" column="SET_LOC" />
+		<result property="setYmd" column="SET_YMD" />
+		<result property="setCde" column="SET_CDE" />
+		<result property="setMet" column="SET_MET" />
+		<result property="setDes" column="RMK_DES" />
+		<collection property="controlPoints" column="FTR_IDN" javaType="java.util.ArrayList" ofType="kwsOverlayTileLevel" select="kr.co.gitt.kworks.projects.yy.mappers.KwsOverlayTileMapper.selectById" ></collection>
+	</resultMap>
+	
+	<!-- 전체 목록 -->
+	<select id="listAll" resultMap="etlNtlpPsMap">
+		SELECT 
+			FTR_IDN,
+			FTR_CDE,
+			BJD_CDE,
+			HJD_CDE,
+			BSE_NAM,
+			PNT_NAM,
+			NBG_X,
+			NBG_Y,
+			NGG_X,
+			NGG_Y,
+			NGW_B,
+			NGW_L,
+			BSE_HGT,
+			MER_CON,
+			SET_LOC,
+			SET_YMD,
+			SET_CDE,
+			SET_MET,
+			RMK_DES
+		FROM
+			ETL_NTLP_PS
+		ORDER BY 
+			FTR_IDN ASC		
+	</select>	
+
+	<!-- 단건 조회 -->
+	<select id="selectOneById" parameterType="Long" resultMap="etlNtlpPsMap">
+		SELECT 
+			FTR_IDN,
+			FTR_CDE,
+			BJD_CDE,
+			HJD_CDE,
+			BSE_NAM,
+			PNT_NAM,
+			NBG_X,
+			NBG_Y,
+			NGG_X,
+			NGG_Y,
+			NGW_B,
+			NGW_L,
+			BSE_HGT,
+			MER_CON,
+			SET_LOC,
+			SET_YMD,
+			SET_CDE,
+			SET_MET,
+			RMK_DES
+		FROM
+			ETL_NTLP_PS
+		WHERE
+			FTR_IDN = #{ftrIdn}
+		ORDER BY 
+			FTR_IDN ASC		
+	</select>	
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="etlNtlpPs">
+		INSERT INTO ETL_NTLP_PS (
+			OBJECTID,
+			GEOM,
+			FTR_CDE,
+			FTR_IDN,
+			BJD_CDE,
+			HJD_CDE,
+			BSE_NAM,
+			PNT_NAM,
+			NBG_X,
+			NBG_Y,
+			NGG_X,
+			NGG_Y,
+			NGW_B,
+			NGW_L,
+			BSE_HGT,
+			MER_CON,
+			SET_LOC,
+			SET_YMD,
+			SET_CDE,
+			SET_MET,
+			RMK_DES
+		) VALUES (
+			NEXTVAL('ETL_NTLP_PS_SEQ'),
+			ST_GEOMFROMTEXT('${wkt}',0),
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{bjdCde, jdbcType=VARCHAR},
+			#{hjdCde, jdbcType=VARCHAR},
+			#{bseNam, jdbcType=VARCHAR},
+			#{pntNam, jdbcType=VARCHAR},
+			#{nbgX, jdbcType=VARCHAR},
+			#{nbgY, jdbcType=VARCHAR},
+			#{nggX, jdbcType=VARCHAR},
+			#{nggY, jdbcType=VARCHAR},
+			#{ngwB, jdbcType=VARCHAR},
+			#{ngwL, jdbcType=VARCHAR},
+			#{bseHgt, jdbcType=DOUBLE},
+			#{merCon, jdbcType=VARCHAR},
+			#{setLoc, jdbcType=VARCHAR},
+			#{setYmd, jdbcType=VARCHAR},
+			#{setCde, jdbcType=VARCHAR},
+			#{setMet, jdbcType=VARCHAR},
+			#{rmkDes, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 변경 -->
+	<update id="update" parameterType="etlNtlpPs">
+		UPDATE ETL_NTLP_PS SET
+			GEOM = ST_GEOMFROMTEXT('${wkt}',0),
+			BJD_CDE = #{bjdCde, jdbcType=VARCHAR},
+			HJD_CDE = #{hjdCde, jdbcType=VARCHAR},
+			BSE_NAM = #{bseNam, jdbcType=VARCHAR},
+			PNT_NAM = #{pntNam, jdbcType=VARCHAR},
+			NBG_X = #{nbgX, jdbcType=VARCHAR},
+			NBG_Y = #{nbgY, jdbcType=VARCHAR},
+			NGG_X = #{nggX, jdbcType=VARCHAR},
+			NGG_Y = #{nggY, jdbcType=VARCHAR},
+			NGW_B = #{ngwB, jdbcType=VARCHAR},
+			NGW_L = #{ngwL, jdbcType=VARCHAR},
+			BSE_HGT = #{bseHgt, jdbcType=DOUBLE},
+			MER_CON = #{merCon, jdbcType=VARCHAR},
+			SET_LOC = #{setLoc, jdbcType=VARCHAR},
+			SET_YMD = #{setYmd, jdbcType=VARCHAR},
+			SET_CDE = #{setCde, jdbcType=VARCHAR},
+			SET_MET = #{setMet, jdbcType=VARCHAR},
+			RMK_DES = #{rmkDes, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM 
+			ETL_NTLP_PS
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</delete>
+	
+</mapper>

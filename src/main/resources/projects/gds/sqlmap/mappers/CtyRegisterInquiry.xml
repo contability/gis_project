@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.CtyRegisterInquiryMapper">
+	
+	<resultMap id="ctyRegisterInquiryMap" type="ctyRegisterInquiry">
+		<result property="objectid" column="OBJECTID"/>
+		<result property="ftrIdn" column="FTR_IDN"/>
+		<result property="ftfIdn" column="FTF_IDN"/>
+		<result property="athCde" column="ATH_CDE"/>
+		<result property="plyCde" column="PLY_CDE"/>
+		<result property="rstCde" column="RST_CDE"/>
+	</resultMap>
+	
+	<!-- 운동시설 -->
+	<select id="listAthl" parameterType="ctyRegisterInquiry" resultMap="ctyRegisterInquiryMap">
+		SELECT GRDN.OBJECTID
+		FROM 
+		   CTY_PKSD_AS PKSD
+		   INNER JOIN CTY_ATHL_PS GRDN ON PKSD.FTR_IDN = GRDN.FTF_IDN
+		   WHERE 
+		   PKSD.FTF_IDN = #{ftfIdn} AND ATH_CDE = #{athCde}
+	</select>
+	
+	<!-- 유희시설 -->
+	<select id="listPlay" parameterType="ctyRegisterInquiry" resultMap="ctyRegisterInquiryMap">
+		SELECT GRDN.OBJECTID
+		FROM 
+		   CTY_PKSD_AS PKSD
+		   INNER JOIN CTY_PLAY_PS GRDN ON PKSD.FTR_IDN = GRDN.FTF_IDN
+		   WHERE 
+		   PKSD.FTF_IDN = #{ftfIdn} AND PLY_CDE = #{plyCde}
+	</select>
+	
+	<!-- 휴게시설_점 -->
+	<select id="listRestPs" parameterType="ctyRegisterInquiry" resultMap="ctyRegisterInquiryMap">
+		SELECT OBJECTID
+		FROM 
+		   CTY_REST_PS
+		WHERE
+		   FTF_IDN = #{ftfIdn} AND RST_CDE = #{rstCde}
+	</select>
+	
+	<!-- 휴게시설_선 -->
+	<select id="listRestLs" parameterType="ctyRegisterInquiry" resultMap="ctyRegisterInquiryMap">
+		SELECT OBJECTID
+		FROM 
+		   CTY_REST_LS
+		WHERE
+		   FTF_IDN = #{ftfIdn} AND RST_CDE = #{rstCde}
+	</select>
+	
+	<!-- 휴게시설_면  -->
+	<select id="listRestAs" parameterType="ctyRegisterInquiry" resultMap="ctyRegisterInquiryMap">
+		SELECT OBJECTID
+		FROM 
+		   CTY_REST_AS
+		WHERE
+		   FTF_IDN = #{ftfIdn} AND RST_CDE = #{rstCde}
+	</select>
+	
+	<!-- 공원구역 -->
+	<select id="listPksdAs" parameterType="ctyRegisterInquiry" resultMap="ctyRegisterInquiryMap">
+		SELECT 
+			FTR_IDN,
+			FTF_IDN
+		FROM CTY_PKSD_AS 
+		WHERE FTR_IDN = #{ftrIdn};
+	</select>
+	
+
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsEditHistMapper">
+	
+	<sql id="where">
+		<where>
+			<if test="searchCondition == 1">
+				<if test="sysId != null and sysId != '' and sysId != 'all'">
+					SYS_ID = CAST(#{sysId} AS INTEGER)
+				</if>
+			</if>
+			<if test="searchCondition == 2">
+				<if test="editType != null and editType != '' and editType != 'all'">
+					AND EDIT_TYPE = #{editType}
+				</if>
+			</if>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 3">
+					DATA_ID IN (SELECT DATA_ID FROM KWS_DATA WHERE DATA_ALIAS LIKE UPPER('%' || #{searchKeyword} || '%'))
+				</if>
+				<if test="searchCondition == 4">
+					EDITOR_ID IN (SELECT USER_ID FROM KWS_USER WHERE USER_NM LIKE UPPER('%' || #{searchKeyword} || '%'))
+				</if>
+			</if>
+			<if test="searchStartDt != null and searchStartDt != '' and searchEndDt != null and searchEndDt != ''">
+				AND EDIT_DT <![CDATA[>=]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') 
+				AND EDIT_DT <![CDATA[<=]]> TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM KWS_EDIT_HIST
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="editHistoryResultDTO">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				HIST_NO,
+				SYS_ID,
+			  	(SELECT SYS_ALIAS FROM KWS_SYS WHERE SYS_ID = HIST.SYS_ID) AS SYS_ALIAS,
+			  	(SELECT DATA_ALIAS FROM KWS_DATA WHERE DATA_ID = HIST.DATA_ID) AS DATA_ALIAS,
+			  	EDIT_TYPE,
+			  	(SELECT BJD_NAM FROM BML_BADM_AS WHERE BJD_CDE = HIST.BJD_CDE) AS BJD_NAM,
+			  	(SELECT USER_NM FROM KWS_USER WHERE USER_ID = HIST.EDITOR_ID) AS EDITOR_NM,
+			  	EDIT_DT
+			FROM KWS_EDIT_HIST HIST
+			<include refid="where" />
+			ORDER BY HIST_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsEditHist">
+		INSERT INTO KWS_EDIT_HIST (
+			HIST_NO,
+			SYS_ID,
+			DATA_ID,
+			EDIT_TYPE,
+			EDIT_DQL_TYPE,
+			EDIT_CN,
+			BJD_CDE,
+			EDITOR_ID,
+			EDITOR_NM
+		)
+		VALUES (
+			#{histNo, jdbcType=BIGINT},
+			#{sysId, jdbcType=BIGINT},
+			#{dataId, jdbcType=VARCHAR},
+			#{editType, jdbcType=VARCHAR},
+			#{editDqlType, jdbcType=VARCHAR},
+			#{editCn, jdbcType=VARCHAR},
+			#{bjdCde, jdbcType=VARCHAR},
+			#{editorId, jdbcType=VARCHAR},
+			#{editorNm, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 엑셀다운로드용 리스트 조회 -->
+	<select id="listEditHistoryExcel" parameterType="searchDTO" resultType="editHistoryResultDTO">
+		SELECT
+			HIST_NO,
+		  	(SELECT SYS_ALIAS FROM KWS_SYS WHERE SYS_ID = HIST.SYS_ID) AS SYS_ALIAS,
+		  	(SELECT DATA_ALIAS FROM KWS_DATA WHERE DATA_ID = HIST.DATA_ID) AS DATA_ALIAS,
+		  	EDIT_TYPE,
+		  	(SELECT BJD_NAM FROM BML_BADM_AS WHERE BJD_CDE = HIST.BJD_CDE) AS BJD_NAM,
+		  	(SELECT USER_NM FROM KWS_USER WHERE USER_ID = HIST.EDITOR_ID) AS EDITOR_NM,
+		  	EDIT_DT
+		FROM KWS_EDIT_HIST HIST
+		<include refid="where" />
+		ORDER BY HIST_NO ASC
+	</select>
+
+</mapper>

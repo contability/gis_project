@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.SwtSserMaMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 하수민원구분 -->
+			<if test="aplCde != null and aplCde != ''">
+				AND APL_CDE = #{aplCde}
+			</if>
+			<!-- 처리상태 -->
+			<if test="proCde != null and proCde != ''">
+				AND PRO_CDE = #{proCde}
+			</if>
+			<!-- 접수일자 -->
+			<if test="rcvYmdMin != null and rcvYmdMin != '' and rcvYmdMax != null and rcvYmdMax != ''">
+				AND RCV_YMD <![CDATA[>=]]> TO_DATE(#{rcvYmdMin}, 'YYYY-MM-DD')
+				AND RCV_YMD <![CDATA[<=]]> TO_DATE(#{rcvYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 민원지법정동 -->
+			<if test="aplBjd != null and aplBjd != ''">
+				AND APL_BJD = #{aplBjd}
+			</if>
+			<!-- 민원인성명 -->
+			<if test="apmNam != null and apmNam != ''">
+				AND APM_NAM = #{apmNam}
+			</if>
+			<!-- 처리자성명 -->
+			<if test="proNam != null and proNam != ''">
+				AND PRO_NAM = #{proNam}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 하수민원 리스트 -->
+	<select id="list" parameterType="swtSserMa" resultType="swtSserMa">
+		SELECT
+			FTR_IDN
+		FROM SWT_SSER_MA
+		<include refid="where" />
+		ORDER BY FTR_IDN DESC
+	</select>
+	
+	<!-- 하수민원 단 건 조회 -->
+	<select id="selectOne" parameterType="Long" resultType="swtSserMa">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			RCV_YMD,
+			RCV_NAM,
+			APL_BJD,
+			APL_ADR,
+			APL_EXP,
+			APL_CDE,
+			APM_NAM,
+			APM_ADR,
+			APM_TEL,
+			PRO_CDE,
+			DUR_YMD,
+			PRO_EXP,
+			PRO_YMD,
+			PRO_NAM
+		FROM SWT_SSER_MA
+		WHERE FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 하수민원 등록 -->
+	<insert id="insert" parameterType="swtSserMa">
+		INSERT INTO SWT_SSER_MA (
+			FTR_CDE,
+			FTR_IDN,
+			RCV_YMD,
+			RCV_NAM,
+			APL_BJD,
+			APL_ADR,
+			APL_EXP,
+			APL_CDE,
+			APM_NAM,
+			APM_ADR,
+			APM_TEL,
+			PRO_CDE,
+			DUR_YMD,
+			PRO_EXP,
+			PRO_YMD,
+			PRO_NAM
+		) VALUES (
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{rcvYmd, jdbcType=VARCHAR},
+			#{rcvNam, jdbcType=VARCHAR},
+			#{aplBjd, jdbcType=VARCHAR},
+			#{aplAdr, jdbcType=VARCHAR},
+			#{aplExp, jdbcType=VARCHAR},
+			#{aplCde, jdbcType=VARCHAR},
+			#{apmNam, jdbcType=VARCHAR},
+			#{apmAdr, jdbcType=VARCHAR},
+			#{apmTel, jdbcType=VARCHAR},
+			#{proCde, jdbcType=VARCHAR},
+			#{durYmd, jdbcType=VARCHAR},
+			#{proExp, jdbcType=VARCHAR},
+			#{proYmd, jdbcType=VARCHAR},
+			#{proNam, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 하수민원 수정 -->
+	<update id="update" parameterType="swtSserMa">
+		UPDATE SWT_SSER_MA SET
+			RCV_YMD = #{rcvYmd, jdbcType=VARCHAR},
+			RCV_NAM = #{rcvNam, jdbcType=VARCHAR},
+			APL_BJD = #{aplBjd, jdbcType=VARCHAR},
+			APL_ADR = #{aplAdr, jdbcType=VARCHAR},
+			APL_EXP = #{aplExp, jdbcType=VARCHAR},
+			APL_CDE = #{aplCde, jdbcType=VARCHAR},
+			APM_NAM = #{apmNam, jdbcType=VARCHAR},
+			APM_ADR = #{apmAdr, jdbcType=VARCHAR},
+			APM_TEL = #{apmTel, jdbcType=VARCHAR},
+			PRO_CDE = #{proCde, jdbcType=VARCHAR},
+			DUR_YMD = #{durYmd, jdbcType=VARCHAR},
+			PRO_EXP = #{proExp, jdbcType=VARCHAR},
+			PRO_YMD = #{proYmd, jdbcType=VARCHAR},
+			PRO_NAM = #{proNam, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+</mapper>

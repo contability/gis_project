@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsDataMapper">
+
+	<!-- 목록 검색 -->
+	<select id="listAll" parameterType="dataSearchDTO" resultType="kwsData">
+		SELECT
+			DATA_ID,
+			DATA_CTGRY_ID,
+			DATA_ALIAS,
+			DATA_TY,
+			GEOM_TY,
+			USE_AT,
+			SPEC_SEARCH_AT,
+			PRNTNG_AT,
+			EDIT_AT,
+			HIST_MANAGE_AT,
+			PHOTO_MANAGE_AT,
+			AUTHOR_MANAGE_AT,
+			EXPORT_AUTHOR_AT,
+			ROAD_REG_AT,
+			ROAD_REG_ATTR,
+			ROAD_REG_FIELD,
+			ROAD_REG_CODE
+		FROM
+			KWS_DATA
+		WHERE
+			AUTHOR_MANAGE_AT = 'Y'
+			<if test="exportAuthorAt != null and exportAuthorAt != ''">
+				AND EXPORT_AUTHOR_AT = #{exportAuthorAt}
+			</if>
+			<if test="dataIds != null and dataIds.size > 0">
+				AND DATA_ID IN 
+				<foreach collection="dataIds" item="dataId" open="(" close=")" separator=",">
+					#{dataId}
+				</foreach>
+			</if>
+		ORDER BY DATA_ALIAS
+	</select>
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsDataMap" type="kwsData">
+		<id property="dataId" column="DATA_ID" />
+		<result property="dataCtgryId" column="DATA_CTGRY_ID"/>
+		<result property="dataAlias" column="DATA_ALIAS"/>
+		<result property="dataTy" column="DATA_TY"/>
+		<result property="geomTy" column="GEOM_TY"/>
+		<result property="useAt" column="USE_AT"/>
+		<result property="specSearchAt" column="SPEC_SEARCH_AT"/>
+		<result property="prntngAt" column="PRNTNG_AT"/>
+		<result property="editAt" column="EDIT_AT"/>
+		<result property="histManageAt" column="HIST_MANAGE_AT"/>
+		<result property="photoManageAt" column="PHOTO_MANAGE_AT"/>
+		<result property="authorManageAt" column="AUTHOR_MANAGE_AT"/>
+		<result property="exportAuthorAt" column="EXPORT_AUTHOR_AT"/>
+		<result property="roadRegAt" column="ROAD_REG_AT"/>
+		<result property="roadRegAttr" column="ROAD_REG_ATTR"/>
+		<result property="roadRegField" column="ROAD_REG_FIELD"/>
+		<result property="roadRegCode" column="ROAD_REG_CODE"/>
+		<collection property="kwsDataFields" ofType="kwsDataField" >
+			<id property="dataId" column="DATA_ID" />
+			<id property="fieldId" column="FIELD_ID"/>
+			<result property="fieldCtgryId" column="FIELD_CTGRY_ID"/>
+			<result property="fieldAlias" column="FIELD_ALIAS"/>
+			<result property="fieldOrdr" column="FIELD_ORDR"/>
+			<result property="fieldTy" column="FIELD_TY"/>
+			<result property="fieldLt" column="FIELD_LT"/>
+			<result property="dcmlLt" column="DCML_LT"/>
+			<result property="pkAt" column="PK_AT"/>
+			<result property="nullAt" column="NULL_AT"/>
+			<result property="unit" column="UNIT"/>
+			<result property="domnId" column="DOMN_ID"/>
+			<result property="dfltValue" column="DFLT_VALUE"/>
+			<result property="indictTy" column="INDICT_TY"/>
+			<result property="customSql" column="CUSTOM_SQL"/>
+			<result property="editAt" column="EDITABLE"/>
+			<result property="sysTy" column="SYS_TY"/>
+		</collection>
+	</resultMap>
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultMap="kwsDataMap">
+		SELECT
+			DATA.DATA_ID,
+			DATA.DATA_CTGRY_ID,
+			DATA.DATA_ALIAS,
+			DATA.DATA_TY,
+			DATA.GEOM_TY,
+			DATA.USE_AT,
+			DATA.SPEC_SEARCH_AT,
+			DATA.PRNTNG_AT,
+			DATA.EDIT_AT,
+			DATA.HIST_MANAGE_AT,
+			DATA.PHOTO_MANAGE_AT,
+			DATA.AUTHOR_MANAGE_AT,
+			DATA.EXPORT_AUTHOR_AT,
+			DATA.ROAD_REG_AT,
+			DATA.ROAD_REG_ATTR,
+			DATA.ROAD_REG_FIELD,
+			DATA.ROAD_REG_CODE,
+			FIELD.FIELD_ID,
+			FIELD.FIELD_CTGRY_ID,
+			FIELD.FIELD_ALIAS,
+			FIELD.FIELD_ORDR,
+			FIELD.FIELD_TY,
+			FIELD.FIELD_LT,
+			FIELD.DCML_LT,
+			FIELD.PK_AT,
+			FIELD.NULL_AT,
+			FIELD.UNIT,
+			FIELD.DOMN_ID,
+			FIELD.DFLT_VALUE,
+			FIELD.INDICT_TY,
+			FIELD.CUSTOM_SQL,
+			FIELD.EDIT_AT AS EDITABLE,
+			FIELD.SYS_TY
+		FROM
+			KWS_DATA DATA
+			LEFT OUTER JOIN KWS_DATA_FIELD FIELD ON DATA.DATA_ID = FIELD.DATA_ID
+		WHERE
+			DATA.DATA_ID = #{dataId}
+		ORDER BY DATA.DATA_ALIAS, FIELD.FIELD_ORDR
+	</select>
+
+	<!-- Lks : 도로대장 -->
+	<!-- 도로대장 단 건 검색 -->
+	<select id="selectOneRoadReg" parameterType="String" resultMap="kwsDataMap">
+		SELECT
+			DATA.DATA_ID,
+			DATA.DATA_CTGRY_ID,
+			DATA.DATA_ALIAS,
+			DATA.DATA_TY,
+			DATA.GEOM_TY,
+			DATA.USE_AT,
+			DATA.SPEC_SEARCH_AT,
+			DATA.PRNTNG_AT,
+			DATA.EDIT_AT,
+			DATA.HIST_MANAGE_AT,
+			DATA.PHOTO_MANAGE_AT,
+			DATA.AUTHOR_MANAGE_AT,
+			DATA.EXPORT_AUTHOR_AT,
+			DATA.ROAD_REG_AT,
+			DATA.ROAD_REG_ATTR,
+			DATA.ROAD_REG_FIELD,
+			DATA.ROAD_REG_CODE,
+			FIELD.FIELD_ID,
+			FIELD.FIELD_CTGRY_ID,
+			FIELD.FIELD_ALIAS,
+			FIELD.FIELD_ORDR,
+			FIELD.FIELD_TY,
+			FIELD.FIELD_LT,
+			FIELD.DCML_LT,
+			FIELD.PK_AT,
+			FIELD.NULL_AT,
+			FIELD.UNIT,
+			FIELD.DOMN_ID,
+			FIELD.DFLT_VALUE,
+			FIELD.INDICT_TY,
+			FIELD.CUSTOM_SQL,
+			FIELD.EDIT_AT,
+			FIELD.SYS_TY
+		FROM
+			KWS_DATA DATA
+			LEFT OUTER JOIN KWS_DATA_FIELD FIELD ON DATA.DATA_ID = FIELD.DATA_ID
+		WHERE
+			DATA.DATA_ID = #{dataId}
+			AND 
+			(FIELD.SYS_TY = 'COMMON' OR FIELD.SYS_TY = 'ROAD_REGISTER')
+		ORDER BY DATA.DATA_ALIAS, FIELD.FIELD_ORDR
+	</select>
+
+	<select id="selectRoadRegByAttr" parameterType="String" resultMap="kwsDataMap">
+		SELECT
+			DATA.DATA_ID,
+			DATA.DATA_CTGRY_ID,
+			DATA.DATA_ALIAS,
+			DATA.DATA_TY,
+			DATA.GEOM_TY,
+			DATA.USE_AT,
+			DATA.SPEC_SEARCH_AT,
+			DATA.PRNTNG_AT,
+			DATA.EDIT_AT,
+			DATA.HIST_MANAGE_AT,
+			DATA.PHOTO_MANAGE_AT,
+			DATA.AUTHOR_MANAGE_AT,
+			DATA.EXPORT_AUTHOR_AT,
+			DATA.ROAD_REG_AT,
+			DATA.ROAD_REG_ATTR,
+			DATA.ROAD_REG_FIELD,
+			DATA.ROAD_REG_CODE,
+			FIELD.FIELD_ID,
+			FIELD.FIELD_CTGRY_ID,
+			FIELD.FIELD_ALIAS,
+			FIELD.FIELD_ORDR,
+			FIELD.FIELD_TY,
+			FIELD.FIELD_LT,
+			FIELD.DCML_LT,
+			FIELD.PK_AT,
+			FIELD.NULL_AT,
+			FIELD.UNIT,
+			FIELD.DOMN_ID,
+			FIELD.DFLT_VALUE,
+			FIELD.INDICT_TY,
+			FIELD.CUSTOM_SQL,
+			FIELD.EDIT_AT,
+			FIELD.SYS_TY
+		FROM
+			KWS_DATA DATA
+			LEFT OUTER JOIN KWS_DATA_FIELD FIELD ON DATA.DATA_ID = FIELD.DATA_ID
+		WHERE
+			DATA.ROAD_REG_AT = 'Y'
+			AND 
+			DATA.ROAD_REG_ATTR = #{dataId}
+			AND 
+			FIELD.SYS_TY = 'COMMON'
+		ORDER BY DATA.DATA_ALIAS, FIELD.FIELD_ORDR
+	</select>
+	
+	<select id="selectRoadRegByCode" resultMap="kwsDataMap">
+		SELECT
+			DATA.DATA_ID,
+			DATA.DATA_CTGRY_ID,
+			DATA.DATA_ALIAS,
+			DATA.DATA_TY,
+			DATA.GEOM_TY,
+			DATA.USE_AT,
+			DATA.SPEC_SEARCH_AT,
+			DATA.PRNTNG_AT,
+			DATA.EDIT_AT,
+			DATA.HIST_MANAGE_AT,
+			DATA.PHOTO_MANAGE_AT,
+			DATA.AUTHOR_MANAGE_AT,
+			DATA.EXPORT_AUTHOR_AT,
+			DATA.ROAD_REG_AT,
+			DATA.ROAD_REG_ATTR,
+			DATA.ROAD_REG_FIELD,
+			DATA.ROAD_REG_CODE,
+			FIELD.FIELD_ID,
+			FIELD.FIELD_CTGRY_ID,
+			FIELD.FIELD_ALIAS,
+			FIELD.FIELD_ORDR,
+			FIELD.FIELD_TY,
+			FIELD.FIELD_LT,
+			FIELD.DCML_LT,
+			FIELD.PK_AT,
+			FIELD.NULL_AT,
+			FIELD.UNIT,
+			FIELD.DOMN_ID,
+			FIELD.DFLT_VALUE,
+			FIELD.INDICT_TY,
+			FIELD.CUSTOM_SQL,
+			FIELD.EDIT_AT,
+			FIELD.SYS_TY
+		FROM
+			KWS_DATA DATA
+			LEFT OUTER JOIN KWS_DATA_FIELD FIELD ON DATA.DATA_ID = FIELD.DATA_ID
+		WHERE
+			DATA.ROAD_REG_ATTR = #{dataId}
+			AND 
+			DATA.ROAD_REG_CODE = #{typeCode}
+			AND 
+			FIELD.SYS_TY = 'COMMON'
+		ORDER BY DATA.DATA_ALIAS, FIELD.FIELD_ORDR
+	</select>
+
+</mapper>

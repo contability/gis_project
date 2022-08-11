@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.PlcyRepoMaMapper">
+	
+	<select id="list" parameterType="plcyRepoMa" resultType="plcyRepoMa">
+		SELECT 
+			FTR_CDE,
+			FTR_IDN,
+			REPO_IDN,
+			REPO_TIT,
+			REPO_VER,
+			REPO_MAK,
+			REPO_LST,
+			RMK_EXP
+		FROM
+			PLCY_REPO_MA
+		WHERE
+			FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+	</select> 
+	
+	<select id="selectRepoIdn" resultType="Long">
+		SELECT 
+			REPO_IDN
+		FROM
+			PLCY_REPO_MA
+		WHERE
+			FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+	</select> 
+	
+	<insert id="insert" parameterType="plcyRepoMa">
+		INSERT INTO
+			PLCY_REPO_MA (
+				FTR_CDE,
+				FTR_IDN,
+				REPO_IDN,
+				REPO_TIT,
+				REPO_VER,
+				REPO_MAK
+			)values(
+				#{ftrCde, jdbcType=VARCHAR},
+				#{ftrIdn, jdbcType=BIGINT},
+				#{repoIdn, jdbcType=BIGINT},
+				#{repoTit, jdbcType=VARCHAR},
+				#{repoVer, jdbcType=BIGINT},
+				#{repoMak, jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<update id="update">
+		UPDATE
+			PLCY_REPO_MA
+		SET
+			REPO_VER = #{repoVer, jdbcType=BIGINT},
+			REPO_TIT = #{repoTit, jdbcType=VARCHAR},
+			REPO_LST = #{repoLst, jdbcType=VARCHAR}
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+		AND
+			REPO_IDN = #{repoIdn}
+	</update>
+	
+	<!-- 버전 최대값 가져오기 -->
+	<select id = "repoVerSeq" resultType="Integer">
+		SELECT 
+			MAX(REPO_VER) AS REPO_VER
+		FROM
+			PLCY_REPO_MA
+		WHERE 
+			FTR_IDN = #{ftrIdn} 
+		AND 
+			REPO_IDN = #{repoIdn}
+		GROUP BY 
+			REPO_VER
+	</select>
+	
+	<delete id = "delete">
+		DELETE
+		FROM 
+			PLCY_REPO_MA 
+		WHERE 
+			FTR_IDN = #{ftrIdn} 
+	</delete>
+	
+	<select id="selectRepoTit" resultType="String">
+		SELECT
+			REPO_TIT
+		FROM
+			PLCY_REPO_MA
+		WHERE
+			FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+		AND
+			REPO_IDN = #{repoIdn, jdbcType=INTEGER}
+	</select>
+	
+	
+</mapper>

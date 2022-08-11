@@ -1,0 +1,28 @@
+.road_video { 
+	display: block;
+	font-size: 12px; font =style : normal;
+	font-weight: 400;
+	letter-spacing: normal;
+	line-height: 1.42857;
+	text-align: start;
+	text-decoration: none;
+	text-shadow: none;
+	text-transform: none;
+	word-break: normal;
+	word-spacing: normal;
+	word-wrap: normal;
+	position: relative;
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 4px;
+	color: black;
+	padding: 4px 8px;
+	opacity: 0.7;
+	white-space: nowrap;
+	opacity: 1;
+	font-weight: bold;
+}
+
+.road_video video {
+	margin-top:20px;
+	margin-left:20px;
+}

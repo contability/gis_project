@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsLyrMapper">
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="layerSearchDTO" resultType="kwsLyr">
+		SELECT
+			LYR.LYR_ID,
+			LYR.DATA_ID,
+			LYR.LYR_CTGRY_ID,
+			LYR.LYR_TY,
+			LYR.LYR_BASS_STYLE
+		FROM KWS_LYR LYR INNER JOIN KWS_DATA DTA ON LYR.DATA_ID = DTA.DATA_ID 
+		WHERE
+			DTA.USE_AT = 'Y'
+			<if test="layerIds != null and layerIds.size > 0">
+				AND LYR.LYR_ID IN 
+				<foreach collection="layerIds" item="layerId" open="(" close=")" separator=",">
+					#{layerId}
+				</foreach>
+			</if>
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultType="kwsLyr">
+		SELECT
+			LYR_ID,
+			DATA_ID,
+			LYR_CTGRY_ID,
+			LYR_TY,
+			LYR_BASS_STYLE
+		FROM KWS_LYR
+		WHERE LYR_ID = #{layerId} 
+	</select>
+	
+	<select id="selectOneByKwsLyr" parameterType="kwsLyr" resultType="kwsLyr">
+		SELECT
+			LYR_ID,
+			DATA_ID,
+			LYR_CTGRY_ID,
+			LYR_TY,
+			LYR_BASS_STYLE
+		FROM KWS_LYR
+		<where>
+			<if test="dataId != null and dataId != ''">
+				AND DATA_ID = #{dataId} 
+			</if>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.LgstrStatsFileMapper">
+
+	<resultMap id="lgstrStatsFileMap" type="lgstrStatsFile">
+		<id property="lgstrStatsNo" column="LGSTRSTATS_NO" />
+		<id property="fileNo" column="FILE_NO"/>
+	    <!-- <association property="kwsFile" column="FILE_NO" javaType="kwsFile" select="kr.co.gitt.kworks.mappers.KwsFileMapper.selectOne"></association> -->
+	</resultMap>
+	
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="java.util.Map" resultMap="lgstrStatsFileMap">
+		SELECT
+			LGSTRSTATS_NO,
+			FILE_NO
+		FROM LGSTR_STATS_FILE
+		WHERE
+			LGSTRSTATS_NO = #{lgstrStatsNo}
+	</select>
+	
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="lgstrStatsFile">
+		INSERT INTO LGSTR_STATS_FILE (
+			LGSTRSTATS_NO,
+			FILE_NO
+		) 
+		VALUES (
+			#{lgstrStatsNo, jdbcType=BIGINT},
+			#{fileNo, jdbcType=BIGINT}
+		)
+	</insert>
+	
+	<!--  삭제  -->
+	<delete id="delete" parameterType="lgstrStatsFile">
+		DELETE FROM LGSTR_STATS_FILE
+		WHERE
+			LGSTRSTATS_NO = #{lgstrStatsNo} AND FILE_NO = #{fileNo}
+	</delete>
+	
+</mapper>

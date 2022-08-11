@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.CtyPksdAsMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="ctyPksdAsMap" type="ctyPksdAs">
+		<id property="ftrCde" column="FTR_CDE" />
+		<id property="ftrIdn" column="FTR_IDN" />
+		<result property="ftfIdn" column="FTF_IDN" />
+		<result property="sdlCde" column="SDL_CDE" />
+		<result property="flrCde" column="FLR_CDE" />
+		<result property="grdAra" column="GRD_ARA" />
+		<result property="fenCde" column="FEN_CDE" />
+		<result property="regNam" column="REG_NAM" />
+		<result property="lodYmd" column="LOD_YMD" />
+		<result property="updNam" column="UPD_NAM" />
+		<result property="udpYmd" column="UDP_YMD" />
+		<result property="sttYmd" column="STT_YMD" />
+		<result property="remark" column="REMARK" />
+		<collection property="cityParkFacilityResults" ofType="CityParkFacilityResultDTO" >
+			<result property="kind" column="KIND" />
+			<result property="dt" column="DT" />
+			<result property="quantity" column="QUANTITY" />
+		</collection>
+	</resultMap>
+
+	<!-- 조경화단 목록 검색 -->
+	<select id="listScap" parameterType="ctyPksdAs" resultMap="ctyPksdAsMap">
+		SELECT
+			PKSD.FTR_CDE AS FTR_CDE,
+			PKSD.FTR_IDN AS FTR_IDN,
+			PKSD.FTF_IDN AS FTF_IDN,
+			PKSD.SDL_CDE AS SDL_CDE,
+			PKSD.FLR_CDE AS FLR_CDE,
+			PKSD.GRD_ARA AS GRD_ARA,
+			PKSD.FEN_CDE AS FEN_CDE,
+			PKSD.REG_NAM AS REG_NAM,
+			PKSD.LOD_YMD AS LOD_YMD,
+			PKSD.UPD_NAM AS UPD_NAM,
+			PKSD.UDP_YMD AS UDP_YMD,
+			PKSD.STT_YMD AS STT_YMD,
+			PKSD.REMARK AS REMARK,
+			GRDN.KIND AS KIND,
+			'' AS DT,
+			GRDN.QUANTITY AS QUANTITY
+		FROM
+			CTY_PKSD_AS PKSD 
+			LEFT OUTER JOIN (SELECT FTF_IDN, SRB_CDE AS KIND, SUM(TRE_NUM) AS QUANTITY FROM CTY_GRDN_AS GROUP BY FTF_IDN, SRB_CDE) GRDN ON PKSD.FTR_IDN = GRDN.FTF_IDN
+		WHERE
+			PKSD.FTF_IDN = #{ftfIdn}	
+	</select>
+	
+	<!-- 운동시설 목록 검색 -->
+	<select id="listAthl" parameterType="ctyPksdAs" resultMap="ctyPksdAsMap">
+		SELECT
+			PKSD.FTR_CDE AS FTR_CDE,
+			PKSD.FTR_IDN AS FTR_IDN,
+			PKSD.FTF_IDN AS FTF_IDN,
+			PKSD.SDL_CDE AS SDL_CDE,
+			PKSD.FLR_CDE AS FLR_CDE,
+			PKSD.GRD_ARA AS GRD_ARA,
+			PKSD.FEN_CDE AS FEN_CDE,
+			PKSD.REG_NAM AS REG_NAM,
+			PKSD.LOD_YMD AS LOD_YMD,
+			PKSD.UPD_NAM AS UPD_NAM,
+			PKSD.UDP_YMD AS UDP_YMD,
+			PKSD.STT_YMD AS STT_YMD,
+			PKSD.REMARK AS REMARK,
+			GRDN.KIND AS KIND,
+			GRDN.DT AS DT,
+			GRDN.QUANTITY AS QUANTITY
+		FROM
+			CTY_PKSD_AS PKSD 
+			LEFT OUTER JOIN (SELECT FTF_IDN, ATH_CDE AS KIND, STT_YMD AS DT, COUNT(FTR_IDN) AS QUANTITY FROM CTY_ATHL_PS GROUP BY FTF_IDN, STT_YMD, ATH_CDE) GRDN ON PKSD.FTR_IDN = GRDN.FTF_IDN
+		WHERE
+			PKSD.FTF_IDN = #{ftfIdn}
+	</select>
+	
+	<!-- 유희시설 목록 검색 -->
+	<select id="listPlay" parameterType="ctyPksdAs" resultMap="ctyPksdAsMap">
+		SELECT
+			PKSD.FTR_CDE AS FTR_CDE,
+			PKSD.FTR_IDN AS FTR_IDN,
+			PKSD.FTF_IDN AS FTF_IDN,
+			PKSD.SDL_CDE AS SDL_CDE,
+			PKSD.FLR_CDE AS FLR_CDE,
+			PKSD.GRD_ARA AS GRD_ARA,
+			PKSD.FEN_CDE AS FEN_CDE,
+			PKSD.REG_NAM AS REG_NAM,
+			PKSD.LOD_YMD AS LOD_YMD,
+			PKSD.UPD_NAM AS UPD_NAM,
+			PKSD.UDP_YMD AS UDP_YMD,
+			PKSD.STT_YMD AS STT_YMD,
+			PKSD.REMARK AS REMARK,
+			PLAY.KIND AS KIND,
+			PLAY.DT AS DT,
+			PLAY.QUANTITY AS QUANTITY
+		FROM
+			CTY_PKSD_AS PKSD 
+			LEFT OUTER JOIN (SELECT FTF_IDN, PLY_CDE AS KIND, STT_YMD AS DT, COUNT(FTR_IDN) AS QUANTITY FROM CTY_PLAY_PS GROUP BY FTF_IDN, STT_YMD, PLY_CDE) PLAY ON PKSD.FTR_IDN = PLAY.FTF_IDN
+		WHERE
+			PKSD.FTF_IDN = #{ftfIdn}
+	</select>
+
+</mapper>

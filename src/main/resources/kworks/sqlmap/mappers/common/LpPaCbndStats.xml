@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.LpPaCbndStatsMapper">
+	<select id="list" parameterType="lpPaCbndStats" resultType="lpPaCbndStats">
+		SELECT
+			STATS_OWN,
+			TO_CHAR(SUM(ST_AREA(GEOM)/10000), 'FM999,999,999,999.99') AS AREA,
+			TO_CHAR(SUM(ST_AREA(GEOM)) * 100 / SUM(SUM(ST_AREA(GEOM))) OVER(), 'FM990.99') AS RATIO
+		FROM
+			LP_PA_CBND_STATS
+		GROUP BY
+			STATS_OWN
+		ORDER BY
+			STATS_OWN
+	</select>
+	<select id="select" parameterType="lpPaCbndStats" resultType="lpPaCbndStats">
+		SELECT
+			TO_CHAR(SUM(ST_AREA(GEOM)/10000), 'FM999,999,999,999.99') AS AREA,
+			TO_CHAR(SUM(ST_AREA(GEOM)) * 100 / SUM(SUM(ST_AREA(GEOM))) OVER(), 'FM990') AS RATIO
+		FROM
+			LP_PA_CBND_STATS
+	</select>
+</mapper>

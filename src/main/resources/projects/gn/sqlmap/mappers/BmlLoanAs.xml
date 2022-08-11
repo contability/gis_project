@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.BmlLoanAsMapper">
+
+	<select id="selectOne" resultType="BmlLoanAs" parameterType="bmlLoanAs">
+		SELECT
+			OBJECTID,
+			PRT_IDN,
+			LON_IDN,
+			PBP_KND,
+			THG_ADR,
+			CRT_DATE,
+			TNT_DATE,
+			TNT_RESN,
+			CRT_STR,
+			CRT_END,
+			LON_AREA,
+			SLON_AREA,
+			LON_PUP,
+			EMP_NAM,
+			PBP_KNDNM,
+			OWN_CDE,
+			OWN_NM,
+			MAN_CDE,
+			MAN_NM,
+			PRS_CDE,
+			MESRV_NM,
+			AMN_CDE,
+			AMN_NM,
+			ACC_CDE,
+			ACC_NM,
+			BJD_CDE,
+			BJD_NM,
+			MONUT,
+			BUN,
+			HO,
+			PER_AMT,
+			LON_START,
+			LON_END,
+			LON_DAY,
+			BL_LON_AR,
+			BL_BD_AR,
+			USE_FLR,
+			EMP_SE,
+			USR_SE_NM,
+			USRBJD_CD,
+			USRBJD_NM,
+			USR_SAN,
+			USR_BUNJI,
+			USR_HO,
+			EMP_BJD,
+			EMP_RN,
+			EMP_NUM
+		FROM
+			BML_LOAN_AS
+		<where>
+			<if test="lonIdn != null">
+				AND LON_IDN = #{lonIdn}
+			</if>
+			<if test="prtIdn != null">
+				AND PRT_IDN = #{prtIdn}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertBackup" parameterType="BmlLoanAs">
+		INSERT INTO
+			BML_LOAN_AS_BACKUP(
+				PRT_IDN,
+				LON_IDN,
+				PBP_KND,
+				THG_ADR,
+				CRT_DATE,
+				TNT_DATE,
+				TNT_RESN,
+				CRT_STR,
+				CRT_END,
+				LON_AREA,
+				SLON_AREA,
+				LON_PUP,
+				EMP_NAM,
+				PBP_KNDNM,
+				OWN_CDE,
+				OWN_NM,
+				MAN_CDE,
+				MAN_NM,
+				PRS_CDE,
+				MESRV_NM,
+				AMN_CDE,
+				AMN_NM,
+				ACC_CDE,
+				ACC_NM,
+				BJD_CDE,
+				BJD_NM,
+				MONUT,
+				BUN,
+				HO,
+				PER_AMT,
+				LON_START,
+				LON_END,
+				LON_DAY,
+				BL_LON_AR,
+				BL_BD_AR,
+				USE_FLR,
+				EMP_SE,
+				USR_SE_NM,
+				USRBJD_CD,
+				USRBJD_NM,
+				USR_SAN,
+				USR_BUNJI,
+				USR_HO,
+				EMP_BJD,
+				EMP_RN,
+				EMP_NUM
+			)
+		VALUES(
+			#{prtIdn, jdbcType=INTEGER},
+			#{lonIdn, jdbcType=INTEGER},
+			#{pbpKnd, jdbcType=VARCHAR},
+			#{thgAdr, jdbcType=VARCHAR},
+			#{crtDate, jdbcType=VARCHAR},
+			#{tntDate, jdbcType=VARCHAR},
+			#{tntResn, jdbcType=VARCHAR},
+			#{crtStr, jdbcType=VARCHAR},
+			#{crtEnd, jdbcType=VARCHAR},
+			#{lonArea, jdbcType=DOUBLE},
+			#{slonArea, jdbcType=DOUBLE},
+			#{lonPup, jdbcType=VARCHAR},
+			#{empNam, jdbcType=VARCHAR},
+			#{pbpKndnm, jdbcType=VARCHAR},
+			#{ownCde, jdbcType=VARCHAR},
+			#{ownNm, jdbcType=VARCHAR},
+			#{manCde, jdbcType=VARCHAR},
+			#{manNm, jdbcType=VARCHAR},
+			#{prsCde, jdbcType=VARCHAR},
+			#{mesrvNm, jdbcType=VARCHAR},
+			#{amnCde, jdbcType=VARCHAR},
+			#{amnNm, jdbcType=VARCHAR},
+			#{accCde, jdbcType=VARCHAR},
+			#{accNm, jdbcType=VARCHAR},
+			#{bjdCde, jdbcType=VARCHAR},
+			#{bjdNm, jdbcType=VARCHAR},
+			#{monut, jdbcType=VARCHAR},
+			#{bun, jdbcType=VARCHAR},
+			#{ho, jdbcType=VARCHAR},
+			#{perAmt, jdbcType=INTEGER},
+			#{lonStart, jdbcType=VARCHAR},
+			#{lonEnd, jdbcType=VARCHAR},
+			#{lonDay, jdbcType=INTEGER},
+			#{blLonAr, jdbcType=DOUBLE},
+			#{blBdAr, jdbcType=DOUBLE},
+			#{useFlr, jdbcType=VARCHAR},
+			#{empSe, jdbcType=VARCHAR},
+			#{usrSeNm, jdbcType=VARCHAR},
+			#{usrbjdCd, jdbcType=VARCHAR},
+			#{usrbjdNm, jdbcType=VARCHAR},
+			#{usrSan, jdbcType=VARCHAR},
+			#{usrBunji, jdbcType=VARCHAR},
+			#{usrHo, jdbcType=VARCHAR},
+			#{empBjd, jdbcType=VARCHAR},
+			#{empRn, jdbcType=VARCHAR},
+			#{empNum, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	 <delete id="removeBackup">
+	 	TRUNCATE TABLE BML_LOAN_AS_BACKUP
+	 </delete>
+	 
+	<delete id="remove">
+		TRUNCATE TABLE BML_LOAN_AS
+	</delete>
+	
+	<insert id="insertPropLoanData">
+		INSERT INTO
+			BML_LOAN_AS(
+				OBJECTID,
+				PRT_IDN,
+				LON_IDN,
+				PBP_KND,
+				THG_ADR,
+				CRT_DATE,
+				TNT_DATE,
+				TNT_RESN,
+				CRT_STR,
+				CRT_END,
+				LON_AREA,
+				SLON_AREA,
+				LON_PUP,
+				EMP_NAM,
+				PBP_KNDNM,
+				OWN_CDE,
+				OWN_NM,
+				MAN_CDE,
+				MAN_NM,
+				PRS_CDE,
+				MESRV_NM,
+				AMN_CDE,
+				AMN_NM,
+				ACC_CDE,
+				ACC_NM,
+				BJD_CDE,
+				BJD_NM,
+				MONUT,
+				BUN,
+				HO,
+				PER_AMT,
+				LON_START,
+				LON_END,
+				LON_DAY,
+				BL_LON_AR,
+				BL_BD_AR,
+				USE_FLR,
+				EMP_SE,
+				USR_SE_NM,
+				USRBJD_CD,
+				USRBJD_NM,
+				USR_SAN,
+				USR_BUNJI,
+				USR_HO,
+				EMP_BJD,
+				EMP_RN,
+				EMP_NUM
+			)
+			(SELECT 
+				(SELECT NVL(MAX(OBJECTID) + 1, 1) FROM BML_LOAN_AS),
+				A.PRT_IDN,
+				A.LON_IDN,
+				A.PBP_KND,
+				A.THG_ADR,
+				A.CRT_DATE,
+				A.TNT_DATE,
+				A.TNT_RESN,
+				A.CRT_STR,
+				A.CRT_END,
+				A.LON_AREA,
+				A.SLON_AREA,
+				A.LON_PUP,
+				A.EMP_NAM,
+				A.PBP_KNDNM,
+				A.OWN_CDE,
+				A.OWN_NM,
+				A.MAN_CDE,
+				A.MAN_NM,
+				A.PRS_CDE,
+				A.MESRV_NM,
+				A.AMN_CDE,
+				A.AMN_NM,
+				A.ACC_CDE,
+				A.ACC_NM,
+				A.BJD_CDE,
+				A.BJD_NM,
+				A.MONUT,
+				A.BUN,
+				A.HO,
+				A.PER_AMT,
+				A.LON_START,
+				A.LON_END,
+				A.LON_DAY,
+				A.BL_LON_AR,
+				A.BL_BD_AR,
+				A.USE_FLR,
+				A.EMP_SE,
+				A.USR_SE_NM,
+				A.USRBJD_CD,
+				A.USRBJD_NM,
+				A.USR_SAN,
+				A.USR_BUNJI,
+				A.USR_HO,
+				A.EMP_BJD,
+				A.EMP_RN,
+				A.EMP_NUM
+			FROM BML_LOAN_AS_BACKUP A 
+			LEFT JOIN BML_PROP_AS_BACKUP B ON B.PRT_IDN = A.PRT_IDN
+			WHERE TO_DATE(A.CRT_END) <![CDATA[>=]]> TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD')) 
+			AND TO_DATE(A.CRT_STR) <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD'))
+			AND A.PBP_KND = '01'
+			AND A.TNT_DATE = ''
+			AND B.DISPO_MET = '')
+	</insert>
+	
+	<insert id="insertBuidLoanData">
+		INSERT INTO
+			BML_LOAN_AS(
+				OBJECTID,
+				PRT_IDN,
+				LON_IDN,
+				PBP_KND,
+				THG_ADR,
+				CRT_DATE,
+				TNT_DATE,
+				TNT_RESN,
+				CRT_STR,
+				CRT_END,
+				LON_AREA,
+				SLON_AREA,
+				LON_PUP,
+				EMP_NAM,
+				PBP_KNDNM,
+				OWN_CDE,
+				OWN_NM,
+				MAN_CDE,
+				MAN_NM,
+				PRS_CDE,
+				MESRV_NM,
+				AMN_CDE,
+				AMN_NM,
+				ACC_CDE,
+				ACC_NM,
+				BJD_CDE,
+				BJD_NM,
+				MONUT,
+				BUN,
+				HO,
+				PER_AMT,
+				LON_START,
+				LON_END,
+				LON_DAY,
+				BL_LON_AR,
+				BL_BD_AR,
+				USE_FLR,
+				EMP_SE,
+				USR_SE_NM,
+				USRBJD_CD,
+				USRBJD_NM,
+				USR_SAN,
+				USR_BUNJI,
+				USR_HO,
+				EMP_BJD,
+				EMP_RN,
+				EMP_NUM
+			)
+			(SELECT 
+				(SELECT NVL(MAX(OBJECTID) + 1, 1) FROM BML_LOAN_AS),
+				A.PRT_IDN,
+				A.LON_IDN,
+				A.PBP_KND,
+				A.THG_ADR,
+				A.CRT_DATE,
+				A.TNT_DATE,
+				A.TNT_RESN,
+				A.CRT_STR,
+				A.CRT_END,
+				A.LON_AREA,
+				A.SLON_AREA,
+				A.LON_PUP,
+				A.EMP_NAM,
+				A.PBP_KNDNM,
+				A.OWN_CDE,
+				A.OWN_NM,
+				A.MAN_CDE,
+				A.MAN_NM,
+				A.PRS_CDE,
+				A.MESRV_NM,
+				A.AMN_CDE,
+				A.AMN_NM,
+				A.ACC_CDE,
+				A.ACC_NM,
+				A.BJD_CDE,
+				A.BJD_NM,
+				A.MONUT,
+				A.BUN,
+				A.HO,
+				A.PER_AMT,
+				A.LON_START,
+				A.LON_END,
+				A.LON_DAY,
+				A.BL_LON_AR,
+				A.BL_BD_AR,
+				A.USE_FLR,
+				A.EMP_SE,
+				A.USR_SE_NM,
+				A.USRBJD_CD,
+				A.USRBJD_NM,
+				A.USR_SAN,
+				A.USR_BUNJI,
+				A.USR_HO,
+				A.EMP_BJD,
+				A.EMP_RN,
+				A.EMP_NUM
+			FROM BML_LOAN_AS_BACKUP A 
+			LEFT JOIN BML_BUID_AS_BACKUP B ON B.PRT_IDN = A.PRT_IDN
+			WHERE TO_DATE(A.CRT_END) <![CDATA[>=]]> TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD')) 
+			AND TO_DATE(A.CRT_STR) <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD'))
+			AND A.PBP_KND = '02'
+			AND A.TNT_DATE = ''
+			AND B.DISPO_MET = '')
+	</insert>
+	
+	<update id="geomUpdate">
+		UPDATE
+			BML_LOAN_AS
+		SET
+			BML_LOAN_AS.GEOM = LP_PA_CBND.GEOM FROM LP_PA_CBND WHERE LP_PA_CBND.PNU = BML_LOAN_AS.BJD_CDE||BML_LOAN_AS.MONUT||LPAD(BML_LOAN_AS.BUN,4,0)||LPAD(BML_LOAN_AS.HO,4,0) 
+	</update>
+	
+	<select id="loanImmCount" resultType="Integer" parameterType="hashMap">
+		SELECT
+			COUNT(LON_END)
+		FROM
+			BML_LOAN_AS
+		WHERE
+			TO_DATE(LON_END) - 60 <![CDATA[<=]]> SYSDATE
+		<if test="deptCode != null and deptCode != '' and deptCode != '42002450000'">
+		AND
+			MAN_CDE = #{deptCode}
+		</if>
+	</select>
+	
+	<select id="areaList" resultType="BmlLoanAs" parameterType="UseAreaSearchDTO">
+		SELECT
+			OBJECTID,
+			PRT_IDN,
+			LON_IDN,
+			PBP_KND,
+			THG_ADR,
+			CRT_DATE,
+			TNT_DATE,
+			TNT_RESN,
+			CRT_STR,
+			CRT_END,
+			LON_AREA,
+			SLON_AREA,
+			LON_PUP,
+			EMP_NAM,
+			PBP_KNDNM,
+			OWN_CDE,
+			OWN_NM,
+			MAN_CDE,
+			MAN_NM,
+			PRS_CDE,
+			MESRV_NM,
+			AMN_CDE,
+			AMN_NM,
+			ACC_CDE,
+			ACC_NM,
+			BJD_CDE,
+			BJD_NM,
+			MONUT,
+			BUN,
+			HO,
+			PER_AMT,
+			LON_START,
+			LON_END,
+			LON_DAY,
+			BL_LON_AR,
+			BL_BD_AR,
+			USE_FLR,
+			EMP_SE,
+			USR_SE_NM,
+			USRBJD_CD,
+			USRBJD_NM,
+			USR_SAN,
+			USR_BUNJI,
+			USR_HO,
+			EMP_BJD,
+			EMP_RN,
+			EMP_NUM
+		FROM
+			BML_LOAN_AS
+		WHERE
+			BJD_CDE = #{bjdCde}
+			AND
+			MONUT = #{monut}
+			AND
+			BUN = #{bun}
+			<if test="ho != null and ho != ''">
+				AND
+				HO = #{ho}
+			</if>
+	</select>
+	
+	<select id="selectPrsGroupList" resultType="BmlLoanAs">
+		SELECT PRS_CDE, MESRV_NM
+		FROM BML_LOAN_AS
+		GROUP BY PRS_CDE, MESRV_NM
+		ORDER BY MESRV_NM
+	</select>
+	
+	<select id="selectManGroupList" resultType="BmlLoanAs">
+		SELECT MAN_CDE, MAN_NM 
+		FROM BML_LOAN_AS
+		GROUP BY MAN_CDE, MAN_NM
+		ORDER BY MAN_NM
+	</select>
+</mapper>

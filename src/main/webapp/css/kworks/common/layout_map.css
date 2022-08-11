@@ -1,0 +1,245 @@
+/* header */
+
+html, body {overflow:hidden;}
+
+#wrap {width:100%; height:100%;}
+#header {height:110px;}
+#header:after{content:""; display:block; clear:both;}
+#header .logo{float:left;}
+#header .systemTitle {float:left;height:42px;}
+
+#header .gnb {float:right;}
+#header .gnb .gnb_text{position:relative; float:left;}
+#header .gnb .gnb_line{position:relative; float:left;}
+#header .gnb .gnb_img{position:relative; float:left;}
+
+#header .heder_snb {width:100%; float:left;}
+#header .heder_snb .snb {position:relative; float:left;}
+#header .heder_snb .snb .snb_text {position:relative; float:left;}
+#header .heder_snb .snb .snb_text a{color:#acc2d6;}
+#header .heder_snb .snb .snb_img {position:relative; float:left;}
+#header .heder_snb .snb .addressChangeSelect {position:relative; float:left;}
+#header .heder_snb .toolbar{float:right; display:inline-block;}
+#header .heder_snb .toolbar .toolbarMenu {position:relative; float:left;}
+#header .heder_snb .toolbar .tbar_center {position:relative; float:left;}
+
+.heder_snb select, .heder_snb input { font-size : 16px; height : 22px; }
+
+/* container */
+#container{position:absolute; top:110px; width:100%; bottom:0px; left:0; right:0;}
+#container .aside{position:absolute; float:left;}
+#container .aside .nav{float:left; background:url(../../../images/kworks/map/common/nav_bg.png) left bottom repeat-y;}
+#container .aside .nav .nav_lst .spm{display:inline-block; vertical-align:top;}
+#container .aside .nav .Status{position:absolute; bottom:0px; position:fixed; text-align:center;}
+
+.kPanel{float:left;}
+.kPanel .pn_tit{background-color:#dadada;}
+.kPanel .pn_tit .b{float:left;}
+.kPanel .pn_tit a{float:right;}
+ 
+.kPanel h1{background:url(../../../images/kworks/map/common/left_2dep_up.png) right center no-repeat;}
+.kPanel h2{background:url(../../../images/kworks/map/common/left_2dep_down.png) right center no-repeat;}
+ 
+.kPanel .upImg{background:url(../../../images/kworks/map/common/left_2dep_up.png) right center no-repeat;}
+.kPanel .dnImg{background:url(../../../images/kworks/map/common/left_2dep_down.png) right center no-repeat;}
+.kPanel .btnBox{display:inline-block; float:right;}
+.kPanel .book_lst{line-height:22px;}
+.kPanel .listBox{display:inline-block;}
+.kPanel .mapTab{position:relative;}
+.kPanel .mapTab .mTab{float:left; margin-right:-1px;}
+.kPanel .style_le{float:left;}
+.kPanel .style_ri{float:right;}
+.kPanel .searchTab{position:relative;}
+ 
+.kPanel .searchTab .sTab{float:left; margin-left:-1px;}
+.kPanel .searchTab .sTab_l{float:left;}
+ 
+.kPanel .boardLst{position:relative; line-height:19px; text-aline:center;}
+.kPanel .boardLst .lstNum{display:inline-block;}
+.kPanel .boardLst .lstNum .num1{float:left; margin-right:-1px;}
+.kPanel .boardLst .lstNum .num2{float:right; margin-right:-1px;}
+.kPanel .inputSearch{position:relative;}
+.kPanel .inputSearch .sLine{float:left;}
+.kPanel .inputSearch .sLine .searchInput{position:relative;}
+.kPanel .inputSearch li.searchMenu { margin-top : 5px; text-align : right; }
+.kPanel .inputSearch li.searchMenu a { margin-right : 3px; vertical-align : middle; }
+.kPanel .inputSearch li.searchMenu a img { vertical-align : middle; }
+.kPanel .inputSearch input[type=number],
+.kPanel .inputSearch input[type=text] {font-size:16px;}
+.kPanel .printStyle{text-align:center; line-height:15px;}
+.kPanel .bgMap_txt{text-align:center; line-height:15px;}
+.kPanel .printCheck{float:left;}
+.kPanel .printLabel{display:inline-block; line-height:16px;}
+.kPanel .layerTop{position:relative;}
+.kPanel .layerTop .topBtn{float:left;}
+.kPanel .layerLst{float:left;}
+.kPanel .layerLst .layerIcon{position:relative; float:right;}
+.kPanel .layerLst .layerIcon .iconNum{float:left;}
+.kPanel .layerLst li{line-height:34px; vertical-align:middle; text-align:left;}
+.kPanel .layerLst img{vertical-align:middle;}
+.kPanel .layerBtn{position:absolute; bottom:0px; position:fixed; text-align:center;}
+.kPanel .layerBtn .btnArea{position:relative; float:left;}
+
+#container .aside .layerPop{position:absolute; z-index:15;}
+#container .aside .layerPop .layer2Pop{float:left;}
+#container .aside .layerPop .layer2Pop .pop_2dep h1{background:url(../../../images/kworks/map/skin2/2depth_bullet1.png) left center no-repeat; }
+#container .aside .layerPop .bottomBtn{position:relative; bottom:0px; position:fixed;}
+#container .aside .layerPop .bottomBtn .btnArea{float:left;}
+
+#map_container {position:relative; left:70px; width:100%; height:100%;}
+#map_container #map {width:100%; height:100%; right:0px; bottom:0px;}
+/* miriele : refactoring roadview ux [START] */
+/*
+  map 은 map_container 의 자식으로 있고  right / bottom 에 붙도록 되어있습니다.
+  map_container 의 width / height 100% 이므로
+  특정 상황 (#map 의 width / height 를 지정 해야하는) 에서
+  map 의 위치 (left / top) 를 조정해야 하는 경우에만
+  left / top 을 지정해서 사용하도록 하면 될 것 같습니다.
+*/
+/* #map {left: 0px; top: 0px;} */
+/* miriele : refactoring roadview ux [END] */
+
+#map_container .map_control{position:absolute; top:5px; z-index:6;}
+#map_container .map_control .con_box img{float:left;}
+
+#map_container .moveAerialMap_control{position:absolute; top:5px; left:17px; z-index:6;}
+#map_container .moveAerialMap_control .con_box img{float:left;}
+
+/* multi map */
+#container .div_multi_select { position:absolute;right:0px;top:0px;z-index:3000; }
+
+/* miriele : refactoring roadview ux [START] */
+/*
+  roadview container 초기 상태는 full screen 으로
+*/
+/* #roadview_container { position:absolute;bottom:0px;right:0px;width:500px;height:500px;z-index:7; background-color:#fff; display:none; } */
+#roadview_container { position:absolute;width:100%;height:100%; background-color:#fff; display:none; }
+/* miriele : refactoring roadview ux [END] */
+#roadview_mode { position:absolute; right:0px; bottom:0px; z-index:8; background:#fff; width:31px; height:31px; display:none; }
+
+.slideBox{position:absolute; left:320px; right:0; bottom:0px; z-index:8; position:fixed;}
+.slideBox:after {content:""; display:block; clear:both;}
+.slideBox .x{float:right;}
+.slideBox h1{background:url(../../../images/kworks/map/common/popup_close.png) right top no-repeat;}
+.slideBox .cont_bot{position:relative;}
+.slideBox .cont_bot .boardSt{float:left;}
+.slideBox .cont_bot .boardSt .boardTit{position:relative; overflow:hidden}
+.slideBox .cont_bot .boardSt .boardTit .titLeft{float:left;}
+.slideBox .cont_bot .boardSt .boardTit .titLeft .tit{float:left; margin-right:10px;}
+.slideBox .cont_bot .boardSt .boardTit .titLeft .btn{float:left; vertical-align:middle; margin-right:3px;}
+.slideBox .cont_bot .boardSt .boardTit .titRight{float:right;}
+.slideBox .cont_bot .boardSt .boardTit .titRight .tit{float:left; margin-right:10px;}
+.slideBox .cont_bot .boardSt .boardTit .titRight .btn{float:left; vertical-align:middle; margin-right:3px;}
+.slideBox .cont_bot .boardSt .tableBox {width:100%; line-height:29px; text-align:center;}
+.slideBox .cont_bot .boardSt .tableBox .Lst{position:relative;}
+.slideBox .cont_bot .boxResult{overflow-y:scroll; max-height:140px;}
+.slideBox .cont_bot .boardSt .tableBox img{vertical-align:middle;}
+
+.m_content .boardSt{float:left;}
+.m_content .b_left {float:left; width:14%;}
+.m_content .b_right {float:right; width:85.65%; height:265px; border-left:1px solid #e2e2e2;}
+.m_content .Lstbox {overflow-y:scroll; max-height:140px;}
+.m_content .btn{float:left; vertical-align:middle; margin-right:3px;}
+
+/* 사진대장관리 */
+.picSlider {width:300px; height:200px; margin:20px 0;}
+.picSlider .bx-wrapper {margin-bottom:0;}
+.picSlider .bx-pager {display:none;}
+.map_imgInfo_pic {text-align:center; height:200px; border:2px solid #ccc; margin:30px auto 20px; overflow:hidden;}
+.map_imgInfo_pic img {width:100%;}
+.map_imgInfo_cate {border:1px solid #46a0d5; height:180px; overflow-y:auto; padding:15px;}
+.map_imgInfo_cate li {margin-top:6px;}
+.map_imgInfo_cate li:first-child {margin-top:0;}
+.map_imgInfo_cate li input[type=checkbox] {vertical-align:top; margin-right:3px;}
+.imgSlideBtn {margin-top:15px;}
+.imgSlideBtn li.first {margin-bottom:5px;}
+
+/* 하수관거관리 */
+.sewageInfo {padding:25px 10px 0;}
+.sewageInfoText {position:relative; padding-left:40px; line-height:17px;}
+.sewageInfoText a {position:absolute; top:0; left:0; width:30px; height:30px; display:block;}
+.sewageInfoText span {color:#CE7200;}
+
+/* popup */
+/* .easyui-dialog{position:absolute; z-index:9;}
+.easyui-dialog .x{float:right;}
+.easyui-dialog h1{background:url(/images/kworks/map/common/popup_close.png) right top no-repeat;}
+.easyui-dialog tr{line-height:29px;} */
+.easyui-dialog .btn_le{float:left;}
+.easyui-dialog .btn_ri{float:right;}
+.easyui-dialog .photoBox{position:relative;}
+.easyui-dialog .photoBox .photoLst{float:left;}
+.easyui-dialog .textBox{overflow-y:scroll; max-height:120px; overflow-x:scroll; max-width:600px;}
+.easyui-dialog .BtnBox{position:relative;}
+.easyui-dialog .BtnBox .boxCon{float:left;}
+.easyui-dialog .BtnBox .boxClo{float:right;}
+.easyui-dialog .resultBox{overflow-y:scroll; max-height:80px;}
+.easyui-dialog .layerSet{position:relative;}
+.easyui-dialog .layerSet .setbox{float:left;}
+.easyui-dialog .listBox{overflow-y:scroll; height:150px;}
+.easyui-dialog .listBox li{line-height:18px;}
+.easyui-dialog .radioBox li{line-height:18px;}
+.easyui-dialog .resultBox2 tr{line-height:22px;}
+.easyui-dialog .listBox2{overflow-y:scroll; height:185px; line-height:18px;}
+.easyui-dialog .listBox3{overflow-y:scroll; height:100px; line-height:18px;}
+.easyui-dialog .pop_2dep h1{background:url(../../../images/kworks/map/skin2/2depth_bullet_down.png) right center no-repeat; }
+.easyui-dialog .pop_2dep h2{background:url(../../../images/kworks/map/skin2/2depth_bullet_up.png) right center no-repeat; }
+
+/* mySystem */
+.mySystem{position:absolute; float:right; right:30px; top:50px; z-index:4; width:450px; height:423px; background:url(../../../images/kworks/map/common/mysystem_box.png) no-repeat;}
+.mySystem .mySys_box{}
+
+/* window - select layer */
+#div_select_layer .div_select_category { padding:5px; }
+#div_select_layer .div_select_category * { vertical-align : middle; }
+#div_select_layer .div_select_category select { margin : 0px 0px 0px 10px;  }
+#div_select_layer .div_select_category .span_select_layer { position : absolute; left:552px; top:40px; font-weight : bold; }
+#div_select_layer .div_select_container { clear:both; position:relative; height:400px; width:820px; }
+#div_select_layer .ul_select_layers { float:left; width:530px; height:400px; border:1px solid #ccc; margin:0px 5px; overflow-y:auto; }
+#div_select_layer .ul_select_selected_layers { float:left; width:250px; height:400px; border:1px solid #ccc; margin:0px 5px; overflow-y:auto; }
+#div_select_layer .ul_select_selected_layers * { vertical-align : middle; }
+#div_select_layer .div_select_container li { float:left; padding:5px; width:160px; }
+#div_select_layer .div_select_container li label { margin-left:3px; }
+#div_select_layer .ul_select_tool { padding:5px; }
+#div_select_layer .ul_select_tool a { vertical-align:middle; margin:0px 3px; }
+
+#ul_file_target_layers { overflow-y:auto; }
+#ul_file_target_layers li { padding:5px; }
+
+/* print */
+#highPrintContents .print_ul_forms li { margin-bottom:5px; }
+#highPrintContents .print_ul_forms li a { vertical-align:middle; height:88px; }
+#highPrintContents .print_ul_forms li a img.layout_img { width:101px; height:88px; border:1px solid #333333; }
+#highPrintContents .print_ul_forms li span { vertical-align:top; display:inline-block; padding:25px 3px 0px 5px; }
+
+/* footer */
+#footer{background-color:#bcbcbc; height:30px; position:fixed; width:100%; bottom:0;}
+#footer .left{float:left;}
+#footer .right{display:inline-block; float:right;}
+#footer .right .ri_text{position:relative; float:left;}
+#footer .right .lst_close .ly_tm{ bottom:30px; line-height:18px;}
+#footer .right .point{position:relative; float:right;}
+
+#tbl_layer_rule_numbers tr td { border:1px solid gray; }
+#tbl_layer_rule_numbers tr td input { width:74px; }
+
+/* 토지정보 - 범례 */
+#ul_land_view_legned li * { vertical-align : middle; }
+#ul_land_view_legned li a { margin-right : 5px; }
+
+/* 공사대장 정렬버튼 */
+.datagrid-sort-asc .sort-icon {
+	display : inline;
+	padding : 0 12px 0 0;
+	background : url('../../../js/kworks/easyui/themes/bootstrap/images/datagrid_icons.png') no-repeat 0px center;
+}
+
+.datagrid-sort-desc .sort-icon {
+	display : inline;
+	padding : 0 12px 0 0;
+	background : url('../../../js/kworks/easyui/themes/bootstrap/images/datagrid_icons.png') no-repeat -16px center;
+}
+
+
+/* 파일 내보내기 글자 크기 조절 */
+#div_export_file * { font-size : 20px; }

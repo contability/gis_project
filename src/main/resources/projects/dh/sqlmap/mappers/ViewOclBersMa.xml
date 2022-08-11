@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.ViewOclBersMaMapper">
+
+	<!-- 측량년도 목록 -->
+	<select id="searchMserYy" resultType="String">
+		SELECT DISTINCT(MESR_YY) FROM VIEW_OCL_BERS_MA ORDER BY MESR_YY
+	</select>
+	
+	<!-- 분석 시작 월 목록 -->
+	<select id="searchBganMt" resultType="String">
+		SELECT DISTINCT(BGAN_MT) FROM VIEW_OCL_BERS_MA ORDER BY BGAN_MT
+	</select>
+	
+	<!-- 분석 종료 월 목록 -->
+	<select id="searchEdanMt" resultType="String">
+		SELECT DISTINCT(EDAN_MT) FROM VIEW_OCL_BERS_MA ORDER BY EDAN_MT
+	</select>
+	
+	<!-- 측량 구역 명칭 목록 -->
+	<select id="searchZoneNm" resultType="String">
+		SELECT DISTINCT(ZONE_NM) FROM VIEW_OCL_BERS_MA ORDER BY ZONE_NM
+	</select>
+	
+	<!-- 조건 -->
+	<sql id="where">
+		<where>
+			<if test="mesrYy != 'All'">
+				AND MESR_YY = #{mesrYy}
+			</if>
+			<if test="bganMt != 'All'">
+				AND BGAN_MT = #{bganMt}
+			</if>
+			<if test="edanMt != 'All'">
+				AND EDAN_MT = #{edanMt}
+			</if>
+			<if test="zoneNm != 'All'">
+				AND ZONE_NM = #{zoneNm}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="beachErosionRequestDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+			VIEW_OCL_BERS_MA
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="beachErosionRequestDTO" resultType="viewOclBersMa">
+		SELECT T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+				SELECT
+					FTR_CDE,
+					MESR_YY,
+					BGAN_MT,
+					EDAN_MT,
+					ZONE_CDE,
+					ZONE_NM,
+					WASH_AR,
+					WASH_VL,
+					AMN_AR,
+					AMN_VL,
+					LYR_ID
+				FROM VIEW_OCL_BERS_MA
+				<include refid="where"/>
+			) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+		ORDER BY BGAN_MT, EDAN_MT
+	</select>
+	
+</mapper>

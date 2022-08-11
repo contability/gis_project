@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.PlcyEditHiMapper">
+	
+	<select id ="listCount" resultType="Integer">
+		SELECT
+			COUNT(*) AS HIST_COUNT
+		FROM PLCY_EDIT_HI
+	</select>
+	
+		<!-- 등록 -->
+	<insert id="insert" parameterType="plcyEditHi">
+		INSERT INTO PLCY_EDIT_HI (
+			HIST_NO,
+			USER_ID,
+			FTR_IDN,
+			PLCY_TIT,
+			EDIT_DATA,
+			EDIT_TYPE
+			) VALUES (
+			#{histNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{plcyTit, jdbcType=VARCHAR},
+			#{editData, jdbcType=BIGINT},
+			#{editType, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="list" resultType="plcyEditHi" parameterType="searchDTO">
+		SELECT T1.*, (ROW_NUMBER() OVER()) AS ROWNUM 
+		FROM (
+			SELECT
+				HIST_NO,
+				USER_ID,
+				(SELECT USER_NM FROM KWS_USER WHERE USER_ID = A.USER_ID) AS USER_NM,
+				FTR_IDN,
+				EDIT_DATE,
+				(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE CODE_ID = EDIT_DATA) as EDIT_DATA,
+				(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE CODE_ID = EDIT_TYPE) as EDIT_TYPE,
+				PLCY_TIT
+			FROM 
+				PLCY_EDIT_HI A 
+			ORDER BY 
+				HIST_NO 
+			DESC
+		)T1
+		offset #{firstIndex} limit 10
+	</select>
+	
+</mapper>

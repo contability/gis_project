@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsUserAuthorHistMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND USER_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND GRAD_USER_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+			<if test="searchStartDt != null and searchStartDt != '' and searchEndDt != null and searchEndDt != ''">
+				AND GRAD_ALWNC_DT <![CDATA[>=]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') 
+				AND GRAD_ALWNC_DT <![CDATA[<=]]> TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1
+			</if>
+		</where>
+	</sql>
+
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM KWS_USER_AUTHOR_HIST
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="kwsUserAuthorHist">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				DEPT_NM
+				, USER_NM
+				, AUTHOR_GROUP_NM
+				, PRCR_CN
+				, GRAD_ALWNC_DT
+				, GRAD_USER_NM
+			FROM KWS_USER_AUTHOR_HIST HIST
+			<include refid="where" />
+			ORDER BY GRAD_ALWNC_DT DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 검색 결과 맵
+	<resultMap id="kwsUserAuthorHistMap" type="kwsUserAuthorHist">
+		<id property="userId" column="USER_ID" />
+		<result property="oldGrad" column="OLD_GRAD"/>
+		<result property="newGrad" column="NEW_GRAD"/>
+		<result property="gradUserId" column="GRAD_USER_ID"/>
+		<result property="gradAlwncDt" column="GRAD_ALWNC_DT"/>
+	</resultMap>
+	-->
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsUserAuthorHist">
+		INSERT INTO KWS_USER_AUTHOR_HIST (
+			USER_ID,
+			USER_NM,
+			DEPT_CODE,
+			DEPT_NM,
+			GRAD_USER_ID,
+			GRAD_USER_NM,
+			GRAD_ALWNC_DT
+			, AUTHOR_GROUP_NM
+			, PRCR_CN
+		)
+		VALUES (
+			#{userId, jdbcType=VARCHAR},
+			#{userNm, jdbcType=VARCHAR},
+			#{deptCode, jdbcType=VARCHAR},
+			#{deptNm, jdbcType=VARCHAR},
+			#{gradUserId, jdbcType=VARCHAR},
+			#{gradUserNm, jdbcType=VARCHAR},
+			#{gradAlwncDt, jdbcType=TIMESTAMP}
+			, #{authorGroupNm, jdbcType=VARCHAR}
+			, #{prcrCn, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 엑셀다운로드용 리스트 조회 -->
+	<select id="listUserAuthorHistExcel" parameterType="searchDTO" resultType="kwsUserAuthorHist">
+		SELECT
+			DEPT_NM
+			, USER_NM
+			, AUTHOR_GROUP_NM
+			, PRCR_CN
+			, GRAD_ALWNC_DT
+			, GRAD_USER_NM
+		FROM KWS_USER_AUTHOR_HIST HIST
+		<include refid="where" />
+		ORDER BY GRAD_ALWNC_DT DESC
+	</select>
+	
+</mapper>

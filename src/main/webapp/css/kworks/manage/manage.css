@@ -1,0 +1,72 @@
+/*
+#ul_menu_list li { position:relative; text-align:left; color:#333; padding:10px; }
+#ul_menu_list li.selected { color:#fff; font-weight:bold; background-color:#164a9d; }
+#ul_menu_list li * { vertical-align:middle; }
+*/
+
+#manage_container { width:100%; }
+
+#manage_container div.panel h1 { text-align:left; padding:10px 5px 0px 10px; font-size:20px; }
+#manage_container div.panel h2 { text-align:center; padding:10px 5px 0px 10px; font-size:20px; }
+#manage_container div.panel hr.hr_title { border:2px solid #46a0d5; margin:10px 0px 20px 0px; }
+#manage_container div.panel hr.hr_subTitle { border:1px solid #46a0d5; margin:10px 0px 20px 0px; }
+
+#manage_container div.panel table { width:100%; text-align:center; }
+#manage_container div.panel table tr { height : 42px; }
+#manage_container div.panel table thead tr { background:#eee; border-top:1px solid #585858; border-bottom:1px solid #585858; }
+#manage_container div.panel table thead tr th { font-size:15px; color:#333; }
+#manage_container div.panel table tbody tr { border-bottom:1px solid #d8d8d8; }
+#manage_container div.panel table tbody tr td { font-size:14px; color:#666; }
+
+#manage_container div.panel div.div_btn { margin:20px 5px 5px 5px; text-align : right; }
+
+.div_modal * { vertical-align : middle; }
+.div_modal form fieldset > div { padding : 10px 0px; border-bottom:1px solid #ccc; }
+.div_modal form fieldset > div span.title { width : 150px; display:inline-block; }
+.div_modal form fieldset > div span.title_left { width : 130px; display:inline-block; text-align: left; }
+.div_modal form fieldset > div .content { width:480px; display:inline-table; text-align:left;  }
+.div_modal form fieldset > div .content_list { height:215px; overflow:auto; display:inline-block; }
+.div_modal form fieldset > div .content input[type=checkbox] { width : 30px; }
+.div_modal form fieldset > div .content input { width : 460px; }
+.div_modal form fieldset > div .content_half input { width : 165px; }
+.div_modal form fieldset > div .content_490 input { width : 490px; }
+.div_modal form fieldset > div .content textarea { width : 460px; }
+.div_modal form fieldset > div .content select { width : 460px; }
+.div_modal form fieldset > div .content_half select { width : 165px; }
+.div_modal form fieldset > div .content ul.fileList { width:450px; border:solid 1px #ccc; padding:5px; margin-bottom:10px; }
+.div_modal form fieldset > div .content ul.fileList li { position:relative; }
+.div_modal form fieldset > div .content ul.fileList li a.a_remove_qestn_file { position:absolute; right:0px; }
+.div_modal form fieldset > div .content span.span_warn { color:#ff0000; margin-top:3px; display:block; }
+
+.div_modal > div > div { padding : 10px 0px; border-bottom:1px solid #ccc; }
+.div_modal div > div span.title { width : 150px; display:inline-block; }
+.div_modal div > div .content { width:480px; display:inline-table; text-align:left;  }
+.div_modal div > div .content ul.fileList { width:450px; border:solid 1px #ccc; padding:5px; margin-bottom:10px; }
+.div_modal div > div .content ul.fileList li { position:relative; }
+.div_modal div > div .content span.span_warn { color:#ff0000; margin-top:3px; display:block; }
+
+.div_modal div > div .connect { width:150px; display:inline-table; text-align:center;  }
+.div_modal div > div .connect ul.fileList { width:450px; border:solid 1px #ccc; padding:5px; margin-bottom:10px; }
+.div_modal div > div .connect ul.fileList li { position:relative; }
+.div_modal div > div .connect span.span_warn { color:#ff0000; margin-top:3px; display:block; }
+
+.div_modal div.div_title { background-color:#e8f0fe; border-top:solid 2px #6fa2ef; height:32px; }
+.div_modal div.div_title:after { content:""; display:block; clear:both; }
+.div_modal div.div_title span { padding : 3px; }
+
+.div_modal ul.ul_author_group_system:after { content:""; display:block; clear:both; }
+.div_modal ul.ul_author_group_system li { float:left; width:210px; margin:3px; text-align:left; }
+
+.div_modal table { width:100%; text-align:center; }
+.div_modal table tr { height : 30px; }
+.div_modal table thead tr { background:#eee; }
+.div_modal table thead tr th { color:#333; border:1px solid #585858; }
+.div_modal table tbody tr td { color:#666; border:1px solid #585858; }
+
+#tbl_layerAuthorGroup_list { display:block; height:250px; overflow-y:auto; }
+#txt_authorGroup_add_Nm { width: 495px; }
+
+#ul_menu_list .leftMenu {display:inline-block; text-align:left; width:174px; height:40px; padding-left:26px; font-size:15px; font-family: "Malgun Gothic", "돋움", "dotum";}
+#ul_menu_list .selected{font-weight:bold;color:#000000}
+
+#paginate { margin-top:10px; }

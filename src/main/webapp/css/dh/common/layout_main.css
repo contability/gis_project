@@ -1,0 +1,63 @@
+html{overflow-y:scroll;overflow-x:hidden;}
+body{text-align:center;}
+
+#wrap {width:100%; height:100%;}
+
+/* header */
+#header {height:60px; background-color:#fff;}
+#header .logo{float:left;}
+
+#header .gnb {float:right;}
+#header .gnb .gnb_text{position:relative; float:left;}
+#header .gnb .gnb_line{position:relative; float:left;}
+
+/* container */
+#container{width:100%;}
+#container .slider {width:100%; position:relative; }
+#container .slider .div_main_background_image { position:absolute; width:100%; height:100%; display:block; background-image: url(../../../images/ss/portal/main_bg_repeat.png); background-repeat: repeat-x; }
+#container .slider .div_main_background_image_logo { position:absolute; top:30%; margin-left: 50px; text-align: left; z-index:99999}
+#container .slideMap{width:1200px; height:364px; position:relative;}
+#container .slideMap .btnBar1{position:relative; float:left; left:442px; top:240px; width:34px; height:8px; background:#0296ff;}
+#container .slideMap .btnBar2{position:relative; float:left; left:447px; top:240px; width:34px; height:8px; background:#b2b3b8;}
+#container .slideMap .btnBar3{position:relative; float:left; left:452px; top:240px; width:34px; height:8px; background:#b2b3b8;}
+#container .slider .div_main_image { position:absolute; width:900px; height:272px; left:280px; top:47px; overflow:hidden; }
+#container .slider .div_main_image ul li { float:left; margin-right:4px; width:288px; }
+
+#mySysSelect { height:20px; }
+
+#container .survice1{width:1200px; height:70px;}
+#container .survice1 .surviTit{position:relative; float:left;}
+#container .survice1 .myMenu{position:relative; float:left;}
+#container .survice1 .surviBtn{position:relative; float:left;}
+#container .survice2{width:1085px; height:280px; margin:0 auto;}
+#container .survice2 .centerNum{float:left;}
+#container .survice2 .centerMenu{float:left;}
+
+#container .mainBbsArea{height:180px;}
+#container .mainBbsArea .mainNoticeArea{position:relative; float:left;}
+#container .mainBbsArea .mainNoticeArea .line{position:relative; float:left;}
+#container .mainBbsArea .mainNoticeArea .noticeTit{float:left;}
+#container .mainBbsArea .mainNoticeArea .noticeBox{float:left;}
+#container .mainBbsArea .mainNoticeArea .noticeBox tr{line-height:23px;}
+#container .mainBbsArea .mainNoticeArea .noticeMore{float:right;}
+
+#container .mainBbsArea .mainRecsroomArea {position:relative; float:left;}
+#container .mainBbsArea .mainRecsroomArea .line{position:relative; float:left;}
+#container .mainBbsArea .mainRecsroomArea .recsroomTit{float:left;}
+#container .mainBbsArea .mainRecsroomArea .recsroomBox{float:left;}
+#container .mainBbsArea .mainRecsroomArea .recsroomBox tr{line-height:23px;}
+#container .mainBbsArea .mainRecsroomArea .recsroomMore{float:right;}
+
+#container .mainBbsArea .system{float:left;}
+#container .mainBbsArea .system .system3{vertical-align:top;}
+
+#indexMap {}
+#admMap, #marqueeBtn img {cursor: pointer;}
+#mainIndexMap {position:absolute; right:20px; bottom:30px; width:329px; height:264px; opacity:0.6;}
+
+#portal_sys_slider { padding : 0px 60px; }
+#portal_sys_slider li { float:left; }
+
+/* footer */
+#footer{position:static;background-color:#fff; height:30px;}
+#footer .left{float:left;}

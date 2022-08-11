@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsTopographicMapMapper">
+
+	<!-- 그룹 목록 검색 -->
+	<select id="listGroup" resultType="String">
+		SELECT DISTINCT
+			GROUP_NAME
+		FROM
+			KWS_TOPOGRAPHIC_MAP
+	</select>
+
+	<!-- 목록 검색 -->
+	<select id="listAll" resultType="kwsTopographicMap">
+		SELECT 
+			SEQ_NO,
+			GROUP_NAME,
+			DATA_TYPE,
+			TITLE,
+			LAYER_NAME,
+			DESCRIPTION,
+			SRS,
+			MIN_VALUE,
+			MAX_VALUE,
+			REQUEST_FORMAT,
+			MAKE_YEAR,
+			MAKE_INSTITUTION,
+			ICON_PATH
+		FROM
+			KWS_TOPOGRAPHIC_MAP
+	</select>
+	
+	<!-- 조건 검색 -->
+	<select id="selectByGroup" resultType="kwsTopographicMap">
+		SELECT 
+			SEQ_NO,
+			GROUP_NAME,
+			DATA_TYPE,
+			TITLE,
+			LAYER_NAME,
+			DESCRIPTION,
+			SRS,
+			MIN_VALUE,
+			MAX_VALUE,
+			REQUEST_FORMAT,
+			MAKE_YEAR,
+			MAKE_INSTITUTION,
+			ICON_PATH
+		FROM
+			KWS_TOPOGRAPHIC_MAP
+		WHERE
+			GROUP_NAME = #{group}
+		ORDER BY 
+			SEQ_NO
+	</select>
+	
+	<!-- 조건 검색 -->
+	<select id="selectOne" resultType="kwsTopographicMap">
+		SELECT 
+			SEQ_NO,
+			GROUP_NAME,
+			DATA_TYPE,
+			TITLE,
+			LAYER_NAME,
+			DESCRIPTION,
+			SRS,
+			MIN_VALUE,
+			MAX_VALUE,
+			REQUEST_FORMAT,
+			MAKE_YEAR,
+			MAKE_INSTITUTION,
+			ICON_PATH
+		FROM
+			KWS_TOPOGRAPHIC_MAP
+		WHERE
+			GROUP_NAME = #{group}
+			AND
+			LAYER_NAME = #{layer}
+		ORDER BY 
+			SEQ_NO
+	</select>	
+</mapper>

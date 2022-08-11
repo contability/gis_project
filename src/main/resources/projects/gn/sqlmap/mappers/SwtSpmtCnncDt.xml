@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.SwtSpmtCnncDtMapper">
+	
+	<!-- select condition dataId and objectid -->
+	<select id="selectWhereDataIdNObjectid" parameterType="java.util.Map" resultType="swtSpmtCnncDt">
+		SELECT
+			T1.FTR_CDE AS FTR_CDE,
+			T1.FTR_IDN AS FTR_IDN,
+			T1.FTF_CDE AS FTF_CDE,
+			T1.FTF_IDN AS FTF_IDN
+		FROM SWT_SPMT_CNNC_DT T1, ${dataId} T2
+		WHERE T2.OBJECTID = #{objectid} AND
+		T1.FTF_CDE = T2.FTR_CDE AND
+		T1.FTF_IDN = T2.FTR_IDN
+		ORDER BY FTR_IDN DESC
+	</select>
+	
+	<select id="listDrngEqp" parameterType="DrngEqpCnfmPrmisnDTO" resultType="DrngEqpVO">
+		SELECT 
+			'SWL_SPOT_PS' AS DATA_ID
+			, '물받이' AS DATA_ALIAS
+			, T2.OBJECTID AS OBJECTID
+			, T2.FTR_CDE AS FTR_CDE
+			, T2.FTR_IDN AS FTR_IDN
+			, (SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0136' AND CODE_ID = T2.SBD_CDE) AS PRPOS 
+		FROM SWT_SPMT_CNNC_DT T1 
+		INNER JOIN SWL_SPOT_PS T2 ON T1.FTF_CDE = T2.FTR_CDE AND T1.FTF_IDN = T2.FTR_IDN
+		WHERE T1.FTR_IDN = #{ftrIdn} AND T1.FTF_CDE = 'SB102'
+		UNION
+		SELECT 
+			'SWL_CONN_LS' AS DATA_ID
+			, '하수연결관' AS DATA_ALIAS
+			, T2.OBJECTID AS OBJECTID
+			, T2.FTR_CDE AS FTR_CDE
+			, T2.FTR_IDN AS FTR_IDN
+			, (SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0050' AND CODE_ID = T2.SBA_CDE) AS PRPOS 
+		FROM SWT_SPMT_CNNC_DT T1 
+		INNER JOIN SWL_CONN_LS T2 ON T1.FTF_CDE = T2.FTR_CDE AND T1.FTF_IDN = T2.FTR_IDN
+		WHERE T1.FTR_IDN = #{ftrIdn} AND T1.FTF_CDE = 'SB003'
+	</select>
+	
+	<!-- 배수설비연결 추가 -->
+	<insert id="insert" parameterType="swtSpmtCnncDt">
+		INSERT INTO SWT_SPMT_CNNC_DT (
+			FTR_CDE,
+			FTR_IDN,
+			FTF_CDE,
+			FTF_IDN
+		) VALUES (
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ftfCde, jdbcType=VARCHAR},
+			#{ftfIdn, jdbcType=BIGINT}
+		)
+	</insert>
+	
+	<!-- 배수설비연결 삭제 -->
+	<delete id="delete" parameterType="swtSpmtCnncDt">
+		DELETE
+		FROM SWT_SPMT_CNNC_DT T1
+		WHERE T1.FTR_CDE = #{ftrCde} 
+			AND T1.FTR_IDN = #{ftrIdn}
+	</delete>
+</mapper>

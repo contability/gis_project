@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsPledgeMapper">
+	
+	<resultMap type="KwsPledge" id="kwsPledgeMap">
+		<id column="USER_ID" property="userId"/>
+		<result column="PLD_YMD" property="pldYmd"/>
+		<result column="DEPT_CODE" property="deptCode"/>
+		<result column="DEPT_NM" property="deptNm"/>
+		<result column="USER_NM" property="userNm"/>
+		<result column="PLD_CLF" property="pldClf"/>
+		<result column="PLD_OFP" property="pldOfp"/>
+	</resultMap>
+	
+	<select id="pledgeChk" resultType="Integer">
+		SELECT
+			COUNT(USER_ID)
+		FROM
+			KWS_PLEDGE
+		WHERE
+			USER_ID = #{userId}
+	</select>
+	
+	<insert id="pledgeInsert" parameterType="KwsPledge">
+		INSERT INTO KWS_PLEDGE(
+			USER_ID, 
+			PLD_YMD, 
+			DEPT_CODE,
+			DEPT_NM, 
+			USER_NM,
+			PLD_CLF,
+			PLD_OFP
+		)
+		VALUES(
+			#{userId, jdbcType=VARCHAR},
+			#{pldYmd, jdbcType=DATE},
+			#{deptCode, jdbcType=VARCHAR},
+			#{deptNm, jdbcType=VARCHAR},
+			#{userNm, jdbcType=VARCHAR},
+			#{pldClf, jdbcType=VARCHAR},
+			#{pldOfp, jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

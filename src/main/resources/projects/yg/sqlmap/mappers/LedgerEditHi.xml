@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yg.mappers.LedgerEditHiMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 이력번호 -->
+			<if test="hisNo != null and hisNo != ''">
+				AND HIS_NO = #{hisNo}
+			</if>
+			<!-- 공사번호/토지사용정보 번호 -->
+			<if test="editIdn != null and editIdn != ''">
+				AND EDIT_IDN = #{editIdn}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 토지공사대장 첨부파일 목록갯수 -->
+	<select id="listCount" resultType="Integer" parameterType="searchDTO">
+		SELECT
+			COUNT(*) AS HIS_NO
+		FROM LEDGER_EDIT_HI
+	</select>
+
+	<!-- 토지공사대장 첨부파일 목록 -->
+	<select id="list" resultType="ledgerEditHi" parameterType="searchDTO">
+		<!-- <include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" /> -->
+		SELECT
+			HIS_NO,
+			EDITOR_ID,
+			(SELECT USER_NM FROM KWS_USER WHERE USER_ID = HI.EDITOR_ID) AS EDITOR_NM,
+			EDIT_DT,
+			LEDG_CDE,
+			CNT_NAM,
+			EDIT_IDN,
+			EDIT_TYPE
+		FROM LEDGER_EDIT_HI HI
+		ORDER BY HIS_NO DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		<!-- <include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" /> -->
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 전체목록 -->
+	<select id="listAll" parameterType="ledgerEditHi" resultType="ledgerEditHi">
+		SELECT
+			HIS_NO,
+			EDITOR_ID,
+			EDIT_DT,
+			LEDG_CDE,
+			CNT_NAM,
+			EDIT_IDN,
+			EDIT_TYPE
+		FROM LEDGER_EDIT_HI
+		<include refid="where" />
+		ORDER BY HIS_NO DESC
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 단건조회 -->
+	<select id="selectOne" parameterType="Long" resultType="ledgerEditHi">
+		SELECT
+			HIS_NO,
+			EDITOR_ID,
+			EDIT_DT,
+			LEDG_CDE,
+			CNT_NAM,
+			EDIT_IDN,
+			EDIT_TYPE
+		FROM LEDGER_EDIT_HI
+		WHERE HIS_NO = #{hisNo}
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 수정 -->
+	<update id="update" parameterType="ledgerEditHi">
+		UPDATE LEDGER_EDIT_HI SET
+			EDITOR_ID = #{editorId, jdbcType=VARCHAR},
+			EDIT_DT = #{editDt, jdbcType=VARCHAR},
+			LEDG_CDE = #{ledgCde, jdbcType=VARCHAR},
+			CNT_NAM = #{cntNam, jdbcType=VARCHAR},
+			EDIT_IDN = #{editIdn, jdbcType=BIGINT},
+			EDIT_TYPE = #{editType, jdbcType=VARCHAR}
+		WHERE
+			HIS_NO = #{hisNo}
+	</update>
+	
+	<!-- 토지공사대장 첨부파일 등록 -->
+	<insert id="insert" parameterType="ledgerEditHi">
+		INSERT INTO LEDGER_EDIT_HI (
+			HIS_NO,
+			EDITOR_ID,
+			EDIT_DT,
+			LEDG_CDE,
+			CNT_NAM,
+			EDIT_IDN,
+			EDIT_TYPE
+		) VALUES (
+			#{hisNo, jdbcType=BIGINT},
+			#{editorId, jdbcType=VARCHAR},
+			#{editDt, jdbcType=VARCHAR},
+			#{ledgCde, jdbcType=VARCHAR},
+			#{cntNam, jdbcType=VARCHAR},
+			#{editIdn, jdbcType=BIGINT},
+			#{editType, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 토지공사대장 첨부파일 삭제 -->
+	<delete id="delete" parameterType="ledgerEditHi">
+		DELETE FROM LEDGER_EDIT_HI
+		WHERE
+			HIS_NO = #{hisNo}
+	</delete>
+	
+</mapper>

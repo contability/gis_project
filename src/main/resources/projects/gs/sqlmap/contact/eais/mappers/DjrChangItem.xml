@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gs.contact.eais.mappers.DjrChangItemMapper">
+	
+	<resultMap id="djrChangItemMap" type="djrChangItem">
+		<id property="changItemPk" column="CHANG_ITEM_PK"/>
+		<result property="bldrgstPk" column="BLDRGST_PK"/>
+		<result property="changCausCd" column="CHANG_CAUS_CD"/>
+		<result property="changCausCdNm" column="CHANG_CAUS_CD_NM"/>
+		<result property="changDetl" column="CHANG_DETL"/>
+		<result property="changDay" column="CHANG_DAY"/>
+		<result property="adjstDay" column="ADJST_DAY"/>
+	</resultMap>
+	
+	<select id="djrChangItemList" parameterType="Integer" resultMap="djrChangItemMap">
+		SELECT
+			CHANG_ITEM_PK,
+			BLDRGST_PK,
+			CHANG_CAUS_CD,			--DJ020
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'DJ020' AND SGRP_CD = CHANG_CAUS_CD) AS CHANG_CAUS_CD_NM,
+			CHANG_DETL,
+			CHANG_DAY,
+			ADJST_DAY
+		FROM
+			V_DJRCHANGITEM_GIS
+		WHERE
+			BLDRGST_PK = #{bldrgstPk}
+	</select>
+</mapper>

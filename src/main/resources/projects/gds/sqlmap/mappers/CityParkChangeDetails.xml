@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.CityParkChangeDetailsMapper">
+	
+	<!-- 검색 조건 -->
+	<sql id="wherePark">
+		<where>
+			<!-- 법정동 코드 -->
+			<if test="bjdCde != null and bjdCde != ''">
+				AND BJD_CDE = #{bjdCde}
+			</if>
+			<!-- 명칭 -->
+			<if test="name != null and name != ''">
+				AND PRK_NAM LIKE '%' || #{name} || '%'
+			</if>
+			<!-- 위치 -->
+			<if test="location != null and location != ''">
+				AND PRK_LOC LIKE '%' || #{location} || '%'
+			</if>
+			<!-- 기간 -->
+			<if test="dateStart != null">
+				AND CTP_YMD <![CDATA[>=]]> #{dateStart}
+			</if>
+			<if test="dateEnd != null">
+				AND CTP_YMD <![CDATA[<=]]> #{dateEnd}
+			</if>
+			<if test="abolitionYn = null or abolitionYn = 'N'">
+				AND PRK_END = '0'
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="whereGren">
+		<where>
+			<!-- 법정동 코드 -->
+			<if test="bjdCde != null and bjdCde != ''">
+				AND BJD_CDE = #{bjdCde}
+			</if>
+			<!-- 명칭 -->
+			<if test="name != null and name != ''">
+				AND GRN_NAM LIKE '%' || #{name} || '%'
+			</if>
+			<!-- 위치 -->
+			<if test="location != null and location != ''">
+				AND GRN_LOC LIKE '%' || #{location} || '%'
+			</if>
+			<!-- 기간 -->
+			<if test="dateStart != null">
+				AND	CTP_YMD <![CDATA[>=]]> #{dateStart}
+			</if>
+			<if test="dateEnd != null">
+				AND CTP_YMD <![CDATA[<=]]> #{dateEnd}
+			</if>
+			<if test="abolitionYn = null or abolitionYn = 'N'">
+				AND GRN_END = '0'
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="cityParkChangeDetailsSearchDTO" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM
+		(
+			<if test="type = '' and type = 'PARK'">
+				SELECT
+					SHT_IDN
+				FROM 
+					CTY_PARK_HT
+				<include refid="wherePark" />
+			</if>
+			<if test="type = ''">
+				UNION ALL
+			</if>
+			<if test="type = '' and type = 'GREEN'">
+				SELECT
+					SHT_IDN
+				FROM 
+					CTY_GREN_HT
+				<include refid="whereGren" />
+			</if>
+		)
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="cityParkChangeDetailsSearchDTO" resultType="cityParkChangeDetailsResultDTO">
+		SELECT 
+			T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+				SELECT 
+					T.parkName,
+					T.location,
+					T.area,
+					T.notificationNo,
+					T.notificationDate,
+					(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0326' AND CODE_ID = T.notificationType) AS notificationType,
+					T.remark
+				FROM (
+					<if test="type = '' and type = 'PARK'">
+						SELECT
+							PRK_NAM AS parkName,
+							PRK_LOC AS location,
+							PRK_ARA AS area,
+							CTP_LAW AS notificationNo,
+							CTP_YMD AS notificationDate,
+							NTC_NAM AS notificationType,
+							REMARK AS remark
+						FROM 	
+							CTY_PARK_HT
+						<include refid="wherePark" />		
+					</if>
+					<if test="type = ''">
+					UNION ALL
+					</if>
+					<if test="type = '' and type = 'GREEN'">
+						SELECT
+							GRN_NAM AS parkName,
+							GRN_LOC AS location,
+							GRN_ARA AS area,
+							CTP_LAW AS notificationNo,
+							CTP_YMD AS notificationDate,
+							NTC_NAM AS notificationType,
+							REMARK AS remark
+						FROM
+							CTY_GREN_HT
+						<include refid="whereGren" />
+					</if>
+				) T
+				ORDER BY notificationDate
+			) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+	</select>
+	
+</mapper>

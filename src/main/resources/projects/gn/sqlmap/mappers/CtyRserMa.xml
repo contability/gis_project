@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.CtyRserMaMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 분류 -->
+			<if test="rcvCde != null and rcvCde != ''">
+				AND RCV_CDE = #{rcvCde}
+			</if>
+			<!-- 공원명 -->
+			<if test="ftfIdn != null and ftfIdn != ''">
+				AND FTF_IDN = #{ftfIdn}
+			</if>
+			<!-- 처리상태 -->
+			<if test="proCde != null and proCde != ''">
+				AND PRO_CDE = #{proCde}
+			</if>
+			<!-- 기간 -->
+			<if test="rcvYmdStart != null">
+				AND RCV_YMD <![CDATA[>=]]> #{rcvYmdStart}
+			</if>
+			<if test="rcvYmdEnd != null">
+				AND RCV_YMD <![CDATA[<=]]> #{rcvYmdEnd}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="cityParkCivilAppealSearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			CTY_RSER_MA
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="cityParkCivilAppealSearchDTO" resultType="ctyRserMa">
+		SELECT 
+			T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+				SELECT 
+					FTR_IDN,
+					FTF_IDN,
+					FTR_CDE,
+					RCV_YMD,
+					RCV_CDE,
+					APM_NAM,
+					APM_ADR,
+					APM_TEL,
+					APL_EXP,
+					PRO_NAM,
+					PRO_YMD,
+					PRO_CDE,
+					PRO_EXP
+				FROM
+					CTY_RSER_MA
+				<include refid="where" />				
+				ORDER BY RCV_YMD DESC
+			) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+				
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="ctyRserMa">
+		INSERT INTO CTY_RSER_MA (
+			FTR_IDN,
+			FTF_IDN,
+			FTR_CDE,
+			RCV_YMD,
+			RCV_CDE,
+			APM_NAM,
+			APM_ADR,
+			APM_TEL,
+			APL_EXP,
+			PRO_NAM,
+			PRO_YMD,
+			PRO_CDE,
+			PRO_EXP
+		) VALUES (
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ftfIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{rcvYmd, jdbcType=VARCHAR},
+			#{rcvCde, jdbcType=VARCHAR},
+			#{apmNam, jdbcType=VARCHAR},
+			#{apmAdr, jdbcType=VARCHAR},
+			#{apmTel, jdbcType=VARCHAR},
+			#{aplExp, jdbcType=VARCHAR},
+			#{proNam, jdbcType=VARCHAR},
+			#{proYmd, jdbcType=VARCHAR},
+			#{proCde, jdbcType=VARCHAR},
+			#{proExp, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="ctyRserMa">
+		UPDATE CTY_RSER_MA
+		SET
+			FTF_IDN = #{ftfIdn, jdbcType=BIGINT},
+			RCV_YMD = #{rcvYmd, jdbcType=BIGINT},
+			RCV_CDE = #{rcvCde, jdbcType=VARCHAR},
+			APM_NAM = #{apmNam, jdbcType=VARCHAR},
+			APM_ADR = #{apmAdr, jdbcType=VARCHAR},
+			APM_TEL = #{apmTel, jdbcType=VARCHAR},
+			APL_EXP = #{aplExp, jdbcType=VARCHAR},
+			PRO_NAM = #{proNam, jdbcType=VARCHAR},
+			PRO_YMD = #{proYmd, jdbcType=VARCHAR},
+			PRO_CDE = #{proCde, jdbcType=VARCHAR},
+			PRO_EXP = #{proExp, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM CTY_RSER_MA
+		WHERE FTR_IDN = #{ftrIdn}
+	</delete>
+
+</mapper>

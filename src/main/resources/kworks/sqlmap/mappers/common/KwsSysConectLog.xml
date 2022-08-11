@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsSysConectLogMapper">
+	<!-- 검색조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchStartDt != '' and searchStartDt != null">
+				AND CONECT_DT &gt; TO_DATE(#{searchStartDt}, 'YYYY-MM-DD')
+			</if>
+			<if test="searchEndDt != '' and searchEndDt != null">
+				AND CONECT_DT &lt; TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1
+			</if>
+			<if test="searchCondition == 'name' and searchKeyword != null and searchKeyword != ''">
+				AND USER_ID IN 
+				( 
+					SELECT 
+						USER_ID 
+					FROM KWS_USER 
+					WHERE USER_NM LIKE '%' || #{searchKeyword} || '%' 
+				) 
+			</if>
+			<if test="searchCondition == 'dept' and searchKeyword != null and searchKeyword != ''">
+				AND DEPT_CODE IN 
+				( 
+					SELECT 
+						DEPT_CODE 
+					FROM KWS_DEPT
+					WHERE DEPT_NM LIKE '%' || #{searchKeyword} || '%'  
+				) 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 월별통계 검색조건 -->
+	<sql id="monthWhere">
+		<where>
+			<if test="searchStartDt != '' and searchStartDt != null">
+				AND CONECT_DT &gt; TO_DATE(#{searchStartDt}, 'YYYY-MM')
+			</if>
+			<if test="searchEndDt != '' and searchEndDt != null">
+				AND CONECT_DT &lt; TO_DATE(#{searchEndDt}, 'YYYY-MM') + 1
+			</if>
+		</where>
+	</sql>
+	
+	<select id="listCount" parameterType="SearchDTO" resultType="Integer">
+		SELECT COUNT(*) AS ROWCOUNT
+		FROM KWS_SYS_CONECT_LOG
+		<include refid="where" />
+	</select>
+	
+	<select id="listSearch" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT 
+				(SELECT USER_NM FROM KWS_USER WHERE USER_ID = LOG.USER_ID) AS USER_NM,
+		  		(SELECT DEPT_NM FROM KWS_DEPT WHERE DEPT_CODE = LOG.DEPT_CODE) AS DEPT_NM,
+		  		(SELECT SYS_ALIAS FROM KWS_SYS WHERE SYS_ID = LOG.SYS_ID) AS SYS_ALIAS, 
+				CONECT_DT
+			FROM KWS_SYS_CONECT_LOG LOG
+			<include refid="where" />
+			ORDER BY CONECT_DT DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<select id="listSys" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT SYS_ID, SYS_ALIAS AS SYS_NM
+		FROM KWS_SYS
+		ORDER BY SYS_ID
+	</select>
+	
+	<select id="listCountGroupBySys" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT T1.SYS_ID,T2.SYS_ALIAS AS SYS_NM, COUNT(*) AS CNT
+		FROM KWS_SYS_CONECT_LOG T1
+		LEFT JOIN KWS_SYS T2 ON T1.SYS_ID = T2.SYS_ID
+		<include refid="where" /> 
+		GROUP BY T1.SYS_ID, T2.SYS_ALIAS
+		ORDER BY T1.SYS_ID
+	</select>
+	
+	<select id="listCountGroupByUser" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			T1.USER_ID,
+			T1.SYS_ID,
+			COUNT(*) AS CNT
+		FROM KWS_SYS_CONECT_LOG T1
+		LEFT OUTER JOIN
+		(
+			SELECT
+				*
+			FROM
+			(
+				SELECT
+					T2.USER_ID
+					,ROWNUM AS RNUM
+				FROM
+				(
+					SELECT
+						USER_ID
+					FROM KWS_SYS_CONECT_LOG
+					<include refid="where" /> 
+					GROUP BY USER_ID
+					ORDER BY USER_ID
+				)T2
+			)T3
+			WHERE T3.RNUM &gt; #{firstIndex} AND T3.RNUM &lt;= #{lastIndex}	
+		)T4
+		ON T4.USER_ID = T1.USER_ID 
+		<include refid="where" />
+		GROUP BY T1.USER_ID, T1.SYS_ID
+		ORDER BY T1.USER_ID, T1.SYS_ID
+	</select>
+	
+	<select id="listUser" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			*
+		FROM
+		(
+			SELECT
+				T1.*,
+				T2.USER_NM,
+				ROWNUM AS RNUM
+			FROM
+			(
+				SELECT 
+					USER_ID,
+					COUNT(*) AS CNT
+				FROM KWS_SYS_CONECT_LOG
+				<include refid="where" /> 
+				
+				GROUP BY USER_ID
+			)T1
+			LEFT OUTER JOIN KWS_USER T2
+				ON T1.USER_ID = T2.USER_ID
+			ORDER BY T1.USER_ID
+		)T3
+		WHERE T3.RNUM &gt; #{firstIndex} AND T3.RNUM &lt;= #{lastIndex}	
+	</select>
+	
+	<select id="listCountUser" parameterType="SearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			SELECT 
+				USER_ID
+			FROM KWS_SYS_CONECT_LOG
+			<include refid="where" /> 
+			
+			GROUP BY USER_ID
+		)T1
+		
+	</select>
+	
+	<!-- 부서별 통계 -->
+	<select id="listCountGroupByDept" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			*
+		FROM
+		(
+			SELECT
+				T1.*,
+				T2.DEPT_NM,
+				ROWNUM AS RNUM
+			FROM
+			(
+				SELECT 
+					DEPT_CODE,
+					SYS_ID,
+					COUNT(*) AS CNT
+				FROM KWS_SYS_CONECT_LOG
+				<include refid="where" /> 
+				
+				GROUP BY DEPT_CODE, SYS_ID
+			)T1
+			LEFT OUTER JOIN KWS_DEPT T2
+				ON T1.DEPT_CODE = T2.DEPT_CODE
+			ORDER BY T1.DEPT_CODE, T1.SYS_ID
+		)T3
+		WHERE T3.RNUM &gt; #{firstIndex} AND T3.RNUM &lt;= #{lastIndex}	
+	</select>
+	<select id="listDept" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			*
+		FROM
+		(
+			SELECT
+				T1.*,
+				T2.DEPT_NM,
+				ROWNUM AS RNUM
+			FROM
+			(
+				SELECT 
+					DEPT_CODE,
+					COUNT(*) AS CNT
+				FROM KWS_SYS_CONECT_LOG
+				<include refid="where" /> 
+				
+				GROUP BY DEPT_CODE
+			)T1
+			LEFT OUTER JOIN KWS_DEPT T2
+				ON T1.DEPT_CODE = T2.DEPT_CODE
+			ORDER BY T1.DEPT_CODE
+		)T3
+		WHERE T3.RNUM &gt; #{firstIndex} AND T3.RNUM &lt;= #{lastIndex}	
+	</select>
+	<select id="listCountDept" parameterType="SearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			SELECT 
+				DEPT_CODE
+			FROM KWS_SYS_CONECT_LOG
+			<include refid="where" /> 
+			
+			GROUP BY DEPT_CODE
+		)T1
+	</select>
+	
+	<!-- 월별 통계 -->
+	<select id="listCountGroupByMonth" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			*
+		FROM
+		(
+			SELECT
+				T2.*,
+				ROWNUM AS RNUM
+			FROM
+			(
+				SELECT 
+					T1.MONTH,
+					T1.SYS_ID,
+					COUNT(*) AS CNT
+				FROM 
+				(
+					SELECT 
+						TO_CHAR(CONECT_DT,'YYYY-MM') AS MONTH,
+						SYS_ID
+					FROM KWS_SYS_CONECT_LOG
+					<include refid="monthWhere" /> 
+					
+				)T1
+				GROUP BY T1.MONTH,T1.SYS_ID
+				ORDER BY T1.MONTH,T1.SYS_ID
+			)T2
+		)T3
+		WHERE T3.RNUM &gt; #{firstIndex} AND T3.RNUM &lt;= #{lastIndex}	
+	</select>
+	<select id="listMonth" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			T3.MONTH,
+			COUNT(*) AS CNT
+		FROM
+		(
+			SELECT
+				T2.*,
+				ROWNUM AS RNUM
+			FROM
+			(
+				SELECT 
+					T1.MONTH,
+					T1.SYS_ID
+				FROM 
+				(
+					SELECT 
+						TO_CHAR(CONECT_DT,'YYYY-MM') AS MONTH,
+						SYS_ID
+					FROM KWS_SYS_CONECT_LOG
+					<include refid="monthWhere" /> 
+					
+				)T1
+				GROUP BY T1.MONTH,T1.SYS_ID
+				ORDER BY T1.MONTH,T1.SYS_ID
+			)T2
+		)T3
+		WHERE T3.RNUM &gt; #{firstIndex} AND T3.RNUM &lt;= #{lastIndex}	
+		GROUP BY T3.MONTH
+	</select>
+	<select id="listCountMonth" parameterType="SearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			SELECT 
+				T1.MONTH,
+				T1.SYS_ID
+			FROM 
+			(
+				SELECT 
+					TO_CHAR(CONECT_DT,'YYYY-MM') AS MONTH,
+					SYS_ID
+				FROM KWS_SYS_CONECT_LOG
+				<include refid="monthWhere" />
+				
+			)T1
+			GROUP BY T1.MONTH,T1.SYS_ID
+		)T3
+	</select>
+	
+	<!-- 일별 통계 -->
+	<select id="listDay" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT 
+			T1.*,
+			ROWNUM AS RNUM
+		FROM 
+		(
+			SELECT 
+				TO_CHAR(CONECT_DT,'YYYY-MM-DD') AS DAY,
+				COUNT(*) AS CNT
+			FROM KWS_SYS_CONECT_LOG
+			<include refid="where" /> 
+			GROUP BY TO_CHAR(CONECT_DT,'YYYY-MM-DD')
+		)T1
+		WHERE ROWNUM &gt; #{firstIndex} AND ROWNUM &lt;= #{lastIndex}
+		ORDER BY T1.DAY
+	</select>
+	<select id="listCountGroupByDay" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			*
+		FROM
+		(
+			SELECT 
+				T1.*,
+				ROWNUM AS RNUM
+			FROM 
+			(
+				SELECT 
+					TO_CHAR(CONECT_DT,'YYYY-MM-DD') AS DAY,
+					SYS_ID,
+					COUNT(*) AS CNT 
+				FROM KWS_SYS_CONECT_LOG
+				<include refid="where" /> 
+				GROUP BY CONECT_DT,SYS_ID
+			)T1
+			ORDER BY T1.DAY,T1.SYS_ID
+		)T2
+		WHERE T2.RNUM &gt; #{firstIndex} AND T2.RNUM &lt;= #{lastIndex}	
+	</select>
+	<select id="listCountDay" parameterType="SearchDTO" resultType="Integer">
+		SELECT 
+			COUNT(*)
+		FROM 
+		(
+			SELECT 
+				TO_CHAR(CONECT_DT,'YYYY-MM-DD') AS DAY,
+				SYS_ID
+			FROM KWS_SYS_CONECT_LOG
+			<include refid="where" />
+			GROUP BY TO_CHAR(CONECT_DT,'YYYY-MM-DD')
+		)
+	</select>
+	
+	<!-- 주별 통계 -->
+	<select id="listWeekday" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT 
+			SYS_ID,
+			COUNT(*) AS CNT
+		FROM KWS_SYS_CONECT_LOG
+		<include refid="where" /> 
+		GROUP BY SYS_ID
+	</select>
+	<select id="listCountGroupByWeekday" parameterType="SearchDTO" resultType="KwsSysConectLog">
+		SELECT
+			*
+		FROM
+		(
+			SELECT
+				T2.*,
+				ROWNUM AS RNUM
+			FROM
+			(
+				SELECT 
+					T1.DAY_OF_WEEK,
+					T1.SYS_ID,
+					COUNT(*) AS CNT
+				FROM 
+				(
+					SELECT 
+						DAY_OF_WEEK,
+						SYS_ID
+					FROM KWS_SYS_CONECT_LOG
+					<include refid="where" /> 
+					
+				)T1
+				GROUP BY T1.DAY_OF_WEEK,T1.SYS_ID
+				ORDER BY T1.DAY_OF_WEEK,T1.SYS_ID
+			)T2
+		)T3
+	</select>
+	<select id="listCountWeekday" parameterType="SearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			SELECT 
+				T1.DAY_OF_WEEK,
+				T1.SYS_ID
+			FROM 
+			(
+				SELECT 
+					DAY_OF_WEEK,
+					SYS_ID
+				FROM KWS_SYS_CONECT_LOG
+				<include refid="where" />
+				
+			)T1
+		)T3
+	</select>
+	
+	<insert id="insert" parameterType="KwsSysConectLog">
+		INSERT INTO KWS_SYS_CONECT_LOG (
+			LOG_NO,
+			USER_ID,
+			USER_NM,
+			SYS_ID,
+			DEPT_CODE,
+			DEPT_NM,
+			DAY_OF_WEEK,
+			CONECT_DT
+		)
+		VALUES (
+			#{logNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{userNm, jdbcType=VARCHAR},
+			#{sysId, jdbcType=BIGINT},
+			#{deptCode, jdbcType=VARCHAR},
+			#{deptNm, jdbcType=VARCHAR},
+			#{dayOfWeek, jdbcType=VARCHAR},
+			#{conectDt, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="listTodayGroupByHourCount" resultType="KwsSysConectLog">
+		SELECT 
+			T1.DAY,
+			T1.SYS_ID,
+			COUNT(*) AS CNT
+		FROM
+		(
+			SELECT
+			TO_CHAR(CONECT_DT,'HH24') AS DAY,
+			SYS_ID
+			FROM KWS_SYS_CONECT_LOG
+			WHERE TO_CHAR(CONECT_DT,'YYYYMMDD') = TO_CHAR(<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,'YYYYMMDD')
+		)T1
+		GROUP BY T1.DAY, T1.SYS_ID
+		ORDER BY T1.DAY, T1.SYS_ID
+	</select>
+	
+	<select id="listGroupByDay" parameterType="searchDTO" resultType="KwsSysConectLog">
+		SELECT
+			T1.DAY,
+      		T1.SYS_ID,
+			COUNT(*) AS CNT
+		FROM
+		(
+			SELECT 
+				TO_CHAR(CONECT_DT,'YYYY-MM-DD') AS DAY,
+        		SYS_ID
+			FROM KWS_SYS_CONECT_LOG
+			WHERE CONECT_DT <![CDATA[>=]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') AND CONECT_DT <![CDATA[<=]]> (TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1)
+		)T1
+		GROUP BY T1.DAY,T1.SYS_ID
+		ORDER BY T1.DAY,T1.SYS_ID		
+	</select>
+	
+	<select id="listGroupByMonth" parameterType="searchDTO" resultType="KwsSysConectLog">
+		SELECT
+			T1.DAY,
+			T1.SYS_ID,
+			COUNT (*) AS CNT
+		FROM
+		(
+            SELECT 
+            TO_CHAR(CONECT_DT,'YYYY-MM') AS DAY,
+            SYS_ID
+            FROM KWS_SYS_CONECT_LOG
+            WHERE CONECT_DT <![CDATA[>=]]> TO_DATE(#{searchStartDt},'YYYY-MM-DD') 
+            AND CONECT_DT <![CDATA[<=]]> TO_DATE(#{searchEndDt},'YYYY-MM-DD')
+        )T1
+		GROUP BY T1.DAY, T1.SYS_ID	
+        ORDER BY T1.DAY, T1.SYS_ID
+	</select>
+	
+	<select id="listGroupByWeek" parameterType="searchDTO" resultType="KwsSysConectLog">
+		SELECT
+      		T1.WEEK,
+      		T1.SYS_ID,
+			COUNT (*) AS CNT
+		FROM
+		(
+			SELECT 
+     	 		TO_CHAR(CONECT_DT,'D') AS WEEK,
+     	 		SYS_ID
+			FROM KWS_SYS_CONECT_LOG
+			WHERE CONECT_DT BETWEEN TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') AND (TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1) 
+		)T1
+		GROUP BY T1.WEEK, T1.SYS_ID	
+		ORDER BY T1.WEEK, T1.SYS_ID	
+	</select>
+	
+	<!-- 엑셀다운로드용 리스트 조회 -->
+	<select id="listSysConectLogExcel" parameterType="searchDTO" resultType="KwsSysConectLog">
+		SELECT 
+		  LOG_NO AS RNUM, 
+		  (SELECT USER_NM FROM KWS_USER WHERE USER_ID = SCL.USER_ID) AS USER_NM,
+		  (SELECT DEPT_NM FROM KWS_DEPT WHERE DEPT_CODE = SCL.DEPT_CODE) AS DEPT_NM,
+		  (SELECT SYS_ALIAS FROM KWS_SYS WHERE SYS_ID = SCL.SYS_ID) AS SYS_NM, 
+		  CONECT_DT
+		FROM KWS_SYS_CONECT_LOG SCL
+		<include refid="where" />
+		ORDER BY CONECT_DT ASC
+	</select>
+	
+</mapper>

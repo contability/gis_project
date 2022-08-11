@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.PlcyStatAsMapper">
+
+	<resultMap id="policyDepRegisterSearchResultMap" type="PolicyDepRegisterSearchDTO">
+		<result property="plcyDep"  column="PLCY_DEP"/>
+		<result property="ids"      column="IDS"     typeHandler="kr.co.gitt.kworks.cmmn.typeHandler.IntegerArrayTH"/>
+		<result property="count"    column="COUNT"/>
+		
+	</resultMap>
+	
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 정책명 -->
+			<if test="plcyTit != null and plcyTit != ''">
+				AND PLCY_TIT LIKE '%' || #{plcyTit} || '%'
+			</if>
+			<!-- 위치 -->
+			<if test="plcyAdr != null and plcyAdr != ''">
+				AND PLCY_ADR LIKE '%' || #{plcyAdr} || '%'
+			</if>
+			<!-- 담당부서 -->
+			<if test="plcyDep != null and plcyDep != ''">
+				AND PLCY_DEP LIKE '%' || #{plcyDep} || '%'
+			</if>
+			<!-- 도급자 -->
+			<if test="cttNam != null and cttNam != ''">
+				AND CTT_NAM LIKE '%' || #{cttNam} || '%'
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 조건검색 검색버튼 클릭시 이벤트 발생 쿼리 -->
+	<!-- /policy/totalListPolicy.do -->
+	<select id="listDep" resultMap="policyDepRegisterSearchResultMap" parameterType="PlcyStatAs">
+		SELECT DISTINCT 
+			PLCY_DEP, 
+			ARRAY_AGG(OBJECTID) AS IDS, 
+			COUNT(*) as COUNT
+		FROM 
+			PLCY_STAT_AS 
+		<include refid="where" />
+		GROUP BY 
+			PLCY_DEP
+	</select>
+	
+	<!--  위치검색 -->
+	<select id="listSearch" resultMap="policyDepRegisterSearchResultMap" parameterType="String">
+		SELECT 
+			PLCY_DEP,
+			ARRAY_AGG(OBJECTID) AS IDS,
+			COUNT(*) as COUNT
+		FROM PLCY_STAT_AS T
+		WHERE 
+			ST_INTERSECTS(T.GEOM, ST_GEOMFROMTEXT(#{geom}))
+		GROUP BY PLCY_DEP 
+	</select> 
+			<!-- 단건검색 -->
+ 	<select id="selectOne" resultType="plcyStatAs">
+		SELECT
+			FTR_IDN,
+			FTR_CDE,
+			BJD_CDE,
+			HJD_CDE,
+			LOD_YMD,
+			PLCY_TIT,
+			PLCY_DEP,
+			PLCY_MNG,
+			PLCY_WRT,
+			PLCY_ADR,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0199' AND CODE_ID = SUBSTRING(PLCY_ADR,0,11)) AS SEL_DONG,
+			CASE WHEN SUBSTRING(PLCY_ADR,11,1) = '1' THEN '' ELSE '산' END AS IS_MOUNT,
+			LTRIM(SUBSTRING(PLCY_ADR,12,4), '0') AS MAIN_NUM,
+			LTRIM(SUBSTRING(PLCY_ADR,16,4), '0') AS SUB_NUM,
+			CTRCTAMT,
+			CTRCT_DT,
+			CTT_BEG,
+			CTT_FRN,
+			CTT_NAM,
+			RMK_EXP,
+			DEPT_SB_CD,
+			DEPT_SB_NM
+		FROM
+			PLCY_STAT_AS
+		WHERE
+			FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+		ORDER BY
+			FTR_IDN DESC
+	</select>
+	
+		
+ 	<update id="update">
+		UPDATE 
+			PLCY_STAT_AS
+		SET 
+			PLCY_TIT = #{plcyTit, jdbcType=VARCHAR},
+			PLCY_DEP = #{plcyDep, jdbcType=VARCHAR},
+			PLCY_MNG = #{plcyMng, jdbcType=VARCHAR},
+			PLCY_ADR = #{plcyAdr, jdbcType=VARCHAR},
+			CTRCTAMT = #{ctrctamt, jdbcType=VARCHAR},
+			CTRCT_DT = #{ctrctDt, jdbcType=VARCHAR},
+			CTT_BEG = #{cttBeg, jdbcType=VARCHAR},
+			CTT_FRN = #{cttFrn, jdbcType=VARCHAR},
+			CTT_NAM = #{cttNam, jdbcType=VARCHAR},
+			RMK_EXP = #{rmkExp, jdbcType=VARCHAR},
+			DEPT_SB_CD = #{deptSbCd, jdbcType=VARCHAR},
+			DEPT_SB_NM = #{deptSbNm, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update> 
+	
+				<!--정책명검색 -->
+ 	<select id="selectPlcyTit" resultType="String">
+		SELECT
+			PLCY_TIT
+		FROM
+			PLCY_STAT_AS
+		WHERE
+			FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+	</select> 
+	
+	<!--PLCY_ADR 주소 -->
+ 	<select id="selectPlcyAdr" resultType="plcyStatAs">
+		SELECT
+			PLCY_ADR,
+			DEPT_SB_NM,
+			DEPT_SB_CD
+		FROM
+			PLCY_STAT_AS
+		WHERE
+			FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+	</select> 
+	
+		<!-- 단건검색 -->
+ 	<select id="selectPlcyStatAs" parameterType="plcyStatAs" resultType="plcyStatAs">
+		SELECT
+			FTR_IDN,
+			FTR_CDE,
+			BJD_CDE,
+			HJD_CDE,
+			LOD_YMD,
+			PLCY_TIT,
+			PLCY_DEP,
+			PLCY_MNG,
+			PLCY_WRT,
+			PLCY_ADR,
+			CTRCTAMT,
+			CTRCT_DT,
+			CTT_BEG,
+			CTT_FRN,
+			CTT_NAM,
+			RMK_EXP,
+			DEPT_SB_CD,
+			DEPT_SB_NM
+		FROM
+			PLCY_STAT_AS
+		WHERE
+			FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+		ORDER BY
+			FTR_IDN
+	</select>
+	
+			<!-- 삭제 -->
+	<delete id="delete" parameterType="plcyStatAs">
+		DELETE FROM 
+			PLCY_STAT_AS
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</delete> 
+	
+			<!-- 삭제 -->
+ 	<delete id="deleteImage" parameterType="plcyStatAs">
+		DELETE FROM 
+			KWS_IMAGE
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+		AND
+			FTR_CDE = 'PA000'
+		AND
+			IMAGE_TY = 'POLICY_PHOTO'
+	</delete> 
+	
+	<!--  위치검색 -->		
+	<select id="quickSearch" resultMap="policyDepRegisterSearchResultMap" parameterType="String">
+		SELECT 
+			PLCY_DEP,
+			ARRAY_AGG(OBJECTID) AS IDS,
+			COUNT(*) as COUNT
+		FROM PLCY_STAT_AS T
+		WHERE 
+			PLCY_ADR = #{plcyAdr, jdbcType=VARCHAR}
+		GROUP BY PLCY_DEP
+	</select> 
+		
+	
+		<!--  부서코드로 검색 -->		
+	<select id="deptSubList"  parameterType="plcyStatAs" resultType="plcyStatAs">
+		SELECT 
+			PLCY_TIT,
+			FTR_IDN,
+			DEPT_SB_CD,
+			ST_ASTEXT(GEOM) AS GEOM,
+			LOD_YMD
+		FROM PLCY_STAT_AS
+		WHERE 
+			DEPT_SB_CD = #{deptSbCd}
+		ORDER BY FTR_IDN
+	</select> 
+</mapper>

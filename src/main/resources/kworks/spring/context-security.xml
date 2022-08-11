@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:egov-security="http://www.egovframe.go.kr/schema/egov-security"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.egovframe.go.kr/schema/egov-security http://www.egovframe.go.kr/schema/egov-security/egov-security-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+		
+	<bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter" >
+	    <property name="authenticationManager" ref="org.springframework.security.authenticationManager" />
+		<property name="postOnly" value="false"/>
+	</bean>
+
+	<security:http pattern="/ClipReport4/**" security="none" />
+	<security:http pattern="/common/**" security="none" />
+	<security:http pattern="/css/**" security="none" />
+	<security:http pattern="/images/**" security="none" />
+	<security:http pattern="/js/**" security="none" />
+	<security:http pattern="/print/**" security="none" />
+	<security:http pattern="/lib/**" security="none" />
+	<security:http pattern="/resource/**" security="none" />
+	<security:http pattern="\A/WEB-INF/jsp/.*\Z" request-matcher="regex" security="none" />
+	
+	<egov-security:config id="securityConfig"
+		loginUrl="/login.do"
+		logoutSuccessUrl="/logout.do"
+		loginFailureUrl="/loginFailure.do"
+		accessDeniedUrl="/accessDenied.do"
+		dataSource="dataSource"
+		jdbcUsersByUsernameQuery="SELECT USER_ID, DEPT_CODE, USER_NM, (SELECT DEPT_NM FROM KWS_DEPT T2 WHERE T1.DEPT_CODE = T2.DEPT_CODE) AS DEPT_NM, PASSWORD, USER_GRAD FROM KWS_USER T1 WHERE USER_ID = ? AND USE_AT = 'Y'"
+		jdbcAuthoritiesByUsernameQuery="SELECT USER_ID, USER_GRAD AS AUTHORITY FROM KWS_USER WHERE USER_ID = ? AND USE_AT = 'Y'"
+		jdbcMapClass="kr.co.gitt.kworks.cmmn.login.UserSessionMapping"
+		hash="sha-256"
+		hashBase64="true"
+		concurrentMaxSessons="1"
+		concurrentExpiredUrl="/concurrentExpired.do"
+		defaultTargetUrl="/portal.do"
+	/>
+	
+	<egov-security:secured-object-config id="securedObjectConfig"
+		roleHierarchyString="
+				ROLE_MNGR > ROLE_DEPT_MNGR
+				ROLE_DEPT_MNGR > ROLE_USER
+				ROLE_USER > ROLE_ANONYMOUS"
+		sqlRolesAndUrl="
+				SELECT URL_PTTRN AS URL, USER_GRAD AS AUTHORITY
+				FROM KWS_ACCES_AUTHOR ORDER BY SORT_ORDR"
+	/>
+		
+	<egov-security:initializer id="initializer"
+		supportMethod="false"
+		supportPointcut="false"
+	/>
+		
+</beans>

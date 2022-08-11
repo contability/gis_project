@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd ">
+
+    <!-- 패키지 내 Controller, Service, Repository 클래스의 auto detect를 위한 mvc 설정 -->
+    <context:component-scan base-package="kr.co.gitt.kworks" />
+	
+    <bean class="egovframework.rte.ptl.mvc.bind.annotation.EgovRequestMappingHandlerAdapter">
+        <property name="customArgumentResolvers">
+            <list>
+                <bean class="egovframework.rte.ptl.mvc.bind.AnnotationCommandMapArgumentResolver" />
+            </list>
+        </property>
+    </bean>
+	
+	<!-- tiles3 -->
+    <bean id="tilesviewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+    	<property name="order" value="1" />
+    </bean>
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles/tiles-layout.xml</value>
+			</list>
+		</property>
+	</bean> 
+	
+	<!-- /For Pagination Tag -->
+	<bean id="jsonView"	class="kr.co.gitt.kworks.co.web.KworksCoMappingJacksonJsonView" >
+		<property name="contentType" value="application/json;charset=UTF-8"/>
+	</bean>
+	<bean id="jsonViewTextPlain" class="kr.co.gitt.kworks.co.web.KworksCoMappingJacksonJsonView" >
+		<property name="contentType" value="text/plain;charset=UTF-8"/>
+	</bean>
+	
+	<bean id="beanNameResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="2"/>
+	
+	<!-- Excel Configuration -->
+	<bean id="CategoryExcelView" class="kr.co.gitt.kworks.co.web.KworksCoCategoryExcelView" />
+	
+	<!-- ReqeustMapping 과 Controller 클래스 매핑을 위한 annotation mvc 설정 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    
+    <!-- 화면처리용 JSP 파일명의  prefix, suffix 처리에 대한 mvc 설정  -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:order="4"
+	    p:viewClass="org.springframework.web.servlet.view.JstlView"
+	    p:prefix="/WEB-INF/jsp/kworks/" p:suffix=".jsp"
+	    p:redirectHttp10Compatible="false"/>    
+	
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">  
+	    <property name="order" value="0" />  
+	</bean>
+	
+</beans>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.BmlAcinAsMapper">
+	<resultMap type="BmlAcinAs" id="bmlAcinAsMap">
+		<id column="PRT_IDN" property="prtIdn"/>
+		<result column="PRT_IDN" property="prtIdn"/>
+		<result column="PNU" property="pnu"/>
+		<result column="LOC_PLC" property="locPlc"/>
+		<result column="OLNLP" property="olnlp"/>
+		<result column="BML_CDE" property="bmlCde"/>
+		<result column="AREA" property="area"/>
+		<result column="SPFC" property="spfc"/>
+		<result column="OWN_CDE" property="ownCde"/>
+		<result column="MEANS_SE" property="meansSe"/>
+		<result column="PRS_CDE" property="prsCde"/>
+		<result column="MAN_CDE" property="manCde"/>
+		<result column="ACQ_DEPT" property="acqDept"/>
+		<result column="ACQ_DATE" property="acqDate"/>
+		<result column="ACQ_CDE" property="acqCde"/>
+		<result column="RST_YN" property="rstYn"/>
+		<result column="USE_MESRV" property="useMesrv"/>
+		<result column="USTR_YN" property="ustrYn"/>
+		<result column="USE_ETC" property="useEtc"/>
+		<result column="USE_BDCMD" property="useBdcmd"/>
+		<result column="LON_PRS" property="lonPrs"/>
+		<result column="LON_AREA" property="lonArea"/>
+		<result column="LON_DAY" property="lonDay"/>
+		<result column="PER_AMT" property="perAmt"/>
+		<result column="OCP_ACN" property="ocpAcn"/>
+		<result column="OCP_AREA" property="ocpArea"/>
+		<result column="OCP_HNPT" property="ocpHnpt"/>
+		<result column="OCP_RM" property="ocpRm"/>
+		<result column="RBML_CDE" property="rbmlCde"/>
+		<result column="BRS_AR" property="brsAr"/>
+		<result column="BRS_LON" property="brsLon"/>
+		<result column="BRS_ARQ" property="brsArq"/>
+		<result column="BRS_OCP" property="brsOcp"/>
+		<result column="BRS_OCPAR" property="brsOcpar"/>
+		<result column="TOT_RM" property="totRm"/>
+	</resultMap>
+
+	<select id="list" resultMap="bmlAcinAsMap">
+		SELECT
+			PRT_IDN,
+			PNU,
+			LOC_PLC,
+			OLNLP,
+			BML_CDE,
+			AREA,
+			SPFC,
+			OWN_CDE,
+			MEANS_SE,
+			PRS_CDE,
+			MAN_CDE,
+			ACQ_DEPT,
+			ACQ_DATE,
+			ACQ_CDE,
+			RST_YN,
+			USE_MESRV,
+			USTR_YN,
+			USE_ETC,
+			USE_BDCMD,
+			LON_PRS,
+			LON_AREA,
+			LON_DAY,
+			PER_AMT,
+			OCP_ACN,
+			OCP_AREA,
+			OCP_HNPT,
+			OCP_RM,
+			RBML_CDE,
+			BRS_AR,
+			BRS_LON,
+			BRS_ARQ,
+			BRS_OCP,
+			BRS_OCPAR,
+			TOT_RM
+		FROM
+			BML_ACIN_AS
+	</select>
+	
+	<select id="selectOne" resultMap="bmlAcinAsMap" parameterType="Long">
+		SELECT
+			PRT_IDN,
+			PNU,
+			LOC_PLC,
+			OLNLP,
+			BML_CDE,
+			AREA,
+			SPFC,
+			OWN_CDE,
+			MEANS_SE,
+			PRS_CDE,
+			MAN_CDE,
+			ACQ_DEPT,
+			ACQ_DATE,
+			ACQ_CDE,
+			RST_YN,
+			USE_MESRV,
+			USTR_YN,
+			USE_ETC,
+			USE_BDCMD,
+			LON_PRS,
+			LON_AREA,
+			LON_DAY,
+			PER_AMT,
+			OCP_ACN,
+			OCP_AREA,
+			OCP_HNPT,
+			OCP_RM,
+			RBML_CDE,
+			BRS_AR,
+			BRS_LON,
+			BRS_ARQ,
+			BRS_OCP,
+			BRS_OCPAR,
+			TOT_RM
+		FROM
+			BML_ACIN_AS
+		WHERE
+			PRT_IDN = #{prtIdn}
+	</select>
+</mapper>

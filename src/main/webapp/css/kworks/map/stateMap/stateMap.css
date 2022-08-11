@@ -1,0 +1,22 @@
+/* 통계지도  툴바  */
+#div_statsMap                                               {width:200px; height:30px; left:350px; bottom:30px; background-color:#252525; color:#ffffff; position:absolute; display:none;}
+#div_statsMap .statsInfo                                    {display:none;}
+#div_statsMap .statsInfo .statsLegendInfo                   {float:left; width:160px; height:300px; background:rgba(255,255,255,1.0); position:relative; overflow:hidden;}
+#div_statsMap .statsInfo .statsLegendInfo .colorShow		{width:160px;}
+#div_statsMap .statsInfo .statsLegendInfo .colorShow ul li  {width:150px; height:55px;}
+#div_statsMap .statsInfo .statsLegendInfo .bubbleShow ul li {width:150px; height:55px; border-bottom:1px dotted #c1c1c1; color:#c1c1c1;}
+#div_statsMap .statsInfo .statsLegendInfo .bubbleShow div   {position:absolute;}
+#div_statsMap .statsInfo .statsLegendColor                  {float:right; width:20px; height:100px;}
+#div_statsMap .statsInfo .statsLegendColor .circleRed       {background-color:#ff0000; width:16px; height:16px; -webkit-border-radius:8px; -moz-border-radius:8px;}
+#div_statsMap .statsInfo .statsLegendColor .circleGreen     {background-color:#00ff00; width:16px; height:16px; -webkit-border-radius:8px; -moz-border-radius:8px;}
+#div_statsMap .statsInfo .statsLegendColor .circleBlue      {background-color:#0000ff; width:16px; height:16px; -webkit-border-radius:8px; -moz-border-radius:8px;}
+#div_statsMap .statsInfo .statsLegendColor .circleMagenta   {background-color:#ff00ff; width:16px; height:16px; -webkit-border-radius:8px; -moz-border-radius:8px;}
+#div_statsMap .statsInfo .statsLegendColor .circleCyan      {background-color:#00ffff; width:16px; height:16px; -webkit-border-radius:8px; -moz-border-radius:8px;}
+
+/* 통계지도  설정목록 */
+#div_statsMapSetList {width:490px;height:20px;left:560px;bottom:30px;background-color:#252525;color:#ffffff;position:absolute;display:none;}
+#div_statsMapSetList ul li {float:left;}
+#div_statsMapSetList .split {margin:0px 10px 0px 10px;}
+
+/* 통계지도 범례단계설정 팝업 */
+#div_statsMapLegendSet {width:400px;height:300px;}

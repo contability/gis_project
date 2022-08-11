@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.EtlRgcpPsMapper">
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 기준점 등급 -->
+			<if test="grdCde != null and grdCde != ''">
+				AND GRD_CDE = #{grdCde}
+			</if>
+			<!-- 점번호 -->
+			<if test="bseNam != null and bseNam != ''">
+				AND BSE_NAM = #{bseNam}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 기준점 리스트 -->
+	<select id="list" parameterType="etlRgcpPs" resultType="etlRgcpPs">
+		SELECT
+			FTR_IDN
+		FROM ETL_RGCP_PS
+		<include refid="where" />
+		ORDER BY FTR_IDN DESC
+	</select>
+	
+	<!-- 기준점 단 건 검색 -->
+	<select id="selectOne" parameterType="etlRgcpPs" resultType="etlRgcpPs">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			PRJ_NAM,
+			DEC_YMD,
+			DEC_NUM,
+			BSE_NAM,
+			WRK_ORG,
+			S50_NUM,
+			S50_NAM,
+			SET_LOC,
+			SET_YMD,
+			SET_NAM,
+			MAR_SIT,
+			OBS_YMD,
+			OBS_NAM,
+			OBF_NAM,
+			OBW_X,
+			OBW_Y,
+			OBG_X,
+			OBG_Y,
+			OGW_X,
+			OGW_Y,
+			OGG_X,
+			OGG_Y,
+			NBW_X,
+			NBW_Y,
+			NBG_X,
+			NBG_Y,
+			NGW_X,
+			NGW_Y,
+			NGG_X,
+			NGG_Y,
+			PNT_NAM,
+			BSE_HGT,
+			ESD_HGT,
+			SET_ADD,
+			REF_DES,
+			USR_DES,
+			UDT_YMD,
+			WRK_NUM,
+			NRR_YMD,
+			NRM_TEL,
+			NRH_TEL,
+			NRD_NAM,
+			MMG_EXP,
+			PMG_EXP,
+			CPK_CDE,
+			GRD_CDE,
+			BJD_CDE,
+			CPS_CDE,
+			LSK_CDE,
+			NRR_CDE,
+			MNG_CDE
+		FROM ETL_RGCP_PS
+		WHERE FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 기준점 수정 -->
+	<update id="update" parameterType="etlRgcpPs">
+		UPDATE ETL_RGCP_PS SET
+			GEOM = SDO_UTIL.FROM_WKTGEOMETRY(#{wkt}),
+			PRJ_NAM = #{prjNam, jdbcType=VARCHAR},
+			DEC_YMD = #{decYmd, jdbcType=VARCHAR},
+			DEC_NUM = #{decNum, jdbcType=VARCHAR},
+			CPK_CDE = #{cpkCde, jdbcType=VARCHAR},
+			BSE_NAM = #{bseNam, jdbcType=VARCHAR},
+			GRD_CDE = #{grdCde, jdbcType=VARCHAR},
+			WRK_ORG = #{wrkOrg, jdbcType=VARCHAR},
+			S50_NAM = #{s50Nam, jdbcType=VARCHAR},
+			CPS_CDE = #{cpsCde, jdbcType=VARCHAR},
+			BJD_CDE = #{bjdCde, jdbcType=VARCHAR},
+			SET_LOC = #{setLoc, jdbcType=VARCHAR},
+			SET_YMD = #{setYmd, jdbcType=VARCHAR},
+			OBS_YMD = #{obsYmd, jdbcType=VARCHAR},
+			SET_NAM = #{setNam, jdbcType=VARCHAR},
+			OBS_NAM = #{obsNam, jdbcType=VARCHAR},
+			MAR_SIT = #{marSit, jdbcType=VARCHAR},
+			OBF_NAM = #{obfNam, jdbcType=VARCHAR},
+			LSK_CDE = #{lskCde, jdbcType=VARCHAR},
+			SET_ADD = #{setAdd, jdbcType=VARCHAR},
+			REF_DES = #{refDes, jdbcType=VARCHAR},
+			NGW_X = #{ngwX, jdbcType=VARCHAR},
+			NGW_Y = #{ngwY, jdbcType=VARCHAR},
+			PNT_NAM = #{pntNam, jdbcType=VARCHAR},
+			NGG_X = #{nggX, jdbcType=VARCHAR},
+			NGG_Y = #{nggY, jdbcType=VARCHAR},
+			ESD_HGT = #{esdHgt, jdbcType=BIGINT},
+			BSE_HGT = #{bseHgt, jdbcType=BIGINT}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 기준점 등록 -->
+	<insert id="insert" parameterType="etlRgcpPs">
+		INSERT INTO ETL_RGCP_PS (
+			OBJECTID,
+			GEOM,
+			FTR_CDE,
+			FTR_IDN,
+			PRJ_NAM,
+			DEC_YMD,
+			DEC_NUM,
+			CPK_CDE,
+			BSE_NAM,
+			GRD_CDE,
+			WRK_ORG,
+			S50_NAM,
+			CPS_CDE,
+			BJD_CDE,
+			SET_LOC,
+			SET_YMD,
+			OBS_YMD,
+			SET_NAM,
+			OBS_NAM,
+			MAR_SIT,
+			OBF_NAM,
+			LSK_CDE,
+			SET_ADD,
+			REF_DES,
+			NGW_X,
+			NGW_Y,
+			PNT_NAM,
+			NGG_X,
+			NGG_Y,
+			ESD_HGT,
+			BSE_HGT
+		) VALUES (
+			#{objectid, jdbcType=BIGINT},
+			SDO_UTIL.FROM_WKTGEOMETRY(#{wkt}),
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{prjNam, jdbcType=VARCHAR},
+			#{decYmd, jdbcType=VARCHAR},
+			#{decNum, jdbcType=VARCHAR},
+			#{cpkCde, jdbcType=VARCHAR},
+			#{bseNam, jdbcType=VARCHAR},
+			#{grdCde, jdbcType=VARCHAR},
+			#{wrkOrg, jdbcType=VARCHAR},
+			#{s50Nam, jdbcType=VARCHAR},
+			#{cpsCde, jdbcType=VARCHAR},
+			#{bjdCde, jdbcType=VARCHAR},
+			#{setLoc, jdbcType=VARCHAR},
+			#{setYmd, jdbcType=VARCHAR},
+			#{obsYmd, jdbcType=VARCHAR}, 
+			#{setNam, jdbcType=VARCHAR},
+			#{obsNam, jdbcType=VARCHAR},
+			#{marSit, jdbcType=VARCHAR},
+			#{obfNam, jdbcType=VARCHAR},
+			#{lskCde, jdbcType=VARCHAR}, 
+			#{setAdd, jdbcType=VARCHAR},
+			#{refDes, jdbcType=VARCHAR},
+			#{ngwX, jdbcType=VARCHAR},
+			#{ngwY, jdbcType=VARCHAR},
+			#{pntNam, jdbcType=VARCHAR}, 
+			#{nggX, jdbcType=VARCHAR},
+			#{nggY, jdbcType=VARCHAR},
+			#{esdHgt, jdbcType=BIGINT},
+			#{bseHgt, jdbcType=BIGINT}
+		)
+	</insert>
+	
+</mapper>

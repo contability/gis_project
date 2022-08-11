@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.BmlOccpAsMapper">
+
+	<select id="selectOne" resultType="BmlOccpAs" parameterType="bmlOccpAs">
+		SELECT
+			PRT_IDN,
+			OCP_IDN,
+			PBP_KND,
+			OCP_ADR,
+			OCP_STR,
+			OCP_END,
+			OCP_ARA,
+			RVR_SI,
+			RVR_GU,
+			OCP_PRS,
+			RMK_EXP,
+			EMP_SE,
+			EMP_NAM,
+			EMP_NUM,
+			EMP_BJD,
+			EMP_RN,
+			MEANS_NM,
+			REGN_CODE,
+			REGN_NM,
+			SAN,
+			BUNJI,
+			HO,
+			TONG,
+			BAN,
+			POBJ_CODE,
+			MAN_CDE,
+			MAN_NM,
+			USR_SE_NM,
+			RN_ADDR,
+			PBP_KNDNM,
+			USRBJD_CD,
+			USRBJD_NM,
+			USR_SAN,
+			USR_BUNJI,
+			USR_HO
+		FROM
+			BML_OCCP_AS
+		<where>
+			<if test="ocpIdn != null">
+				AND OCP_IDN = #{ocpIdn}
+			</if>
+			<if test="prtIdn != null">
+				AND PRT_IDN = #{prtIdn}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="BmlOccpAs">
+		INSERT INTO
+			BML_OCCP_AS(
+				OBJECTID,
+				PRT_IDN,
+				OCP_IDN,
+				PBP_KND,
+				OCP_ADR,
+				OCP_STR,
+				OCP_END,
+				OCP_ARA,
+				RVR_SI,
+				RVR_GU,
+				OCP_PRS,
+				RMK_EXP,
+				EMP_SE,
+				EMP_NAM,
+				EMP_NUM,
+				EMP_BJD,
+				EMP_RN,
+				MEANS_NM,
+				REGN_CODE,
+				REGN_NM,
+				SAN,
+				BUNJI,
+				HO,
+				TONG,
+				BAN,
+				POBJ_CODE,
+				MAN_CDE,
+				MAN_NM,
+				USR_SE_NM,
+				RN_ADDR,
+				PBP_KNDNM,
+				USRBJD_CD,
+				USRBJD_NM,
+				USR_SAN,
+				USR_BUNJI,
+				USR_HO
+			)
+		VALUES(
+			(SELECT NVL(MAX(OBJECTID) + 1, 1) FROM BML_OCCP_AS),
+			#{prtIdn, jdbcType=INTEGER},
+			#{ocpIdn, jdbcType=INTEGER},
+			#{pbpKnd, jdbcType=VARCHAR},
+			#{ocpAdr, jdbcType=VARCHAR},
+			#{ocpStr, jdbcType=VARCHAR},
+			#{ocpEnd, jdbcType=VARCHAR},
+			#{ocpAra, jdbcType=DOUBLE},
+			#{rvrSi, jdbcType=INTEGER},
+			#{rvrGu, jdbcType=INTEGER},
+			#{ocpPrs, jdbcType=VARCHAR},
+			#{rmkExp, jdbcType=VARCHAR},
+			#{empSe, jdbcType=VARCHAR},
+			#{empNam, jdbcType=VARCHAR},
+			#{empNum, jdbcType=VARCHAR},
+			#{empBjd, jdbcType=VARCHAR},
+			#{empRn, jdbcType=VARCHAR},
+			#{meansNm, jdbcType=VARCHAR},
+			#{regnCode, jdbcType=VARCHAR},
+			#{regnNm, jdbcType=VARCHAR},
+			#{san, jdbcType=VARCHAR},
+			#{bunji, jdbcType=VARCHAR},
+			#{ho, jdbcType=VARCHAR},
+			#{tong, jdbcType=VARCHAR},
+			#{ban, jdbcType=VARCHAR},
+			#{pobjCode, jdbcType=VARCHAR},
+			#{manCde, jdbcType=VARCHAR},
+			#{manNm, jdbcType=VARCHAR},
+			#{usrSeNm, jdbcType=VARCHAR},
+			#{rnAddr, jdbcType=VARCHAR},
+			#{pbpKndnm, jdbcType=VARCHAR},
+			#{usrbjdCd, jdbcType=VARCHAR},
+			#{usrbjdNm, jdbcType=VARCHAR},
+			#{usrSan, jdbcType=VARCHAR},
+			#{usrBunji, jdbcType=VARCHAR},
+			#{usrHo, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="remove">
+		TRUNCATE TABLE BML_OCCP_AS
+	</delete>
+	
+	<update id="geomUpdate">
+		UPDATE
+			BML_OCCP_AS
+		SET
+			BML_OCCP_AS.GEOM = LP_PA_CBND.GEOM FROM LP_PA_CBND WHERE LP_PA_CBND.PNU = BML_OCCP_AS.REGN_CODE||BML_OCCP_AS.SAN||LPAD(BML_OCCP_AS.BUNJI,4,0)||LPAD(BML_OCCP_AS.HO,4,0) 
+	</update>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsRoadRegMapper">
+
+	<!-- 전체 검색 -->
+	<select id="listAll" resultType="kwsRoadReg">
+		SELECT
+			REG_IDN,
+			REG_ALIAS,
+			REG_LAYER_ID,
+			REG_PROP_FIELD,
+			REG_PROP_VALUE,
+			REG_SUB_ID,
+			REG_SUB_FIELD,
+			REG_SUB_VALUE,
+			USE_AT
+		FROM
+			KWS_ROAD_REG
+		ORDER BY REG_IDN
+	</select>
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsRoadRegMap" type="kwsRoadReg">
+		<id property="regIdn" column="REG_IDN" />
+		<result property="regAlias" column="REG_ALIAS"/>
+		<result property="regLayerId" column="REG_LAYER_ID"/>
+		<result property="regPropField" column="REG_PROP_FIELD"/>
+		<result property="regPropValue" column="REG_PROP_VALUE"/>
+		<result property="regSubId" column="REG_SUB_ID"/>
+		<result property="regSubField" column="REG_SUB_FIELD"/>
+		<result property="regSubValue" column="REG_SUB_VALUE"/>
+		<result property="useAt" column="USE_AT"/>
+	</resultMap>
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultMap="kwsRoadRegMap">
+		SELECT
+			REG_IDN,
+			REG_ALIAS,
+			REG_LAYER_ID,
+			REG_PROP_FIELD,
+			REG_PROP_VALUE,
+			REG_SUB_ID,
+			REG_SUB_FIELD,
+			REG_SUB_VALUE,
+			USE_AT
+		FROM
+			KWS_ROAD_REG
+		WHERE
+			REG_IDN = #{regIdn}
+		ORDER BY REG_IDN
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsDeptMapper">
+	
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND DEPT_CODE LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND USER_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+			KWS_DEPT
+		WHERE USE_AT = 'Y'
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="KwsDept">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				DEPT_CODE,
+				DEPT_NM,
+				DEPT_ALL_NM,
+				DEPT_TELNO,
+				DEPT_FXNUM,
+				USE_AT
+			FROM KWS_DEPT
+			WHERE USE_AT = 'Y'
+			ORDER BY DEPT_CODE ASC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 페이징 없이 목록 검색 -->
+	<!-- 작업자 : 이승재, 2020.12.07 -->
+	<select id="listNoPaging" resultType="KwsDept" parameterType="String">
+		SELECT
+			DEPT_CODE,
+			DEPT_NM,
+			DEPT_ALL_NM,
+			DEPT_TELNO,
+			DEPT_FXNUM,
+			USE_AT
+		FROM KWS_DEPT
+		WHERE USE_AT = 'Y' 
+		<choose>
+			<when test="_parameter eq 'DEPT_NM'">ORDER BY DEPT_NM ASC</when>
+			<otherwise>ORDER BY DEPT_CODE ASC</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 전체 검색 -->
+	<select id="listAll" resultType="KwsDept">
+		SELECT
+			DEPT_CODE,
+			DEPT_NM,
+			DEPT_ALL_NM,
+			DEPT_TELNO,
+			DEPT_FXNUM,
+			USE_AT
+		FROM KWS_DEPT
+	</select>
+		
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultType="KwsDept">
+		SELECT
+			DEPT_CODE,
+			DEPT_NM,
+			DEPT_ALL_NM,
+			DEPT_TELNO,
+			DEPT_FXNUM,
+			USE_AT
+		FROM KWS_DEPT
+		WHERE
+			DEPT_CODE = #{deptCode}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="KwsDept">
+		INSERT INTO KWS_DEPT (
+			DEPT_CODE,
+			DEPT_NM,
+			USE_AT
+		) 
+		VALUES (
+			#{deptCode, jdbcType=VARCHAR},
+			#{deptNm, jdbcType=VARCHAR},
+			'Y'
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="KwsDept">
+		UPDATE KWS_DEPT SET
+			DEPT_NM = #{deptNm, jdbcType=VARCHAR}
+		WHERE
+			DEPT_CODE = #{deptCode}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM KWS_DEPT
+		WHERE
+			DEPT_CODE = #{deptCode}
+	</delete>
+	
+	<!-- 엑셀다운로드용 리스트 조회 -->
+	<select id="listDeptExcel" parameterType="searchDTO" resultType="kwsDept">
+		SELECT
+			DEPT_CODE,
+			DEPT_NM,
+			DEPT_ALL_NM,
+			DEPT_TELNO,
+			DEPT_FXNUM,
+			USE_AT
+		FROM KWS_DEPT
+		WHERE USE_AT = 'Y'
+		<include refid="where" />
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsDeptMap" type="kwsDept">
+		<id property="deptCode" column="DEPT_CODE" />
+		<result property="deptNm" column="DEPT_NM"/>
+		<collection property="kwsDeptSubs" ofType="kwsDeptSub">
+			<id property="deptSubCode" column="DEPT_SUB_CODE" />
+			<result property="deptSubNm" column="DEPT_SUB_NM" />
+		</collection>
+	</resultMap>
+
+	<!-- 전체 목록 검색 -->
+	<select id="listDeptSub" resultMap="kwsDeptMap">
+		SELECT 
+			DEPT.DEPT_CODE,
+			DEPT.DEPT_NM,
+			SUB.DEPT_SUB_NM,
+			SUB.DEPT_SUB_CODE,
+			PLCY.FTR_IDN,
+			PLCY.PLCY_TIT
+		FROM 
+			KWS_DEPT DEPT	
+		LEFT OUTER JOIN 
+			(SELECT * FROM KWS_DEPT_SUB WHERE USE_AT = 'Y') SUB
+		ON 
+			DEPT.DEPT_CODE = SUB.DEPT_CODE
+		RIGHT OUTER JOIN
+			(SELECT * FROM PLCY_STAT_AS WHERE DEPT_SB_CD != '') PLCY
+		ON
+			SUB.DEPT_SUB_CODE = PLCY.DEPT_SB_CD
+		WHERE 
+			DEPT.USE_AT = 'Y'
+		ORDER BY DEPT.DEPT_NM
+	</select>
+	
+	<select id="deptNmReturn" resultType="String" parameterType="String">
+		SELECT 
+			DEPT_NM
+		FROM 
+			KWS_DEPT
+		WHERE 
+			DEPT_CODE = #{deptCode}
+	</select>
+
+	
+</mapper>

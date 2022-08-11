@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsThemamapLyrMapper">
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsThemamapLyr" >
+		INSERT INTO KWS_THEMAMAP_LYR (
+			THEMAMAP_ID,
+			LYR_ID,
+			SORT_ORDR,
+			LYR_STYLE
+		)
+		VALUES (
+			#{themamapId, jdbcType=BIGINT},
+			#{lyrId, jdbcType=VARCHAR},
+			#{sortOrdr, jdbcType=INTEGER},
+			#{lyrStyle, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long" >
+		DELETE FROM KWS_THEMAMAP_LYR
+		WHERE THEMAMAP_ID = #{themamapId}
+	</delete>
+
+</mapper>

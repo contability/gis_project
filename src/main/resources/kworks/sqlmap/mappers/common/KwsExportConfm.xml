@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportConfmMapper">
+
+	<!-- 단 건 검색 결과 맵 -->
+	<resultMap id="kwsExportConfmMap" type="kwsExportConfm">
+		<id property="exportNo" column="EXPORT_NO" />
+		<result property="confmerId" column="CONFMER_ID"/>
+		<result property="confmDt" column="CONFM_DT"/>
+		<result property="returnPrvonsh" column="RETURN_PRVONSH"/>
+		<association property="kwsUser" column="CONFMER_ID" javaType="kwsUser" select="kr.co.gitt.kworks.mappers.KwsUserMapper.selectOne" />
+	</resultMap>
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="kwsExportConfmMap">
+		SELECT
+			EXPORT_NO,
+			CONFMER_ID,
+			CONFM_DT,
+			RETURN_PRVONSH
+		FROM KWS_EXPORT_CONFM
+		WHERE 
+			EXPORT_NO = #{exportNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExportConfm">
+		INSERT INTO KWS_EXPORT_CONFM (
+			EXPORT_NO,
+			CONFMER_ID,
+			CONFM_DT,
+			RETURN_PRVONSH
+		) 
+		VALUES (
+			#{exportNo, jdbcType=BIGINT},
+			#{confmerId, jdbcType=VARCHAR},
+			<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,
+			#{returnPrvonsh, jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

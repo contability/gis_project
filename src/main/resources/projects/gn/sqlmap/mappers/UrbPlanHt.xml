@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.UrbPlanHtMapper">
+
+	<!-- 이력의 개수 -->
+	<select id="getCount" resultType="Integer">
+		SELECT 
+			COUNT(*)
+		FROM 
+			URB_PLAN_HT 
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 이력 시퀀스 -->
+	<select id="getLastSequence" resultType="Integer">
+		SELECT 
+			MAX(UPR_SEQ)
+		FROM 
+			URB_PLAN_HT 
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert">
+		INSERT INTO URB_PLAN_HT (
+			FTR_IDN,
+			UPR_IDN,
+			UPR_SEQ,
+			UPR_GRD,
+			UPR_TYP,
+			UPR_NUM,
+			UPR_WID,
+			UPR_LEN,
+			UPR_STR,
+			UPR_END,
+			UPR_NTY,
+			UPR_YMD,
+			UPR_CLA,
+			RMK_EXP
+		) VALUES (
+			#{data.ftrIdn, jdbcType=BIGINT},
+			#{data.uprIdn, jdbcType=VARCHAR},
+			#{data.uprSeq, jdbcType=BIGINT},
+			#{data.uprGrd, jdbcType=VARCHAR},
+			#{data.uprTyp, jdbcType=VARCHAR},
+			#{data.uprNum, jdbcType=VARCHAR},
+			#{data.uprWid, jdbcType=REAL},
+			#{data.uprLen, jdbcType=REAL},
+			#{data.uprStr, jdbcType=VARCHAR},
+			#{data.uprEnd, jdbcType=VARCHAR},
+			#{data.uprNty, jdbcType=VARCHAR},
+			#{data.uprYmd, jdbcType=VARCHAR},
+			#{data.uprCla, jdbcType=VARCHAR},
+			#{data.rmkExp, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 수정 -->
+	<update id="update">
+		UPDATE 
+			URB_PLAN_HT
+		SET 
+			UPR_IDN = #{data.uprIdn, jdbcType=BIGINT},
+			UPR_GRD = #{data.uprGrd, jdbcType=VARCHAR},
+			UPR_TYP = #{data.uprTyp, jdbcType=VARCHAR},
+			UPR_NUM = #{data.uprNum, jdbcType=VARCHAR},
+			UPR_WID = #{data.uprWid, jdbcType=REAL},		
+			UPR_LEN = #{data.uprLen, jdbcType=REAL},
+			UPR_STR = #{data.uprStr, jdbcType=VARCHAR},
+			UPR_END = #{data.uprEnd, jdbcType=VARCHAR},
+			UPR_NTY = #{data.uprNty, jdbcType=VARCHAR},
+			UPR_YMD = #{data.uprYmd, jdbcType=VARCHAR},
+			UPR_CLA = #{data.uprCla, jdbcType=VARCHAR},
+			RMK_EXP = #{data.rmkExp, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+			AND
+			UPR_SEQ = #{uprSeq}
+	</update>
+
+	<!-- 일괄 삭제 -->
+	<delete id="deleteAll">
+		DELETE FROM 
+			URB_PLAN_HT
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</delete>	
+
+	<!-- 단건 삭제 -->
+	<delete id="delete">
+		DELETE FROM 
+			URB_PLAN_HT
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+			AND
+			UPR_SEQ = #{uprSeq}
+	</delete>	
+
+</mapper>

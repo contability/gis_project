@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsBaseMapHostMapper">
+	
+	<!-- 목록 검색 -->
+	<select id="listAll" parameterType="java.util.Map" resultType="kwsBaseMapHost">
+		SELECT
+			HOST_NO,
+			MAP_NO,
+			PORT,
+			URL
+		FROM
+			KWS_BASE_MAP_HOST
+		WHERE
+			MAP_NO = #{mapNo}	
+	</select>
+	
+</mapper>

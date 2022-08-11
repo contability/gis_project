@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.BmlPropAsMapper">
+	
+	<select id="selectOne" resultType="BmlPropAs" parameterType="Long">
+		SELECT
+			OBJECTID,
+			PRT_IDN,
+			PBP_KND,
+			PRT_NAM,
+			OWN_CDE,
+			PRS_CDE,
+			AMN_CDE,
+			ACC_CDE,
+			MAN_CDE,
+			CHR_NAM,
+			MND_CDE,
+			PST_NUM,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			SPC_ADR,
+			SPC_DONG,
+			SPC_HO,
+			RN_ADDR,
+			PTY_PC,
+			AUT_AMNT,
+			ACQ_DEPT,
+			ACQ_PC,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PRV,
+			RST_YN,
+			LOAN_YN,
+			SALE_LMT,
+			RMK_EXP,
+			BML_CDE,
+			MOK_CDE,
+			AREA,
+			PAREA,
+			OLNLP,
+			ACQ_ARA,
+			CNR_QTA,
+			SPFC,
+			CTY_PLAN,
+			PLAN_FTY,
+			DWK,
+			PLAN_BNS,
+			OWN_NM,
+			MESRV_NM,
+			AMN_NM,
+			ACC_NM,
+			MAN_NM,
+			MND_NM,
+			BJD_NM,
+			TONG,
+			BAN,
+			JIMOK_NM,
+			RJIMOK_NM,
+			CNR_QTA2,
+			DISPO_YMD,
+			DISPO_MET,
+			DISPO_CODE,
+			DISPO_WHY,
+			GAIN_DEP,
+			GISE_CDE,
+			SEAOLL_YN,
+			INSYS_NM
+		FROM
+			BML_PROP_AS
+		WHERE 
+			PRT_IDN = #{prtIdn}
+	</select>
+	
+	<insert id="insert" parameterType="BmlPropAs">
+	INSERT INTO
+		BML_PROP_AS(
+			OBJECTID,
+			PRT_IDN,
+			PBP_KND,
+			PRT_NAM,
+			OWN_CDE,
+			PRS_CDE,
+			AMN_CDE,
+			ACC_CDE,
+			MAN_CDE,
+			CHR_NAM,
+			MND_CDE,
+			PST_NUM,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			SPC_ADR,
+			SPC_DONG,
+			SPC_HO,
+			RN_ADDR,
+			PTY_PC,
+			AUT_AMNT,
+			ACQ_DEPT,
+			ACQ_PC,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PRV,
+			RST_YN,
+			LOAN_YN,
+			SALE_LMT,
+			RMK_EXP,
+			BML_CDE,
+			MOK_CDE,
+			AREA,
+			PAREA,
+			OLNLP,
+			ACQ_ARA,
+			CNR_QTA,
+			SPFC,
+			CTY_PLAN,
+			PLAN_FTY,
+			DWK,
+			PLAN_BNS,
+			OWN_NM,
+			MESRV_NM,
+			AMN_NM,
+			ACC_NM,
+			MAN_NM,
+			MND_NM,
+			BJD_NM,
+			TONG,
+			BAN,
+			JIMOK_NM,
+			RJIMOK_NM,
+			CNR_QTA2,
+			DISPO_YMD,
+			DISPO_MET,
+			DISPO_CODE,
+			DISPO_WHY,
+			GAIN_DEP,
+			GISE_CDE,
+			SEAOLL_YN,
+			INSYS_NM
+		)
+	VALUES(
+		(SELECT NVL(MAX(OBJECTID) + 1, 1) FROM BML_PROP_AS),
+		#{prtIdn, jdbcType=INTEGER},
+		#{pbpKnd, jdbcType=VARCHAR},
+		#{prtNam, jdbcType=VARCHAR},
+		#{ownCde, jdbcType=VARCHAR},
+		#{prsCde, jdbcType=VARCHAR},
+		#{amnCde, jdbcType=VARCHAR},
+		#{accCde, jdbcType=VARCHAR},
+		#{manCde, jdbcType=VARCHAR},
+		#{chrNam, jdbcType=VARCHAR},
+		#{mndCde, jdbcType=VARCHAR},
+		#{pstNum, jdbcType=VARCHAR},
+		#{bjdCde, jdbcType=VARCHAR},
+		#{locPlc, jdbcType=VARCHAR},
+		#{monut, jdbcType=VARCHAR},
+		#{bun, jdbcType=VARCHAR},
+		#{ho, jdbcType=VARCHAR},
+		#{spcAdr, jdbcType=VARCHAR},
+		#{spcDong, jdbcType=VARCHAR},
+		#{spcHo, jdbcType=VARCHAR},
+		#{rnAddr, jdbcType=VARCHAR},
+		#{ptyPc, jdbcType=VARCHAR},
+		#{autAmnt, jdbcType=VARCHAR},
+		#{acqDept, jdbcType=VARCHAR},
+		#{acqPc, jdbcType=VARCHAR},
+		#{acqDate, jdbcType=VARCHAR},
+		#{acqCde, jdbcType=VARCHAR},
+		#{acqPrv, jdbcType=VARCHAR},
+		#{rstYn, jdbcType=VARCHAR},
+		#{loanYn, jdbcType=VARCHAR},
+		#{saleLmt, jdbcType=VARCHAR},
+		#{rmkExp, jdbcType=VARCHAR},
+		#{bmlCde, jdbcType=VARCHAR},
+		#{mokCde, jdbcType=VARCHAR},
+		#{area, jdbcType=DOUBLE},
+		#{parea, jdbcType=DOUBLE},
+		#{olnlp, jdbcType=DOUBLE},
+		#{acqAra, jdbcType=DOUBLE},
+		#{cnrQta, jdbcType=INTEGER},
+		#{spfc, jdbcType=VARCHAR},
+		#{ctyPlan, jdbcType=VARCHAR},
+		#{planFty, jdbcType=VARCHAR},
+		#{dwk, jdbcType=VARCHAR},
+		#{planBns, jdbcType=VARCHAR},
+		#{ownNm, jdbcType=VARCHAR},
+		#{mesrvNm, jdbcType=VARCHAR},
+		#{amnNm, jdbcType=VARCHAR},
+		#{accNm, jdbcType=VARCHAR},
+		#{manNm, jdbcType=VARCHAR},
+		#{mndNm, jdbcType=VARCHAR},
+		#{bjdNm, jdbcType=VARCHAR},
+		#{tong, jdbcType=VARCHAR},
+		#{ban, jdbcType=VARCHAR},
+		#{jimokNm, jdbcType=VARCHAR},
+		#{rjimokNm, jdbcType=VARCHAR},
+		#{cnrQta2, jdbcType=DOUBLE},
+		#{dispoYmd, jdbcType=VARCHAR},
+		#{dispoMet, jdbcType=VARCHAR},
+		#{dispoCode, jdbcType=VARCHAR},
+		#{dispoWhy, jdbcType=VARCHAR},
+		#{gainDep, jdbcType=VARCHAR},
+		#{giseCde, jdbcType=VARCHAR},
+		#{seaollYn, jdbcType=VARCHAR},
+		#{insysNm, jdbcType=VARCHAR}
+	)
+	</insert>
+	
+	<delete id="deleteBackup">
+		TRUNCATE TABLE BML_PROP_AS_BACKUP
+	</delete>
+	
+	<insert id="backup">
+		INSERT INTO
+			BML_PROP_AS_BACKUP(
+				PRT_IDN,
+				PBP_KND,
+				PRT_NAM,
+				OWN_CDE,
+				PRS_CDE,
+				AMN_CDE,
+				ACC_CDE,
+				MAN_CDE,
+				CHR_NAM,
+				MND_CDE,
+				PST_NUM,
+				BJD_CDE,
+				LOC_PLC,
+				MONUT,
+				BUN,
+				HO,
+				SPC_ADR,
+				SPC_DONG,
+				SPC_HO,
+				RN_ADDR,
+				PTY_PC,
+				AUT_AMNT,
+				ACQ_DEPT,
+				ACQ_PC,
+				ACQ_DATE,
+				ACQ_CDE,
+				ACQ_PRV,
+				RST_YN,
+				LOAN_YN,
+				SALE_LMT,
+				RMK_EXP,
+				BML_CDE,
+				MOK_CDE,
+				AREA,
+				PAREA,
+				OLNLP,
+				ACQ_ARA,
+				CNR_QTA,
+				SPFC,
+				CTY_PLAN,
+				PLAN_FTY,
+				DWK,
+				PLAN_BNS,
+				OWN_NM,
+				MESRV_NM,
+				AMN_NM,
+				ACC_NM,
+				MAN_NM,
+				MND_NM,
+				BJD_NM,
+				TONG,
+				BAN,
+				JIMOK_NM,
+				RJIMOK_NM,
+				CNR_QTA2,
+				DISPO_YMD,
+				DISPO_MET,
+				DISPO_CODE,
+				DISPO_WHY,
+				GAIN_DEP,
+				GISE_CDE,
+				SEAOLL_YN,
+				INSYS_NM
+			)
+			(SELECT 
+				PRT_IDN,
+				PBP_KND,
+				PRT_NAM,
+				OWN_CDE,
+				PRS_CDE,
+				AMN_CDE,
+				ACC_CDE,
+				MAN_CDE,
+				CHR_NAM,
+				MND_CDE,
+				PST_NUM,
+				BJD_CDE,
+				LOC_PLC,
+				MONUT,
+				BUN,
+				HO,
+				SPC_ADR,
+				SPC_DONG,
+				SPC_HO,
+				RN_ADDR,
+				PTY_PC,
+				AUT_AMNT,
+				ACQ_DEPT,
+				ACQ_PC,
+				ACQ_DATE,
+				ACQ_CDE,
+				ACQ_PRV,
+				RST_YN,
+				LOAN_YN,
+				SALE_LMT,
+				RMK_EXP,
+				BML_CDE,
+				MOK_CDE,
+				AREA,
+				PAREA,
+				OLNLP,
+				ACQ_ARA,
+				CNR_QTA,
+				SPFC,
+				CTY_PLAN,
+				PLAN_FTY,
+				DWK,
+				PLAN_BNS,
+				OWN_NM,
+				MESRV_NM,
+				AMN_NM,
+				ACC_NM,
+				MAN_NM,
+				MND_NM,
+				BJD_NM,
+				TONG,
+				BAN,
+				JIMOK_NM,
+				RJIMOK_NM,
+				CNR_QTA2,
+				DISPO_YMD,
+				DISPO_MET,
+				DISPO_CODE,
+				DISPO_WHY,
+				GAIN_DEP,
+				GISE_CDE,
+				SEAOLL_YN,
+				INSYS_NM
+			FROM
+				BML_PROP_AS)
+	</insert>
+	
+	<delete id="remove">
+		TRUNCATE TABLE BML_PROP_AS
+	</delete>
+	
+	<update id="geomUpdate">
+		UPDATE
+			BML_PROP_AS
+		SET
+			BML_PROP_AS.GEOM = LP_PA_CBND.GEOM FROM LP_PA_CBND WHERE LP_PA_CBND.PNU = BML_PROP_AS.BJD_CDE||BML_PROP_AS.MONUT||LPAD(BML_PROP_AS.BUN,4,0)||LPAD(BML_PROP_AS.HO,4,0) 
+	</update>
+	
+	<select id="mismatchProp" resultType="Integer" parameterType="hashMap">
+		SELECT
+			COUNT(PRT_IDN)
+		FROM
+			BML_PROP_AS
+		WHERE
+			GEOM IS NULL
+		<if test="deptCode != null and deptCode != '' and deptCode != '42002450000'">
+		AND
+			MAN_CDE = #{deptCode}
+		</if>
+	</select>
+	
+	<select id="selectListArea" resultType="BmlPropAs" parameterType="UseAreaSearchDTO">
+		SELECT
+			OBJECTID,
+			PRT_IDN,
+			PBP_KND,
+			PRT_NAM,
+			OWN_CDE,
+			PRS_CDE,
+			AMN_CDE,
+			ACC_CDE,
+			MAN_CDE,
+			CHR_NAM,
+			MND_CDE,
+			PST_NUM,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			SPC_ADR,
+			SPC_DONG,
+			SPC_HO,
+			RN_ADDR,
+			PTY_PC,
+			AUT_AMNT,
+			ACQ_DEPT,
+			ACQ_PC,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PRV,
+			RST_YN,
+			LOAN_YN,
+			SALE_LMT,
+			RMK_EXP,
+			BML_CDE,
+			MOK_CDE,
+			AREA,
+			PAREA,
+			OLNLP,
+			ACQ_ARA,
+			CNR_QTA,
+			SPFC,
+			CTY_PLAN,
+			PLAN_FTY,
+			DWK,
+			PLAN_BNS,
+			OWN_NM,
+			MESRV_NM,
+			AMN_NM,
+			ACC_NM,
+			MAN_NM,
+			MND_NM,
+			BJD_NM,
+			TONG,
+			BAN,
+			JIMOK_NM,
+			RJIMOK_NM,
+			CNR_QTA2,
+			DISPO_YMD,
+			DISPO_MET,
+			DISPO_CODE,
+			DISPO_WHY,
+			GAIN_DEP,
+			GISE_CDE,
+			SEAOLL_YN,
+			INSYS_NM
+		FROM
+			BML_PROP_AS
+		WHERE
+			BJD_CDE = #{bjdCde}
+			AND
+			MONUT = #{monut}
+			AND
+			BUN = #{bun}
+			<if test="ho != null and ho != ''">
+				AND
+				HO = #{ho}
+			</if>
+	</select>
+	
+	<select id="selectAccGroupList" resultType="BmlPropAs">
+		SELECT 
+			ACC_CDE, ACC_NM 
+		FROM 
+			BML_PROP_AS
+		WHERE 
+			ACC_NM != ''
+		GROUP BY 
+			ACC_CDE, ACC_NM
+		UNION
+		SELECT 
+			ACC_CDE, ACC_NM 
+		FROM 
+			BML_BUID_AS
+		WHERE 
+			ACC_NM != ''
+		GROUP BY 
+			ACC_CDE, ACC_NM
+		ORDER BY 
+			ACC_NM
+	</select>
+	
+	<select id="selectManGroupList" resultType="BmlPropAs">
+		SELECT MAN_CDE, MAN_NM 
+		FROM BML_PROP_AS
+		GROUP BY MAN_CDE, MAN_NM
+		UNION
+		SELECT MAN_CDE, MAN_NM 
+		FROM BML_BUID_AS
+		GROUP BY MAN_CDE, MAN_NM
+		ORDER BY MAN_NM
+	</select>
+	
+	<delete id="filterValidData">
+		DELETE FROM
+			BML_PROP_AS
+		WHERE
+			DISPO_MET != ''
+		OR
+			DISPO_MET != NULL
+	</delete>
+</mapper>

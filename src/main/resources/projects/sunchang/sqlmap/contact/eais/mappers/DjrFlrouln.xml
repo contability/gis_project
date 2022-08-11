@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.sunchang.contact.eais.mappers.DjrFlroulnMapper">
+	
+	<resultMap id="djrFlroulnMap" type="djrFlrouln">
+		<id property="flrOulnPk" column="FLR_OULN_PK"/>
+		<result property="bldrgstPk" column="BLDRGST_PK"/>
+		<result property="flrGbCd" column="FLR_GB_CD"/>
+		<result property="flrGbCdNm" column="FLR_GB_CD_NM"/>
+		<result property="flrNo" column="FLR_NO"/>
+		<result property="flrNoNm" column="FLR_NO_NM"/>
+		<result property="strctCd" column="STRCT_CD"/>
+		<result property="strctCdNm" column="STRCT_CD_NM"/>
+		<result property="etcStrct" column="ETC_STRCT"/>
+		<result property="mainPurpsCd" column="MAIN_PURPS_CD"/>
+		<result property="mainPurpsCdNm" column="MAIN_PURPS_CD_NM"/>
+		<result property="etcPurps" column="ETC_PURPS"/>
+		<result property="area" column="AREA"/>
+		<result property="mainAtchGbCd" column="MAIN_ATCH_GB_CD"/>
+		<result property="mainAtchGbCdNm" column="MAIN_ATCH_GB_CD_NM"/>
+		<result property="mainAtchSeqno" column="MAIN_ATCH_SEQNO"/>
+		<result property="mainBldrgstPk" column="MAIN_BLDRGST_PK"/>
+		<result property="areaExctYn" column="AREA_EXCT_YN"/>
+	</resultMap>
+	
+	
+	<select id="djrFlroulnList" parameterType="Integer" resultMap="djrFlroulnMap">
+		SELECT
+			FLR_OULN_PK,
+			BLDRGST_PK,
+			FLR_GB_CD,				--CM038
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM038' AND SGRP_CD = FLR_GB_CD) AS FLR_GB_CD_NM,
+			FLR_NO,
+			FLR_NO_NM,
+			STRCT_CD,				--CM004
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM004' AND SGRP_CD = STRCT_CD) AS STRCT_CD_NM,
+			ETC_STRCT,
+			MAIN_PURPS_CD,			--CM024
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM024' AND SGRP_CD = MAIN_PURPS_CD) AS MAIN_PURPS_CD_NM,
+			ETC_PURPS,
+			AREA,
+			MAIN_ATCH_GB_CD,		--CM031
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM031' AND SGRP_CD = MAIN_ATCH_GB_CD) AS MAIN_ATCH_GB_CD_NM,
+			MAIN_ATCH_SEQNO,
+			MAIN_BLDRGST_PK,
+			AREA_EXCT_YN
+		FROM
+			V_DJRFLROULN_GIS
+		WHERE
+			BLDRGST_PK = #{bldrgstPk}
+	</select>
+</mapper>

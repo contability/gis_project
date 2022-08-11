@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	<!-- 접속 로그 -->
+	<bean id="connectLogAdvice" class="kr.co.gitt.kworks.cmmn.aop.ConnectLogAdvice" />
+	<aop:config>
+		<aop:aspect id="connectLogAspect" ref="connectLogAdvice">
+			<aop:pointcut id="connectLogPointcut" expression=" execution(public String kr.co.gitt.kworks.web.portal.PortalController.portalPage(..)) " />
+			<aop:after pointcut-ref="connectLogPointcut" method="after" />
+		</aop:aspect>
+	</aop:config>
+
+	<!-- 시스템 접속 로그 -->
+	<bean id="systemConnectLogAdvice" class="kr.co.gitt.kworks.cmmn.aop.SystemConnectLogAdvice" />
+	<aop:config>
+		<aop:aspect id="systemConnectLogAspect" ref="systemConnectLogAdvice">
+			<aop:pointcut id="systemConnectLogPointcut" expression=" execution(public String kr.co.gitt.kworks.web.main.MainController.mainPage(..)) " />
+			<aop:after pointcut-ref="systemConnectLogPointcut" method="after" />
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- 메뉴 로그 -->
+	<bean id="menuConnectLogAdvice" class="kr.co.gitt.kworks.cmmn.aop.MenuConnectLogAdvice" />
+	<aop:config>
+		<aop:aspect id="menuConnectLogAspect" ref="menuConnectLogAdvice">
+			<aop:pointcut id="menuConnectLogPointcut" expression=" execution(public String kr.co.gitt.kworks.rest.spatial.SpatialSearchController.listAllDataSummary(..)) ||
+				execution(public String kr.co.gitt.kworks.rest.spatial.SpatialSearchController.listAllData(..)) || 
+				execution(public String kr.co.gitt.kworks.web.clipreport.ClipReportController.stats(..)) ||
+				execution(public String kr.co.gitt.kworks.rest.analysis.crossSection.CrossSectionalViewController.listAllCrossSectionalView(..)) ||
+				execution(public String kr.co.gitt.kworks.web.cmmn.AuthorConfirmController.confirmIndication(..)) ||  
+				execution(public String kr.co.gitt.kworks.web.cmmn.AuthorConfirmController.confirmEdit(..)) || 
+				execution(public String kr.co.gitt.kworks.projects.dh.web.cmmnProp.CmmnPropController.confirm(..)) "/>
+			<aop:after pointcut-ref="menuConnectLogPointcut" method="after" />
+		</aop:aspect>
+	</aop:config>
+
+</beans>

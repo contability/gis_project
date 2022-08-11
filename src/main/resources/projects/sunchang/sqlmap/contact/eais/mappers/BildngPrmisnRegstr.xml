@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.sunchang.contact.eais.mappers.BildngPrmisnRegstrMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="bildngPrmisnRegstrMap" type="bildngPrmisnRegstr">
+		<result property="pmsrgstPk" column="PMSRGST_PK"/>
+		<result property="pmsnoYear" column="PMSNO_YEAR"/>
+		<result property="pmsnoKikCd" column="PMSNO_KIK_CD"/>
+		<result property="pmsnoKikCdNm" column="PMSNO_KIK_CD_NM"/>
+		<result property="pmsnoGbCd" column="PMSNO_GB_CD"/>
+		<result property="pmsnoGbCdNm" column="PMSNO_GB_CD_NM"/>
+		<result property="pmsnoSeqno" column="PMSNO_SEQNO"/>
+		<result property="archGbCd" column="ARCH_GB_CD"/>
+		<result property="archGbCdNm" column="ARCH_GB_CD_NM"/>
+		<result property="pmsDeclGbCd" column="PMS_DECL_GB_CD"/>
+		<result property="pmsDeclGbCdNm" column="PMS_DECL_GB_CD_NM"/>
+		<result property="archPmsDay" column="ARCH_PMS_DAY"/>
+		<result property="platArea" column="PLAT_AREA"/>
+		<result property="exuseArea" column="EXUSE_AREA"/>
+		<result property="pmsCnclYn" column="PMS_CNCL_YN"/>
+		<result property="pmsCnclYnNm" column="PMS_CNCL_YN_NM"/>
+		<result property="pmsCnclDay" column="PMS_CNCL_DAY"/>
+		<result property="cnclCaus" column="CNCL_CAUS"/>
+		<result property="stcnsSchedDay" column="STCNS_SCHED_DAY"/>
+		<result property="stcnsGbCd" column="STCNS_GB_CD"/>
+		<result property="stcnsGbCdNm" column="STCNS_GB_CD_NM"/>
+		<result property="stcnsDelayCaus" column="STCNS_DELAY_CAUS"/>
+		<result property="stcnsDelayDay" column="STCNS_DELAY_DAY"/>
+		<result property="realStcnsDay" column="REAL_STCNS_DAY"/>
+		<result property="useaprGbCd" column="USEAPR_GB_CD"/>
+		<result property="entirUseaprYn" column="ENTIR_USEAPR_YN"/>
+		<result property="tmpUseOdr" column="TMP_USE_ODR"/>
+		<result property="tmpUseSeqno" column="TMP_USE_SEQNO"/>
+		<result property="tmpUseaprExpDay" column="TMP_USEAPR_EXP_DAY"/>
+		<result property="useaprDay" column="USEAPR_DAY"/>
+		<result property="tmpbldPrsvExpDay" column="TMPBLD_PRSV_EXP_DAY"/>
+		<result property="tmpbldExtndOdr" column="TMPBLD_EXTND_ODR"/>
+		<result property="tmpbldTrsctDay" column="TMPBLD_TRSCT_DAY"/>
+		<result property="archArea" column="ARCH_AREA"/>
+		<result property="totarea" column="TOTAREA"/>
+		<result property="mainBldCnt" column="MAIN_BLD_CNT"/>
+		<result property="atchBldDongCnt" column="ATCH_BLD_DONG_CNT"/>
+		<result property="atchBldArea" column="ATCH_BLD_AREA"/>
+		<result property="mainPurpsCd" column="MAIN_PURPS_CD"/>
+		<result property="mainPurpsCdNm" column="MAIN_PURPS_CD_NM"/>
+		<result property="etcPurps" column="ETC_PURPS"/>
+		<result property="etcPurpsNm" column="ETC_PURPS_NM"/>
+		<result property="hhldCnt" column="HHLD_CNT"/>
+		<result property="fmlyCnt" column="FMLY_CNT"/>
+		<result property="hoCnt" column="HO_CNT"/>
+		<result property="sigunguCd" column="SIGUNGU_CD"/>
+		<result property="bjdongCd" column="BJDONG_CD"/>
+		<result property="platGbCd" column="PLAT_GB_CD"/>
+		<result property="bun" column="BUN"/>
+		<result property="ji" column="JI"/>
+	</resultMap>
+
+	<!-- 목록 조회 -->
+	<select id="list" parameterType="String" resultType="bildngPrmisnRegstr">
+		SELECT
+			PLC.SIGUNGU_CD,
+			PLC.BJDONG_CD,
+			PLC.BUN,
+			PLC.JI,
+			PLC.PLAT_GB_CD,		      -- 0 : 대지 / 1 : 산 / 2 : 블록
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM008' AND SGRP_CD = PLC.PLAT_GB_CD) AS PLAT_GB_CD_NM,
+			GST.PMSRGST_PK,
+			GST.PMSNO_YEAR,
+			GST.PMSNO_KIK_CD,         -- CM040
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM040' AND SGRP_CD = GST.PMSNO_KIK_CD) AS PMSNO_KIK_CD_NM,
+			GST.PMSNO_GB_CD,          -- CM039
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM039' AND SGRP_CD = GST.PMSNO_GB_CD) AS PMSNO_GB_CD_NM,
+			GST.PMSNO_SEQNO,
+			GST.ARCH_GB_CD,           -- KC004
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'KC004' AND SGRP_CD = GST.ARCH_GB_CD) AS ARCH_GB_CD_NM,
+			GST.PMS_DECL_GB_CD,       -- KC024
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'KC024' AND SGRP_CD = GST.PMS_DECL_GB_CD) AS PMS_DECL_GB_CD_NM,
+			GST.ARCH_PMS_DAY,
+			GST.PLAT_AREA,
+			GST.EXUSE_AREA,
+			GST.PMS_CNCL_YN,          -- KC030
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'KC030' AND SGRP_CD = GST.PMS_CNCL_YN) AS PMS_CNCL_YN_NM,
+			GST.PMS_CNCL_DAY,
+			GST.CNCL_CAUS,
+			GST.STCNS_SCHED_DAY,
+			GST.STCNS_GB_CD,          -- CM047
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM047' AND SGRP_CD = GST.STCNS_GB_CD) AS STCNS_GB_CD_NM,
+			GST.REAL_STCNS_DAY,
+			GST.STCNS_DELAY_DAY,
+			GST.STCNS_DELAY_CAUS,
+			GST.USEAPR_GB_CD,         -- 1 : 사용승인 / 2 : 임시사용승인
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM015' AND SGRP_CD = GST.USEAPR_GB_CD) AS USEAPR_GB_CD_NM,
+			GST.ENTIR_USEAPR_YN,      -- 0 : 일부 1 : 전체
+			GST.USEAPR_DAY,
+			GST.TMP_USE_ODR,
+			GST.TMP_USE_SEQNO,
+			GST.TMP_USEAPR_EXP_DAY,
+			GST.TMPBLD_PRSV_EXP_DAY,
+			GST.TMPBLD_EXTND_ODR,
+			GST.TMPBLD_TRSCT_DAY,
+			GST.ARCH_AREA,
+			GST.TOTAREA,
+			GST.MAIN_BLD_CNT,
+			GST.ATCH_BLD_DONG_CNT,
+			GST.ATCH_BLD_AREA,
+			GST.MAIN_PURPS_CD,        -- CM024
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM024' AND SGRP_CD = GST.MAIN_PURPS_CD) AS MAIN_PURPS_CD_NM,
+			GST.ETC_PURPS,            -- CM087
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM087' AND SGRP_CD = GST.ETC_PURPS) AS ETC_PURPS_NM,
+			GST.HHLD_CNT,
+			GST.FMLY_CNT,
+			GST.HO_CNT
+		FROM V_KCRPMSRGST_GIS GST
+		LEFT OUTER JOIN V_KCRPLATPLC_GIS PLC ON GST.PMSRGST_PK = PLC.PMSRGST_PK
+		WHERE PLC.SIGUNGU_CD = #{sigunguCd}
+		AND PLC.BJDONG_CD = #{bjdongCd}
+		AND PLC.PLAT_GB_CD = #{platGbCd}
+		AND PLC.BUN = #{bun}
+		AND PLC.JI = #{ji}
+	</select>
+	
+	<!-- 단 건 조회 -->
+	<select id="selectOne" parameterType="bildngPrmisnRegstr" resultMap="bildngPrmisnRegstrMap">
+		SELECT
+			PLC.SIGUNGU_CD,
+			PLC.BJDONG_CD,
+			PLC.BUN,
+			PLC.JI,
+			PLC.PLAT_GB_CD,		      -- 0 : 대지 / 1 : 산 / 2 : 블록
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM008' AND SGRP_CD = PLC.PLAT_GB_CD) AS PLAT_GB_CD_NM,
+			GST.PMSRGST_PK,
+			GST.PMSNO_YEAR,
+			GST.PMSNO_KIK_CD,         -- CM040
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM040' AND SGRP_CD = GST.PMSNO_KIK_CD) AS PMSNO_KIK_CD_NM,
+			GST.PMSNO_GB_CD,          -- CM039
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM039' AND SGRP_CD = GST.PMSNO_GB_CD) AS PMSNO_GB_CD_NM,
+			GST.PMSNO_SEQNO,
+			GST.ARCH_GB_CD,           -- KC004
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'KC004' AND SGRP_CD = GST.ARCH_GB_CD) AS ARCH_GB_CD_NM,
+			GST.PMS_DECL_GB_CD,       -- KC024
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'KC024' AND SGRP_CD = GST.PMS_DECL_GB_CD) AS PMS_DECL_GB_CD_NM,
+			GST.ARCH_PMS_DAY,
+			GST.PLAT_AREA,
+			GST.EXUSE_AREA,
+			GST.PMS_CNCL_YN,          -- KC030
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'KC030' AND SGRP_CD = GST.PMS_CNCL_YN) AS PMS_CNCL_YN_NM,
+			GST.PMS_CNCL_DAY,
+			GST.CNCL_CAUS,
+			GST.STCNS_SCHED_DAY,
+			GST.STCNS_GB_CD,          -- CM047
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM047' AND SGRP_CD = GST.STCNS_GB_CD) AS STCNS_GB_CD_NM,
+			GST.REAL_STCNS_DAY,
+			GST.STCNS_DELAY_DAY,
+			GST.STCNS_DELAY_CAUS,
+			GST.USEAPR_GB_CD,         -- 1 : 사용승인 / 2 : 임시사용승인
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM015' AND SGRP_CD = GST.USEAPR_GB_CD) AS USEAPR_GB_CD_NM,
+			GST.ENTIR_USEAPR_YN,      -- 0 : 일부 1 : 전체
+			GST.USEAPR_DAY,
+			GST.TMP_USE_ODR,
+			GST.TMP_USE_SEQNO,
+			GST.TMP_USEAPR_EXP_DAY,
+			GST.TMPBLD_PRSV_EXP_DAY,
+			GST.TMPBLD_EXTND_ODR,
+			GST.TMPBLD_TRSCT_DAY,
+			GST.ARCH_AREA,
+			GST.TOTAREA,
+			GST.MAIN_BLD_CNT,
+			GST.ATCH_BLD_DONG_CNT,
+			GST.ATCH_BLD_AREA,
+			GST.MAIN_PURPS_CD,        -- CM024
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM024' AND SGRP_CD = GST.MAIN_PURPS_CD) AS MAIN_PURPS_CD_NM,
+			GST.ETC_PURPS,            -- CM087
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'CM087' AND SGRP_CD = GST.ETC_PURPS) AS ETC_PURPS_NM,
+			GST.HHLD_CNT,
+			GST.FMLY_CNT,
+			GST.HO_CNT
+		FROM V_KCRPMSRGST_GIS GST
+		LEFT OUTER JOIN V_KCRPLATPLC_GIS PLC ON GST.PMSRGST_PK = PLC.PMSRGST_PK
+		WHERE PLC.PMSRGST_PK = #{pmsrgstPk}
+		AND PLC.SIGUNGU_CD = #{sigunguCd}
+		AND PLC.BJDONG_CD = #{bjdongCd}
+		AND PLC.PLAT_GB_CD = #{platGbCd}
+		AND PLC.BUN = #{bun}
+		AND PLC.JI = #{ji}
+	</select>
+</mapper>

@@ -1,0 +1,38 @@
+.pledge_date{
+	width : 40px;
+}
+
+.off_green{
+	color : #E9E9E9;
+}
+
+.on_green{
+	color : #313131;
+	font-weight: bold;
+}
+
+.div_window_pledge p:not(.p_cnt){
+	padding: 10px 0px 10px 0px;
+	text-align: left;
+}
+
+.div_window_pledge dd{
+	padding: 10px 0px 10px 40px;
+	text-align: left;
+}
+
+#pledge_title{
+	text-align: center;
+	text-decoration: underline;
+	font-size: xx-large;
+}
+
+.p_cnt{
+	padding: 10px 0px 10px 0px;
+	text-align: right;
+}
+
+#pledge_tbl tbody tr td input{
+	border : 0px;
+	width : 430px;
+}

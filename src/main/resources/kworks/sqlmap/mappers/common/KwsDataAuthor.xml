@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsDataAuthorMapper">
+	
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="java.util.Map" resultType="kwsDataAuthor">
+		SELECT
+			DATA_ID,
+			AUTHOR_GROUP_NO,
+			INDICT_AT,
+			EDIT_AT,
+			EXPORT_AT,
+			PRNTNG_AT
+		FROM KWS_DATA_AUTHOR
+		WHERE
+			AUTHOR_GROUP_NO = #{authorGroupNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsDataAuthor">
+		INSERT INTO KWS_DATA_AUTHOR (
+			DATA_ID,
+			AUTHOR_GROUP_NO,
+			INDICT_AT,
+			EDIT_AT,
+			EXPORT_AT,
+			PRNTNG_AT
+		)
+		VALUES (
+			#{dataId, jdbcType=VARCHAR},
+			#{authorGroupNo, jdbcType=BIGINT},
+			#{indictAt, jdbcType=VARCHAR},
+			#{editAt, jdbcType=VARCHAR},
+			#{exportAt, jdbcType=VARCHAR},
+			#{prntngAt, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_DATA_AUTHOR
+		WHERE
+			AUTHOR_GROUP_NO = #{authorGroupNo}
+	</delete>
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gs.mappers.ReantAsMapper">
+
+	<!-- 단건조회/소수점/단위끊기/PNU->주소변환 2021.03.04 조원기 -->
+	<select id="selectOne" parameterType="Long" resultType="reantAs">
+		SELECT 
+			FTR_IDN,
+			FTR_CDE,
+			JOB_DATE,
+			JOB_TYPE,
+			JOB_PERS,
+			JOB_NOTE,
+			AREA_GS,
+			AREA_GJ,
+			AREA_HN,
+			AREA_JW,
+			AREA_TS,
+			ETC_NOTE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'BJD-000' AND CODE_ID =SUBSTRING(PNU, 0, 11)) || ' ' ||
+			CASE SUBSTRING(PNU, 11, 1) WHEN '1' THEN '' WHEN '2' THEN '산' END || LTRIM(SUBSTRING(PNU, 12, 4),'0') ||
+			CASE LTRIM(SUBSTRING(PNU, 16, 4),'0') WHEN '' THEN '' ELSE '-' END || LTRIM(SUBSTRING(PNU, 16, 4),'0') AS ADDRESS,
+			PNU,
+			EXP_IDN
+		FROM 
+			REANT_AS
+		WHERE 
+			FTR_IDN  = #{ftrIdn}
+	</select>
+	
+	<select id="getExpIdn" parameterType="Long" resultType="reantAs">
+	
+	SELECT EXP_IDN, JOB_DATE FROM REANT_AS WHERE FTR_IDN = #{ftrIdn}
+	
+	</select>
+	
+<!-- 	<select id=getDate parameterType="Long" resultType="reantAs">
+	
+	SELECT JOB_DATE FROM REANT_AS WHERE FTR_IDN = #{ftrIdn}
+	
+	</select> -->
+	
+	<select id="reantExpIdnSearch" parameterType="reantAs" resultType="reantAs">
+	
+		SELECT 
+			JOB_TYPE
+		FROM 
+			REANT_AS 
+		WHERE 
+			EXP_IDN = #{expIdn} 
+		AND 
+			JOB_TYPE = #{jobType}
+		ORDER BY JOB_TYPE
+		
+	</select>
+	
+	<select id="list" parameterType="Long" resultType="reantAs">
+		SELECT 
+			OBJECTID,
+			FTR_IDN,
+			FTR_CDE,
+			JOB_DATE,
+			JOB_TYPE,
+			JOB_PERS,
+			JOB_NOTE,
+			AREA_GS,
+			AREA_GJ,
+			AREA_HN,
+			AREA_JW,
+			AREA_TS,
+			ETC_NOTE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'BJD-000' AND CODE_ID =SUBSTRING(PNU, 0, 11)) || ' ' ||
+			CASE SUBSTRING(PNU, 11, 1) WHEN '1' THEN '' WHEN '2' THEN '산' END || LTRIM(SUBSTRING(PNU, 12, 4),'0') ||
+			CASE LTRIM(SUBSTRING(PNU, 16, 4),'0') WHEN '' THEN '' ELSE '-' END || LTRIM(SUBSTRING(PNU, 16, 4),'0') AS ADDRESS,
+			PNU,
+			EXP_IDN
+		FROM 
+			REANT_AS
+		WHERE 
+			EXP_IDN  = #{expIdn}
+	</select>
+	
+	<update id="update">
+		UPDATE 
+			REANT_AS
+		SET
+			JOB_DATE = #{data.jobDate, jdbcType=VARCHAR},
+			JOB_TYPE = #{data.jobType, jdbcType=VARCHAR},
+			JOB_PERS = #{data.jobPers, jdbcType=BIGINT},
+			JOB_NOTE = #{data.jobNote, jdbcType=VARCHAR},
+			AREA_GS = #{data.areaGs, jdbcType=DOUBLE},
+			AREA_GJ = #{data.areaGj, jdbcType=DOUBLE},
+			AREA_HN = #{data.areaHn, jdbcType=DOUBLE},
+			AREA_JW = #{data.areaJw, jdbcType=DOUBLE},
+			AREA_TS = #{data.areaTs, jdbcType=DOUBLE},
+			ETC_NOTE = #{data.etcNote, jdbcType=VARCHAR},
+			PNU = #{data.pnu, jdbcType=VARCHAR}
+			<!-- ,
+			EXP_IDN = #{data.expIdn, jdbcType=VARCHAR} -->
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<delete id="delete"  parameterType="Long">
+		DELETE FROM REANT_AS WHERE FTR_IDN = #{ftrIdn}
+	</delete>
+	
+	<select id="listFtrIdnGet" parameterType="Long" resultType="reantAs">
+		SELECT 
+			FTR_IDN, FTR_CDE, JOB_TYPE
+		FROM 
+			REANT_AS
+		WHERE 
+			EXP_IDN  = #{expIdn}
+	</select>
+	
+</mapper>

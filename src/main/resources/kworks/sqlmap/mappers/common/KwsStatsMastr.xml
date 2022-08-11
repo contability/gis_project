@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsStatsMastrMapper">
+
+	<sql id="where">
+		<where>
+			<if test="clNo != null and clNo != ''">
+				AND CL_NO = #{clNo}
+			</if>		
+			<if test="iemYear != null and iemYear != ''">
+				AND IEM_YEAR = #{iemYear}
+			</if>		
+		</where>
+	</sql>
+	
+	<select id="list" parameterType="kwsStatsMastr" resultType="kwsStatsMastr">
+		SELECT
+			*
+		FROM KWS_STATS_MASTR
+		<include refid="where" />
+		ORDER BY CL_NO, IEM_NO
+	</select>
+	<select id="groupByIemYear" parameterType="kwsStatsMastr" resultType="kwsStatsMastr">
+		SELECT
+			IEM_YEAR
+		FROM KWS_STATS_MASTR
+		GROUP BY IEM_YEAR
+		ORDER BY IEM_YEAR
+	</select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.OcpatEditHiMapper">
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="ocpatEditHi">
+		INSERT INTO OCPAT_EDIT_HI (
+			HIST_NO,
+			USER_ID,
+			EDIT_DT,
+			FTR_CDE,
+			FTR_IDN,
+			PMT_NUM,
+			EDIT_TYPE
+		) VALUES (
+			#{histNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{editDt, jdbcType=TIMESTAMP},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{pmtNum, jdbcType=VARCHAR},
+			#{editType, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="listCount" resultType="Integer">
+		SELECT
+			COUNT(*) AS HIST_COUNT
+		FROM OCPAT_EDIT_HI
+	</select>
+	
+	<select id="list" resultType="OcpatEditHi" parameterType="searchDTO">
+		SELECT T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+				SELECT
+					HIST_NO,
+					USER_ID,
+					(SELECT USER_NM FROM KWS_USER WHERE USER_ID = HI.USER_ID) AS USER_NM,
+					EDIT_DT,
+					FTR_CDE,
+					(SELECT OCPAT_ALIAS FROM KWS_OCPAT_REG WHERE OCPAT_PROP_VALUE = HI.FTR_CDE) AS CDE_NAM,
+					FTR_IDN,
+					PMT_NUM,
+					EDIT_TYPE
+				FROM OCPAT_EDIT_HI HI
+				ORDER BY HIST_NO DESC
+			) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+	</select>
+
+</mapper>

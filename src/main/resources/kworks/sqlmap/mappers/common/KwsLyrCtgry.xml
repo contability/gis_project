@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsLyrCtgryMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsLyrCtgryMap" type="kwsLyrCtgry">
+		<id property="lyrCtgryId" column="LYR_CTGRY_ID" />
+		<result property="lyrCtgryNm" column="LYR_CTGRY_NM"/>
+		<result property="sortOrdr" column="SORT_ORDR"/>
+		<result property="useAt" column="USE_AT"/>
+		<collection property="kwsLyrs" ofType="kwsLyr">
+			<id property="lyrId" column="LYR_ID" />
+			<result property="dataId" column="DATA_ID" />
+			<result property="lyrCtgryId" column="LYR_CTGRY_ID"/>
+			<result property="lyrTy" column="LYR_TY"/>
+			<result property="lyrBassStyle" column="LYR_BASS_STYLE"/>
+		</collection>
+	</resultMap>
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="layerSearchDTO" resultMap="kwsLyrCtgryMap">
+		SELECT 
+			CTGRY.LYR_CTGRY_ID,
+			CTGRY.LYR_CTGRY_NM,
+			CTGRY.SORT_ORDR,
+			CTGRY.USE_AT,
+			LYR.LYR_ID,
+			LYR.DATA_ID,
+			LYR.LYR_CTGRY_ID,
+			LYR.LYR_TY,
+			LYR.LYR_BASS_STYLE
+		FROM
+			KWS_LYR_CTGRY CTGRY
+			INNER JOIN KWS_LYR LYR ON CTGRY.LYR_CTGRY_ID = LYR.LYR_CTGRY_ID
+			INNER JOIN KWS_DATA DTA ON LYR.DATA_ID = DTA.DATA_ID 
+		WHERE
+			DTA.USE_AT = 'Y'
+			<if test="authorGroupNos != null and authorGroupNos.size > 0">
+				AND LYR.DATA_ID IN (SELECT DATA_ID FROM KWS_DATA_AUTHOR DTA WHERE AUTHOR_GROUP_NO IN 
+				<foreach collection="authorGroupNos" item="authorGroupNo" open="(" close=")" separator=",">
+					#{authorGroupNo}
+				</foreach>
+				AND INDICT_AT = 'Y')
+			</if>
+		ORDER BY CTGRY.SORT_ORDR
+	</select>
+</mapper>

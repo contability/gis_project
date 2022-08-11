@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.MngUserAuthorHistMapper">
+	<!-- 검색조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND USER_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND GRAD_USER_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+			<if test="searchStartDt != null and searchStartDt != '' and searchEndDt != null and searchEndDt != ''">
+				AND GRAD_ALWNC_DT <![CDATA[>=]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') 
+				AND GRAD_ALWNC_DT <![CDATA[<=]]> TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 목록조회수 -->
+	<select id="listCount" parameterType="SearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM MNG_USER_AUTHOR_HIST
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록조회 -->
+	<select id="list" parameterType="SearchDTO" resultType="MngUserAuthorHist">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				*
+			FROM MNG_USER_AUTHOR_HIST
+			<include refid="where" />
+			ORDER BY GRAD_ALWNC_DT DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<select id="selectOne" parameterType="Long" resultType="MngUserAuthorHist">
+		SELECT
+			*
+		FROM
+			MNG_USER_AUTHOR_HIST
+		WHERE
+			SN = #{sn}
+	</select>
+	
+	<update id="update" parameterType="MngUserAuthorHist">
+		UPDATE
+			MNG_USER_AUTHOR_HIST
+		SET
+			AUTHOR_GROUP_NM = #{authorGroupNm, jdbcType=VARCHAR},
+			PRCR_CN = #{prcrCn, jdbcType=VARCHAR},
+			JOB_NM = #{jobNm, jdbcType=VARCHAR}
+		WHERE
+			SN = #{sn}
+	</update>
+	
+	<delete id="delete" parameterType="Long">
+		DELETE FROM
+			MNG_USER_AUTHOR_HIST
+		WHERE
+			SN = #{sn}
+	</delete>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsNoticeFileMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsNoticeFileMap" type="kwsNoticeFile">
+		<id property="noticeNo" column="NOTICE_NO" />
+		<id property="fileNo" column="FILE_NO" />
+		<result property="fileOrdr" column="FILE_ORDR"/>
+		<association property="kwsFile" column="FILE_NO" javaType="kwsFile" select="kr.co.gitt.kworks.mappers.KwsFileMapper.selectOne"/>
+	</resultMap>
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="java.util.Map" resultMap="kwsNoticeFileMap">
+		SELECT
+			NOTICE_NO,
+			FILE_NO,
+			FILE_ORDR
+		FROM KWS_NOTICE_FILE
+		WHERE
+			NOTICE_NO = #{noticeNo}
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsNoticeFile">
+		INSERT INTO KWS_NOTICE_FILE (
+			NOTICE_NO,
+			FILE_NO,
+			FILE_ORDR
+		) 
+		VALUES (
+			#{noticeNo, jdbcType=BIGINT},
+			#{fileNo, jdbcType=BIGINT},
+			#{fileOrdr, jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="kwsNoticeFile">
+		DELETE FROM KWS_NOTICE_FILE
+		WHERE
+			NOTICE_NO = #{noticeNo} AND FILE_NO = #{fileNo}
+	</delete>
+
+</mapper>

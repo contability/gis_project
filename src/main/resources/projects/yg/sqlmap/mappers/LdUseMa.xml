@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yg.mappers.LdUseMaMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 공사명 -->
+			<if test="cntNam != null and cntNam != ''">
+				AND CONS.CNT_NAM LIKE '%' || #{cntNam} || '%'
+			</if>
+			
+			<!-- 토지사용정보번호 -->
+			<if test="luiIdn != null and luiIdn != ''">
+				AND USE.LUI_IDN = #{luiIdn}
+			</if>
+			
+			<!-- 소유자명 -->
+			<if test="ownNam != null and ownNam != ''">
+				AND USE.OWN_NAM LIKE '%' || #{ownNam} || '%'
+			</if>
+			
+			<!-- pnu -->
+			<if test="pnu != null and pnu != ''">
+				AND USE.PNU LIKE #{pnu} || '%'
+			</if>
+			
+		</where>
+	</sql>
+	
+	<!-- 토지사용정보대장 조회 -->
+	<select id="list" parameterType="Long" resultType="ldUseMa">
+		SELECT
+			LUI_IDN,
+			CNT_IDN,
+			PNU,
+			OWN_NAM,
+			OWN_YMD,
+			TOT_AREA,
+			INC_AREA
+		FROM LD_USE_MA
+		WHERE CNT_IDN = #{cntIdn}
+		ORDER BY CNT_IDN DESC
+	</select>
+	
+	<!-- 토지사용정보대장 조회 + PNU위치 -->
+	<select id="pnuList" parameterType="Long" resultType="ldUseMa">
+		SELECT
+			LUI_IDN,
+			CNT_IDN,
+			(SELECT CODE_ID FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0004' AND CODE_ID = SUBSTR(T.PNU, 1, 10)) || ' ' || (SELECT JIBUN FROM LP_PA_CBND WHERE PNU = T.PNU) AS PNU,
+			OWN_NAM,
+			OWN_YMD,
+			TOT_AREA,
+			INC_AREA
+		FROM LD_USE_MA T
+		WHERE CNT_IDN = #{cntIdn}
+		ORDER BY CNT_IDN DESC
+	</select>
+
+	<!-- 토지사용정보대장 + 토지중심공사대장 검색결과 -->
+	<select id="listAll" parameterType="ldUseMa" resultType="ldUseMa">
+		SELECT 
+			CONS.CNT_NAM,
+			USE.LUI_IDN,
+			CONS.CTT_YMD,
+			USE.PNU,
+			USE.OWN_NAM,
+			USE.OWN_YMD,
+			USE.TOT_AREA,
+			USE.INC_AREA
+		FROM LD_CONS_MA CONS
+		INNER JOIN LD_USE_MA USE ON CONS.CNT_IDN = USE.CNT_IDN
+		<include refid="where" />
+		ORDER BY USE.CNT_IDN DESC
+	</select>
+	
+	<!-- 토지사용정보대장 단 건 검색 -->
+	<select id="selectOne" parameterType="cntrwkRegstrDTO" resultType="ldUseMa">
+		SELECT
+			LUI_IDN,
+			CNT_IDN,
+			PNU,
+			OWN_NAM,
+			OWN_YMD,
+			TOT_AREA,
+			INC_AREA
+		FROM LD_USE_MA
+		WHERE LUI_IDN = #{luiIdn}
+	</select>
+	
+	<!-- 토지사용정보대장 수정 -->
+	<update id="update" parameterType="ldUseMa">
+		UPDATE LD_USE_MA SET	
+			PNU = #{pnu, jdbcType=VARCHAR},
+			OWN_NAM = #{ownNam, jdbcType=VARCHAR},
+			OWN_YMD = #{ownYmd, jdbcType=VARCHAR},
+			TOT_AREA = #{totArea, jdbcType=BIGINT},
+			INC_AREA = #{incArea, jdbcType=BIGINT}
+		WHERE LUI_IDN = #{luiIdn}
+	</update>
+	
+	<!-- 토지사용정보대장 등록 -->
+	<insert id="insert" parameterType="ldUseMa">
+		INSERT INTO LD_USE_MA (
+			LUI_IDN,
+			CNT_IDN,
+			PNU,
+			OWN_NAM,
+			OWN_YMD,
+			TOT_AREA,
+			INC_AREA
+		) VALUES (
+			#{luiIdn, jdbcType=BIGINT},
+			#{cntIdn, jdbcType=BIGINT},
+			#{pnu, jdbcType=VARCHAR},
+			#{ownNam, jdbcType=VARCHAR},
+			#{ownYmd, jdbcType=VARCHAR},
+			#{totArea, jdbcType=BIGINT},
+			#{incArea, jdbcType=BIGINT}
+		)
+	</insert>
+	
+	<!-- 토지사용정보대장 삭제 -->
+	<delete id="delete" parameterType="ldUseMa">
+		DELETE FROM LD_USE_MA
+		WHERE
+			LUI_IDN = #{luiIdn}
+	</delete>
+	
+	<!-- 토지사용정보대장 공사위치 -->
+	<select id="searchWKT" parameterType="ldUseMa" resultType="ldUseMa">
+		SELECT 
+			ST_ASTEXT(CBND.GEOM) AS GEOM
+		FROM LD_USE_MA USE
+		INNER JOIN LP_PA_CBND CBND ON USE.PNU = CBND.PNU
+		WHERE USE.LUI_IDN = #{luiIdn}
+	</select>
+
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdtPcbsDtMapper">
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="serIdn != null and serIdn != ''">
+				AND SER_IDN = #{serIdn}
+			</if>
+			<if test="ftrCde != null and ftrCde != ''">
+				AND FTR_CDE = #{ftrCde}
+			</if>
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 조건 검색 -->
+	<select id="list" parameterType="rdtPcbsDt" resultType="rdtPcbsDt">
+		SELECT
+			PCBS.SER_IDN,
+			PCBS.FTR_CDE,
+			PCBS.FTR_IDN,
+			PCBS.EXAMIN_DE,
+			PCBS.EXAMIN_RESN,
+			PCBS.EXAMIN_CN,
+			PCBS.PROCESS_OPINION,
+			PCBS.REPORT_TRGET_YEAR,
+			PCBS.EXAMIN_RESULT,
+			PCBS.CLS_RNG_VIEW_IMG_ID,
+			PCBS.DSTNT_VIEW_IMG_ID,
+			PCBS.ETC_IMG_ID,
+			PCBS.EXMNR_INFO,
+			PCBS.REMARK,
+	      	T1.EXAMIN_RESULT_NM
+		FROM RDT_PCBS_DT PCBS
+		LEFT OUTER JOIN
+		(SELECT CODE_ID, CODE_NM AS EXAMIN_RESULT_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-207')T1 ON PCBS.EXAMIN_RESULT = T1.CODE_ID
+		WHERE PCBS.SER_IDN = #{serIdn}
+	</select>
+	
+	<select id="selectOne" parameterType="rdtPcbsDt" resultType="rdtPcbsDt">
+		SELECT
+			PCBS.SER_IDN,
+			PCBS.FTR_CDE,
+			PCBS.FTR_IDN,
+			PCBS.EXAMIN_DE,
+			PCBS.EXAMIN_RESN,
+			PCBS.EXAMIN_CN,
+			PCBS.PROCESS_OPINION,
+			PCBS.REPORT_TRGET_YEAR,
+			PCBS.EXAMIN_RESULT,
+			PCBS.CLS_RNG_VIEW_IMG_ID,
+			PCBS.DSTNT_VIEW_IMG_ID,
+			PCBS.ETC_IMG_ID,
+			PCBS.EXMNR_INFO,
+			PCBS.REMARK,
+	      	T1.EXAMIN_RESULT_NM
+		FROM RDT_PCBS_DT PCBS
+		LEFT OUTER JOIN
+		(SELECT CODE_ID, CODE_NM AS EXAMIN_RESULT_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-207')T1 ON PCBS.EXAMIN_RESULT = T1.CODE_ID
+		WHERE PCBS.FTR_IDN = #{ftrIdn}
+	</select>
+
+	<insert id="add" parameterType="rdtPcbsDt">
+		INSERT INTO RDT_PCBS_DT
+		(
+			SER_IDN,
+			FTR_CDE,
+			FTR_IDN,
+			EXAMIN_DE,
+			EXAMIN_RESN,
+			EXAMIN_CN,
+			PROCESS_OPINION,
+			REPORT_TRGET_YEAR,
+			EXAMIN_RESULT,
+			CLS_RNG_VIEW_IMG_ID,
+			DSTNT_VIEW_IMG_ID,
+			ETC_IMG_ID,
+			EXMNR_INFO,
+			REMARK
+		)	
+		VALUES
+		(
+			#{serIdn, jdbcType=VARCHAR},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{examinDe, jdbcType=VARCHAR},
+			#{examinResn, jdbcType=VARCHAR},
+			#{examinCn, jdbcType=VARCHAR},
+			#{processOpinion, jdbcType=VARCHAR},
+			#{reportTrgetYear, jdbcType=VARCHAR},
+			#{examinResult, jdbcType=VARCHAR},
+			#{clsRngViewImgId, jdbcType=VARCHAR},
+			#{dstntViewImgId, jdbcType=VARCHAR},
+			#{etcImgId, jdbcType=VARCHAR},
+			#{exmnrInfo, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR}
+		)	
+	</insert>
+	
+	<update id="modify" parameterType="rdtPcbsDt">
+		UPDATE RDT_PCBS_DT SET
+			EXAMIN_DE = #{examinDe, jdbcType=VARCHAR},
+			EXAMIN_RESN = #{examinResn, jdbcType=VARCHAR},
+			EXAMIN_CN = #{examinCn, jdbcType=VARCHAR},
+			PROCESS_OPINION = #{processOpinion, jdbcType=VARCHAR},
+			REPORT_TRGET_YEAR = #{reportTrgetYear, jdbcType=VARCHAR},
+			EXAMIN_RESULT = #{examinResult, jdbcType=VARCHAR},
+			CLS_RNG_VIEW_IMG_ID = #{clsRngViewImgId, jdbcType=VARCHAR},
+			DSTNT_VIEW_IMG_ID = #{dstntViewImgId, jdbcType=VARCHAR},
+			ETC_IMG_ID = #{etcImgId, jdbcType=VARCHAR},
+			EXMNR_INFO = #{exmnrInfo, jdbcType=VARCHAR},
+			REMARK = #{remark, jdbcType=VARCHAR}
+		WHERE FTR_CDE = #{ftrCde}
+			AND FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<delete id="remove" parameterType="rdtPcbsDt">
+		DELETE RDT_PCBS_DT
+		WHERE SER_IDN = #{serIdn}
+	</delete>
+</mapper>

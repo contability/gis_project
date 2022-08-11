@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsSurveyMapper">
+
+	<resultMap type="kwsSurvey" id="kwsSurveyMap">
+		<result property="userId" column="USER_ID"/>
+		<result property="month" column="MONTH"/>
+		<result property="qst1" column="QST1"/>
+		<result property="qst2" column="QST2"/>
+		<result property="qst3" column="QST3"/>
+		<result property="qst4" column="QST4"/>
+		<result property="etc" column="ETC"/>
+	</resultMap>
+
+	<select id="selectByUserId" resultMap="kwsSurveyMap">
+		SELECT
+			USER_ID,
+			MONTH,
+			QST1,
+			QST2,
+			QST3,
+			QST4,
+			QST5,
+			QST6,
+			QST7,
+			QST8,
+			QST9,
+			QST10,
+			QST11
+		FROM
+			KWS_SURVEY
+		WHERE
+			USER_ID = #{userId}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO 
+			KWS_SURVEY(USER_ID, MONTH, QST1, QST2, QST3, QST4, QST5, QST6, QST7, QST8, QST9, QST10, QST11)
+		VALUES
+			(#{userId, jdbcType=VARCHAR}, 
+			#{month, jdbcType=BIGINT},
+			#{qst1, jdbcType=VARCHAR},
+			#{qst2, jdbcType=VARCHAR},
+			#{qst3, jdbcType=VARCHAR},
+			#{qst4, jdbcType=VARCHAR},
+			#{qst5, jdbcType=VARCHAR},
+			#{qst6, jdbcType=VARCHAR},
+			#{qst7, jdbcType=VARCHAR},
+			#{qst8, jdbcType=VARCHAR},
+			#{qst9, jdbcType=VARCHAR},
+			#{qst10, jdbcType=VARCHAR},
+			#{qst11, jdbcType=VARCHAR})
+	</insert>
+
+</mapper>

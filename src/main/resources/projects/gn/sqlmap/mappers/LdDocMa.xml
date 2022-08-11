@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.LdDocMaMapper">
+	
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="cntIdn != null and cntIdn != ''">
+				AND CNT_IDN = #{cntIdn}
+			</if>
+			<if test="luiIdn != null and luiIdn != ''">
+				AND LUI_IDN = #{luiIdn}
+			</if>
+			<if test="docCde != null and docCde != ''">
+				AND DOC_CDE = #{docCde}
+			</if>
+			<if test="docFile != null and docFile != ''">
+				AND DOC_FILE = #{docFile}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="list" parameterType="ldDocMa" resultType="ldDocMa">
+		SELECT 
+			CNT_IDN,
+			LUI_IDN,
+			DOC_CDE,
+			DOC_FILE
+		FROM LD_DOC_MA
+		<include refid="where" />
+	</select>
+	
+	<!-- 토지사용증명서파일 조회 -->
+	<select id="fileList" parameterType="ldDocMa" resultType="ldDocMa">
+		SELECT 
+			CNT_IDN,
+			LUI_IDN,
+			DOC_CDE,
+			DOC_FILE
+		FROM LD_DOC_MA
+		<include refid="where" />
+	</select>	
+	
+	<!-- 토지사용증명서 등록 -->
+	<insert id="insert" parameterType="ldDocMa">
+		INSERT INTO LD_DOC_MA (
+			CNT_IDN,
+			LUI_IDN,
+			DOC_CDE,
+			DOC_FILE
+		) VALUES (
+			#{cntIdn, jdbcType=BIGINT},
+			#{luiIdn, jdbcType=BIGINT},
+			#{docCde, jdbcType=VARCHAR},
+			#{docFile, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 토지사용증명서 삭제 -->
+	<delete id="delete" parameterType="ldDocMA">
+		DELETE FROM LD_DOC_MA
+		<include refid="where" />
+	</delete>
+	
+</mapper>

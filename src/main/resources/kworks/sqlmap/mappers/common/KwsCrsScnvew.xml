@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsCrsScnvewMapper">
+
+	<!-- 목록 검색 -->
+	<select id="listAll" resultType="kwsCrsScnvew">
+		SELECT
+			DATA_TY,
+			DATA_ID,
+			COLOR,
+			FIELD_LOW_DEP,
+			FIELD_HIG_DEP,
+			FIELD_AVG_DEP,
+			FIELD_DIP,
+			FIELD_DIP_TYPE,
+			FIELD_DIP_HOL,
+			FIELD_DIP_VEL
+		FROM
+			KWS_CRS_SCNVEW
+		ORDER BY DATA_ID
+	</select>
+
+</mapper>

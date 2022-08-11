@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.sc.mappers.EttCpsvDtMapper">
+	
+	<!-- 측량표지현황조사목록 조회 -->
+	<select id="list" parameterType="ettCpsvDt" resultType="ettCpsvDt">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			FTF_CDE,
+			FTF_IDN,
+			RPT_YMY,
+			CPS_CDE,
+			SPS_CDE,
+			SBS_CDE,
+			DCS_CDE,
+			LND_NAM,
+			LND_PAD,
+			LND_RAD,
+			SVR_YMD,
+			SVG_NAM,
+			SVP_PST,
+			SVP_NAM,
+			RMK_DES
+		FROM ETT_CPSV_DT
+		WHERE
+			FTF_CDE = #{ftfCde}
+		AND FTF_IDN = #{ftfIdn}
+		ORDER BY FTR_IDN DESC
+	</select>
+	
+	<!-- 측량표지현황조사 단 건 조회 -->
+	<select id="selectOne" parameterType="ettCpsvDt" resultType="ettCpsvDt">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			FTF_CDE,
+			FTF_IDN,
+			RPT_YMY,
+			CPS_CDE,
+			SPS_CDE,
+			SBS_CDE,
+			DCS_CDE,
+			LND_NAM,
+			LND_PAD,
+			LND_RAD,
+			SVR_YMD,
+			SVG_NAM,
+			SVP_PST,
+			SVP_NAM,
+			RMK_DES
+		FROM ETT_CPSV_DT
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 측량표지현황조사 등록 -->
+	<insert id="insert" parameterType="ettCpsvDt">
+		INSERT INTO ETT_CPSV_DT
+		(
+			FTR_IDN,
+			FTR_CDE,
+			FTF_IDN,
+			FTF_CDE,
+			RPT_YMY,
+			SVR_YMD,
+			CPS_CDE,
+			SVG_NAM,
+			SPS_CDE,
+			SVP_PST,
+			SBS_CDE,
+			SVP_NAM,
+			DCS_CDE,
+			LND_NAM,
+			LND_PAD,
+			LND_RAD,
+			RMK_DES
+		) VALUES (
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftfIdn, jdbcType=BIGINT},
+			#{ftfCde, jdbcType=VARCHAR},
+			#{rptYmy, jdbcType=VARCHAR},
+			#{svrYmd, jdbcType=VARCHAR},
+			#{cpsCde, jdbcType=VARCHAR},
+			#{svgNam, jdbcType=VARCHAR},
+			#{spsCde, jdbcType=VARCHAR},
+			#{svpPst, jdbcType=VARCHAR},
+			#{sbsCde, jdbcType=VARCHAR},
+			#{svpNam, jdbcType=VARCHAR},
+			#{dcsCde, jdbcType=VARCHAR},
+			#{lndNam, jdbcType=VARCHAR},
+			#{lndPad, jdbcType=VARCHAR},
+			#{lndRad, jdbcType=VARCHAR},
+			#{rmkDes, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 측량표지현황조사 수정 -->
+	<update id="update" parameterType="ettCpsvDt">
+		UPDATE ETT_CPSV_DT SET
+			RPT_YMY = #{rptYmy, jdbcType=VARCHAR},
+			SVR_YMD = #{svrYmd, jdbcType=VARCHAR},
+			CPS_CDE = #{cpsCde, jdbcType=VARCHAR},
+			SVG_NAM = #{svgNam, jdbcType=VARCHAR},
+			SPS_CDE = #{spsCde, jdbcType=VARCHAR},
+			SVP_PST = #{svpPst, jdbcType=VARCHAR},
+			SBS_CDE = #{sbsCde, jdbcType=VARCHAR},
+			SVP_NAM = #{svpNam, jdbcType=VARCHAR},
+			DCS_CDE = #{dcsCde, jdbcType=VARCHAR},
+			LND_NAM = #{lndNam, jdbcType=VARCHAR},
+			LND_PAD = #{lndPad, jdbcType=VARCHAR},
+			LND_RAD = #{lndRad, jdbcType=VARCHAR},
+			RMK_DES = #{rmkDes, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+</mapper>

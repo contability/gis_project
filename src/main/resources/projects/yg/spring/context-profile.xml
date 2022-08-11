@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <!-- 양구_개발 -->
+    <beans profile="yg_dev">
+    
+    	<!-- Property -->
+	    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	        <property name="locations">
+	            <list>
+	                <value>classpath:/projects/yg/props/globals-dev.properties</value>
+	                <value>classpath:/projects/yg/props/contact-dev.properties</value>
+	            </list>
+	        </property>
+	    </bean>
+	    
+    </beans>
+    
+    
+    <!-- 양구_운영 -->
+    <beans profile="yg_oper">
+	    
+	    <!-- Property -->
+	    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	        <property name="locations">
+	            <list>
+	                <value>classpath:/projects/yg/props/globals-oper.properties</value>
+	                <value>classpath:/projects/yg/props/contact-oper.properties</value>
+	            </list>
+	        </property>
+	    </bean>
+	    
+    </beans>
+    
+</beans>

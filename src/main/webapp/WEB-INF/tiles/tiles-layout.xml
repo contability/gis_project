@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	
+	<!-- 공통 템플릿 -->
+	<definition name="template_portal" template="/WEB-INF/tiles/common/layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/tiles/common/header.jsp" />
+		<put-attribute name="menu" value="" />
+		<put-attribute name="content" value="" />
+	</definition>
+	
+	<!-- 나의시스템 -->
+	<definition name="/self/*/*" extends="template_portal">
+		<put-attribute name="menu" value="/WEB-INF/tiles/self/menu.jsp" />
+		<put-attribute name="content" value="/WEB-INF/jsp/kworks/{0}.jsp" />
+	</definition>
+	
+	<!-- 관리자시스템 -->
+	<definition name="/manage/*/*" extends="template_portal">
+		<put-attribute name="menu" value="/WEB-INF/tiles/manage/menu.jsp" />
+		<put-attribute name="content" value="/WEB-INF/jsp/kworks/{0}.jsp" />
+	</definition>
+	<definition name="/projects/*/manage/*/*" extends="template_portal">
+		<put-attribute name="menu" value="/WEB-INF/tiles/manage/menu.jsp" />
+		<put-attribute name="content" value="/WEB-INF/jsp/kworks/{0}.jsp" />
+	</definition>
+	
+	<!-- 사용자 게시판 -->
+	<definition name="/bbs/*/*" extends="template_portal">
+		<put-attribute name="menu" value="/WEB-INF/tiles/bbs/menu.jsp" />
+		<put-attribute name="content" value="/WEB-INF/jsp/kworks/{0}.jsp" />
+	</definition>
+	
+	<!--부서 관리자 시스템 -->
+	<definition name="/deptManage/*/*" extends="template_portal">
+		<put-attribute name="menu" value="/WEB-INF/tiles/deptManage/menu.jsp" />
+		<put-attribute name="content" value="/WEB-INF/jsp/kworks/{0}.jsp" />
+	</definition>
+	
+</tiles-definitions>

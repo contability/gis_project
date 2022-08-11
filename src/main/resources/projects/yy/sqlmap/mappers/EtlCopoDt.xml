@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.EtlCopoDtMapper">
+
+	<!-- 목록 검색 -->
+	<select id="selectById" parameterType="java.util.Map" resultType="EtlCopoDt">
+		SELECT
+			ECP_NO,
+			FTR_CDE,
+			FTR_IDN,
+			ECP_NAM,
+			ECP_DEG,
+			ECP_LEN,
+			RMK_DES
+		FROM
+			ETL_COPO_DT
+		WHERE
+			FTR_CDE = #{ftrCde}
+		AND
+			FTR_IDN = #{ftrIdn}
+		ORDER BY 
+			ECP_NO ASC		
+	</select>
+
+	<!-- 목록 검색 -->
+	<select id="selectByIdn" resultType="EtlCopoDt">
+		SELECT
+			ECP_NO,
+			FTR_CDE,
+			FTR_IDN,
+			ECP_NAM,
+			ECP_DEG,
+			ECP_LEN,
+			RMK_DES
+		FROM
+			ETL_COPO_DT
+		WHERE
+			FTR_CDE = #{ftrCde}
+		AND
+			FTR_IDN = #{ftrIdn}
+		ORDER BY 
+			ECP_NO ASC		
+	</select>
+
+	<!-- 단건 조회 -->
+	<select id="selectOneByNo" parameterType="Long" resultType="EtlCopoDt">
+		SELECT 
+			ECP_NO,
+			FTR_CDE,
+			FTR_IDN,
+			ECP_NAM,
+			ECP_DEG,
+			ECP_LEN,
+			RMK_DES
+		FROM
+			ETL_COPO_DT
+		WHERE
+			ECP_NO = #{ecpNo}
+		ORDER BY 
+			FTR_IDN ASC		
+	</select>	
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="etlCopoDt">
+		INSERT INTO ETL_COPO_DT (
+			ECP_NO,
+			FTR_CDE,
+			FTR_IDN,
+			ECP_NAM,
+			ECP_DEG,
+			ECP_LEN,
+			RMK_DES
+		) VALUES (
+			#{ecpNo, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ecpNam, jdbcType=VARCHAR},
+			#{ecpDeg, jdbcType=VARCHAR},
+			#{ecpLen, jdbcType=DOUBLE},
+			#{rmkDes, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 변경 -->
+	<update id="update" parameterType="etlCopoDt">
+		UPDATE ETL_COPO_DT SET
+			FTR_IDN = #{ftrIdn, jdbcType=BIGINT},
+			FTR_CDE = #{ftrCde, jdbcType=VARCHAR},
+			ECP_NAM = #{ecpNam, jdbcType=VARCHAR},
+			ECP_DEG = #{ecpDeg, jdbcType=VARCHAR},
+			ECP_LEN = #{ecpLen, jdbcType=DOUBLE},
+			RMK_DES = #{rmkDes, jdbcType=VARCHAR}
+		WHERE
+			ECP_NO = #{ecpNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM 
+			ETL_COPO_DT
+		WHERE 
+			ECP_NO = #{ecpNo}
+	</delete>
+
+	<!-- 삭제 -->
+	<delete id="deleteById" >
+		DELETE FROM 
+			ETL_COPO_DT
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+		AND
+			FTR_CDE = #{ftrCde}
+	</delete>
+
+</mapper>

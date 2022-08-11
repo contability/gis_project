@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.WttConsMaMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 공사번호 -->
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+			<!-- 공사명 -->
+			<if test="cntNam != null and cntNam != ''">
+				AND CNT_NAM LIKE '%' || #{cntNam} || '%'
+			</if>
+			<!-- 공사구분 -->
+			<if test="wrkCde != null and wrkCde != ''">
+				AND WRK_CDE = #{wrkCde}
+			</if>
+			<!-- 공사구분 -->
+			<if test="wrkCde != null and wrkCde != ''">
+				AND WRK_CDE = #{wrkCde}
+			</if>
+			<!-- 계약일 -->
+			<if test="cttYmdMin != null and cttYmdMin != '' and cttYmdMax != null and cttYmdMax != ''">
+				AND CTT_YMD <![CDATA[>=]]> TO_DATE(#{cttYmdMin}, 'YYYY-MM-DD')
+				AND CTT_YMD <![CDATA[<=]]> TO_DATE(#{cttYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 착공일 -->
+			<if test="begYmdMin != null and begYmdMin != '' and begYmdMax != null and begYmdMax != ''">
+				AND BEG_YMD <![CDATA[>=]]> TO_DATE(#{begYmdMin}, 'YYYY-MM-DD')
+				AND BEG_YMD <![CDATA[<=]]> TO_DATE(#{begYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 준공일 -->
+			<if test="rfnYmdMin != null and rfnYmdMin != '' and rfnYmdMax != null and rfnYmdMax != ''">
+				AND RFN_YMD <![CDATA[>=]]> TO_DATE(#{rfnYmdMin}, 'YYYY-MM-DD')
+				AND RFN_YMD <![CDATA[<=]]> TO_DATE(#{rfnYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			
+			<!-- 계약금액 -->
+			<if test="tctAmtMin != null and tctAmtMin != '' and tctAmtMax != null and tctAmtMax != ''">
+				AND TCT_AMT <![CDATA[>=]]> #{tctAmtMin}
+				AND TCT_AMT <![CDATA[<=]]> #{tctAmtMax}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 상수공사대장 리스트 -->
+	<select id="list" parameterType="wttConsMa" resultType="wttConsMa">
+		SELECT
+			FTR_IDN
+		FROM WTT_CONS_MA
+		<include refid="where" />
+		ORDER BY FTR_IDN DESC
+	</select>
+	
+	<!-- 상수공사대장 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="wttConsMa">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			CNT_NAM,
+			WRK_CDE,
+			CNT_LOC,
+			DSN_NAM,
+			CNT_DES,
+			DSN_AMT,
+			GVR_DES,
+			DPC_AMT,
+			BEG_YMD,
+			DGC_AMT,
+			DET_AMT,
+			FNS_YMD,
+			SVS_NAM,
+			NAT_AMT,
+			RFN_YMD,
+			COU_AMT,
+			FCH_YMD,
+			CIT_AMT,
+			FCH_NAM,
+			BND_AMT,
+			CSS_AMT,
+			KWN_EXP,
+			HNG_EXP,
+			SHN_EXP,
+			MOK_EXP,
+			BID_YMD,
+			EST_AMT,
+			CTT_YMD,
+			CTT_CDE,
+			TCT_AMT,
+			CPC_AMT,
+			CGV_AMT,
+			CET_AMT,
+			GCN_NAM,
+			POC_NAM,
+			GCN_ADR,
+			GCN_TEL
+		FROM WTT_CONS_MA
+		WHERE FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 상수공사대장 수정 -->
+	<update id="update" parameterType="wttConsMa">
+		UPDATE WTT_CONS_MA SET
+			CNT_NAM = #{cntNam, jdbcType=VARCHAR},
+			WRK_CDE = #{wrkCde, jdbcType=VARCHAR},
+			CNT_LOC = #{cntLoc, jdbcType=VARCHAR},
+			DSN_NAM = #{dsnNam, jdbcType=VARCHAR},
+			CNT_DES = #{cntDes, jdbcType=VARCHAR},
+			DSN_AMT = #{dsnAmt, jdbcType=BIGINT},
+			GVR_DES = #{gvrDes, jdbcType=VARCHAR},
+			DPC_AMT = #{dpcAmt, jdbcType=BIGINT},
+			BEG_YMD = #{begYmd, jdbcType=VARCHAR},
+			DGC_AMT = #{dgcAmt, jdbcType=BIGINT},
+			DET_AMT = #{detAmt, jdbcType=BIGINT},
+			FNS_YMD = #{fnsYmd, jdbcType=VARCHAR},
+			SVS_NAM = #{svsNam, jdbcType=VARCHAR},
+			NAT_AMT = #{natAmt, jdbcType=BIGINT},
+			RFN_YMD = #{rfnYmd, jdbcType=VARCHAR},
+			COU_AMT = #{couAmt, jdbcType=BIGINT},
+			FCH_YMD = #{fchYmd, jdbcType=VARCHAR},
+			CIT_AMT = #{citAmt, jdbcType=BIGINT},
+			FCH_NAM = #{fchNam, jdbcType=VARCHAR},
+			BND_AMT = #{bndAmt, jdbcType=BIGINT},
+			CSS_AMT = #{cssAmt, jdbcType=BIGINT},
+			KWN_EXP = #{kwnExp, jdbcType=VARCHAR},
+			HNG_EXP = #{hngExp, jdbcType=VARCHAR},
+			SHN_EXP = #{shnExp, jdbcType=VARCHAR},
+			MOK_EXP = #{mokExp, jdbcType=VARCHAR},
+			BID_YMD = #{bidYmd, jdbcType=VARCHAR},
+			EST_AMT = #{estAmt, jdbcType=BIGINT},
+			CTT_YMD = #{cttYmd, jdbcType=VARCHAR},
+			CTT_CDE = #{cttCde, jdbcType=VARCHAR},
+			TCT_AMT = #{tctAmt, jdbcType=BIGINT},
+			CPC_AMT = #{cpcAmt, jdbcType=BIGINT},
+			CGV_AMT = #{cgvAmt, jdbcType=BIGINT},
+			CET_AMT = #{cetAmt, jdbcType=BIGINT},
+			GCN_NAM = #{gcnNam, jdbcType=VARCHAR},
+			POC_NAM = #{pocNam, jdbcType=VARCHAR},
+			GCN_ADR = #{gcnAdr, jdbcType=VARCHAR},
+			GCN_TEL = #{gcnTel, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 상수공사대장 등록 -->
+	<insert id="insert" parameterType="wttConsMa">
+		INSERT INTO WTT_CONS_MA (
+			FTR_CDE,
+			FTR_IDN,
+			CNT_NAM,
+			WRK_CDE,
+			CNT_LOC,
+			DSN_NAM,
+			CNT_DES,
+			DSN_AMT,
+			GVR_DES,
+			DPC_AMT,
+			BEG_YMD,
+			DGC_AMT,
+			DET_AMT,
+			FNS_YMD,
+			SVS_NAM,
+			NAT_AMT,
+			RFN_YMD,
+			COU_AMT,
+			FCH_YMD,
+			CIT_AMT,
+			FCH_NAM,
+			BND_AMT,
+			CSS_AMT,
+			KWN_EXP,
+			HNG_EXP,
+			SHN_EXP,
+			MOK_EXP,
+			BID_YMD,
+			EST_AMT,
+			CTT_YMD,
+			CTT_CDE,
+			TCT_AMT,
+			CPC_AMT,
+			CGV_AMT,
+			CET_AMT,
+			GCN_NAM,
+			POC_NAM,
+			GCN_ADR,
+			GCN_TEL
+		) VALUES (
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{cntNam, jdbcType=VARCHAR},
+			#{wrkCde, jdbcType=VARCHAR},
+			#{cntLoc, jdbcType=VARCHAR},
+			#{dsnNam, jdbcType=VARCHAR},
+			#{cntDes, jdbcType=VARCHAR},
+			#{dsnAmt, jdbcType=BIGINT},
+			#{gvrDes, jdbcType=VARCHAR},
+			#{dpcAmt, jdbcType=BIGINT},
+			#{begYmd, jdbcType=VARCHAR},
+			#{dgcAmt, jdbcType=BIGINT},
+			#{detAmt, jdbcType=BIGINT},
+			#{fnsYmd, jdbcType=VARCHAR},
+			#{svsNam, jdbcType=VARCHAR},
+			#{natAmt, jdbcType=BIGINT},
+			#{rfnYmd, jdbcType=VARCHAR},
+			#{couAmt, jdbcType=BIGINT},
+			#{fchYmd, jdbcType=VARCHAR},
+			#{citAmt, jdbcType=BIGINT},
+			#{fchNam, jdbcType=VARCHAR},
+			#{bndAmt, jdbcType=BIGINT},
+			#{cssAmt, jdbcType=BIGINT},
+			#{kwnExp, jdbcType=VARCHAR},
+			#{hngExp, jdbcType=VARCHAR},
+			#{shnExp, jdbcType=VARCHAR},
+			#{mokExp, jdbcType=VARCHAR},
+			#{bidYmd, jdbcType=VARCHAR},
+			#{estAmt, jdbcType=BIGINT},
+			#{cttYmd, jdbcType=VARCHAR},
+			#{cttCde, jdbcType=VARCHAR},
+			#{tctAmt, jdbcType=BIGINT},
+			#{cpcAmt, jdbcType=BIGINT},
+			#{cgvAmt, jdbcType=BIGINT},
+			#{cetAmt, jdbcType=BIGINT},
+			#{gcnNam, jdbcType=VARCHAR},
+			#{pocNam, jdbcType=VARCHAR},
+			#{gcnAdr, jdbcType=VARCHAR},
+			#{gcnTel, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+</mapper>

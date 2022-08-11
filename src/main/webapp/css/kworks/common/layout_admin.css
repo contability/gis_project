@@ -1,0 +1,51 @@
+body{text-align:center;}
+
+#wrap {width:100%; }
+
+/* header */
+#header {width:100%; }
+.header_wrap{position:relative; width:100%; height:64px; border-bottom:4px solid #088bc2;}
+.logo{float:left;}
+
+.gnb {float:right;}
+.gnb .gnb_text{position:relative; float:left;}
+.gnb .gnb_line{position:relative; float:left;}
+
+
+/* container */
+.container_wrap{width:1200px;}
+.nav{position:relative; width:203px;}
+.border{position:absolute; width:1px; height:90%; background-color:#d6d6d6;}
+.panel{width:940px; display:block;}
+.titleArea{height:36px;}
+.line{position:absolute; width:940px; height:2px; background-color:#46a0d5;}
+
+.cont{overflow:hidden;float:left;padding:0 40px; width:915px;}
+
+.scrollWrap{overflow:hidden}
+.scrollWrap .scroll{overflow-y:scroll;float:left;width:33.3333333%;min-height:300px}
+.scrollWrap ul{overflow-y:scroll;float:left;width:25%;min-height:300px;max-height:300px;border-bottom:1px solid #a0a0a0}
+.scrollWrap ul li{padding:14px 5px 17px;margin-top:0 !important;border-bottom:1px solid #d8d8d8;height:auto !important;font-size:13px;color:#666}
+
+.btnArea{padding:20px 0;text-align:right;}
+.btnArea.v1{padding:0}
+
+.editWrap{overflow:hidden}
+
+#edit table.w100 > tr > td{padding:10px 10px 10px 0}
+
+.editWrap .f_r{padding:17px 20px 18px;width:310px;border:1px solid #333}
+.tbWrap{overflow:hidden}
+
+.table_top {padding:20px 0 5px; text-align:right;}
+.table_top select {background-color:#fff; border:1px solid #d2dce3; height:28px; line-height:28px; text-indent:3px; vertical-align:middle; margin-left:5px;}
+
+.layerPop {border:1px solid #338bd1; position:absolute; padding:15px; top:50%; left:50%; display:none; background-color:#fff;}
+.layerPop h1 {margin-bottom:15px;}
+.layerPop table {width:100%;}
+.layerPop table th,
+.layerPop table td {padding:8px 5px 10px;border-bottom:1px solid #d8d8d8;font-size:13px;color:#666}
+.layerPop table td {text-align:left;}
+.layerPop table td input[type=text] {line-height:23px; padding-left:10px;}
+.layerPop table td input[type=text],
+.layerPop table td select {border:1px solid #ccc; width:100%; height:23px;}

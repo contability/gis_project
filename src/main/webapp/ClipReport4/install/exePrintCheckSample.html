@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="./clip_exePrintCheck.js"></script>
+<script type="text/javascript">
+function isExePrintInstallCheck(){
+	var button = document.getElementById("isExePrintInstall");
+	//window 일때
+	if(is_window){
+		//reportExePrintCheck.js 파일을 첨부합니다.
+		//ClipReportExePrintCheck 함수를 사용하여 설치확인을 합니다.
+		//pc에 exe print 모듈이 설치가 되어 있다면 인자로 넘긴 함수가 실행됩니다.	
+		ClipReportExePrintCheck(function(version){
+			alert("version:" + version);
+			button.innerHTML = "설치 완료";
+			button.disabled = true;
+		});
+	}
+}
+
+</script>
+</head>
+<body onload = "isExePrintInstallCheck()">
+<button id="isExePrintInstall">설치</button>
+</body>
+</html>

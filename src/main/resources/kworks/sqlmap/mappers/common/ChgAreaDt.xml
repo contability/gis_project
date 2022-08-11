@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.ChgAreaDtMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="chngeDetctNo != null and chngeDetctNo != ''">
+				AND CHNGE_DETCT_NO = #{chngeDetctNo}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="chgAreaDt" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			CHG_AREA_DT
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="chgAreaDt" resultType="chgAreaDt">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				CHNGE_AREA_NO,
+				CHNGE_DETCT_NO,
+				CHNGE_AREA_LC,
+				CHNGE_AREA_DC,
+				CHNGE_AREA_RM,
+				GEOJSON,
+				PARTITN_CD,
+				WRTER_ID,
+				FRST_RGSDE,
+				UPDUSR_ID, 
+				LAST_UPDDE,
+				PARTITN_MAP_1,
+				PARTITN_MAP_2,
+				PARTITN_MAP_3,
+				PARTITN_MAP_4
+			FROM CHG_AREA_DT
+			<include refid="where"/>
+			ORDER BY CHNGE_AREA_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="chgAreaDtMap" type="chgAreaDt">
+		<id property="chngeAreaNo" column="CHNGE_AREA_NO" />
+		<result property="chngeDetctNo" column="CHNGE_DETCT_NO"/>
+		<result property="chngeAreaLc" column="CHNGE_AREA_LC"/>
+		<result property="chngeAreaDc" column="CHNGE_AREA_DC"/>
+		<result property="chngeAreaRm" column="CHNGE_AREA_RM"/>
+		<result property="geojson" column="GEOJSON"/>
+		<result property="partitnCd" column="PARTITN_CD"/>
+		<result property="wrterId" column="WRTER_ID"/>
+		<result property="frstRgsde" column="FRST_RGSDE"/>
+		<result property="updusrId" column="UPDUSR_ID"/>
+		<result property="lastUpdde" column="LAST_UPDDE"/>
+		<result property="partitnMap1" column="PARTITN_MAP_1"/>
+		<result property="partitnMap2" column="PARTITN_MAP_2"/>
+		<result property="partitnMap3" column="PARTITN_MAP_3"/>
+		<result property="partitnMap4" column="PARTITN_MAP_4"/>
+	</resultMap>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="chgAreaDtMap">
+		SELECT
+			CHNGE_AREA_NO,
+			CHNGE_DETCT_NO,
+			CHNGE_AREA_LC,
+			CHNGE_AREA_DC,
+			CHNGE_AREA_RM,
+			GEOJSON,
+			PARTITN_CD,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID, 
+			LAST_UPDDE,
+			PARTITN_MAP_1,
+			PARTITN_MAP_2,
+			PARTITN_MAP_3,
+			PARTITN_MAP_4
+		FROM CHG_AREA_DT
+		WHERE
+			CHNGE_AREA_NO = #{chngeAreaNo}
+	</select>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM CHG_AREA_DT
+		WHERE
+			CHNGE_AREA_NO = #{chngeAreaNo}
+	</delete>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="chgAreaDt">
+		UPDATE CHG_AREA_DT SET 
+			CHNGE_AREA_LC = #{chngeAreaLc, jdbcType=VARCHAR},
+			CHNGE_AREA_DC = #{chngeAreaDc, jdbcType=VARCHAR},
+			CHNGE_AREA_RM = #{chngeAreaRm, jdbcType=VARCHAR},
+			PARTITN_CD = #{partitnCd, jdbcType=VARCHAR},
+			GEOJSON = #{geojson, jdbcType=VARCHAR},
+			UPDUSR_ID = #{updusrId, jdbcType=VARCHAR},
+			LAST_UPDDE = <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,
+			PARTITN_MAP_1 = #{partitnMap1, jdbcType=VARCHAR},
+			PARTITN_MAP_2 = #{partitnMap2, jdbcType=VARCHAR},
+			PARTITN_MAP_3 = #{partitnMap3, jdbcType=VARCHAR},
+			PARTITN_MAP_4 = #{partitnMap4, jdbcType=VARCHAR}
+		WHERE
+			CHNGE_AREA_NO = #{chngeAreaNo}
+	</update>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="chgAreaDt">
+		INSERT INTO CHG_AREA_DT (
+			CHNGE_AREA_NO,
+			CHNGE_DETCT_NO,
+			CHNGE_AREA_LC,
+			CHNGE_AREA_DC,
+			CHNGE_AREA_RM,
+			GEOJSON,
+			PARTITN_CD,
+			WRTER_ID,
+			UPDUSR_ID,
+			PARTITN_MAP_1,
+			PARTITN_MAP_2,
+			PARTITN_MAP_3,
+			PARTITN_MAP_4
+		)
+		VALUES (
+			#{chngeAreaNo, jdbcType=BIGINT},
+			#{chngeDetctNo, jdbcType=BIGINT},
+			#{chngeAreaLc, jdbcType=VARCHAR},
+			#{chngeAreaDc, jdbcType=VARCHAR},
+			#{chngeAreaRm, jdbcType=VARCHAR},
+			#{geojson, jdbcType=VARCHAR},
+			#{partitnCd, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			#{updusrId, jdbcType=VARCHAR},
+			#{partitnMap1, jdbcType=VARCHAR},
+			#{partitnMap2, jdbcType=VARCHAR},
+			#{partitnMap3, jdbcType=VARCHAR},
+			#{partitnMap4, jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

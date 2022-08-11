@@ -1,0 +1,6 @@
+/* 도시공원 업무 */
+#div_city_park_menu .ul_city_park_menu_job_menu_list { padding:3px 10px 5px 15px; }
+#div_city_park_menu .ul_city_park_menu_job_menu_list li h2 { font-size:12px; padding:8px 5px 5px 5px; color:#666; border-bottom:1px solid #e6e6e6; border-top:1px solid #e6e6e6; }
+#div_city_park_menu .ul_city_park_menu_job_menu_list li.li_menu_group { font-size:14px; font-weight:bold; }
+#div_city_park_menu .ul_city_park_menu_job_menu_list li.li_menu { padding:5px 0 5px 10px; font-size:12px; color:#666; display: block;}
+#div_city_park_menu .ul_city_park_menu_job_menu_list li.li_menu img { padding:5px 5px 3px 0; }

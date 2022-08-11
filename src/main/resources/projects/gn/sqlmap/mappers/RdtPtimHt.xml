@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.RdtPtimHtMapper">
+
+	<resultMap type="RdtPtimHt" id="rdtPtimHtMap">
+		<id column="IMP_IDN" property="impIdn"/>
+		<result column="FTR_CDE" property="ftrCde"/>
+		<result column="FTF_CDE" property="ftfCde"/>
+		<result column="FTF_IDN" property="ftfIdn"/>
+		<result column="PRJ_NAM" property="prjNam"/>
+		<result column="CTT_YMD" property="cttYmd"/>
+		<result column="BEG_YMD" property="begYmd"/>
+		<result column="RFN_YMD" property="rfnYmd"/>
+		<result column="CNT_DES" property="cntDes"/>
+		<result column="WRTER_ID" property="wrterId"/>
+		<result column="FRST_RGSDE" property="frstRgsde"/>
+		<result column="UPDUSR_ID" property="updusrId"/>
+		<result column="LAST_UPDDE" property="lastUpdde"/>
+	</resultMap>
+	
+	<select id="rdtPtimHtSelectList" parameterType="RdtPtimHt" resultMap="rdtPtimHtMap" >
+		SELECT
+			IMP_IDN,
+			FTR_CDE,
+			FTF_CDE,
+			FTF_IDN,
+			PRJ_NAM,
+			CTT_YMD,
+			BEG_YMD,
+			RFN_YMD,
+			CNT_DES
+			<!-- ,WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE, -->
+		FROM
+			RDT_PTIM_HT
+		WHERE
+			FTF_CDE = #{ftfCde}
+		AND
+			FTF_IDN = #{ftfIdn}
+	</select>
+	
+	<select id="rdtPtimHtSelectOne" parameterType="Long" resultMap="rdtPtimHtMap">
+		SELECT
+			IMP_IDN,
+			FTR_CDE,
+			FTF_CDE,
+			FTF_IDN,
+			PRJ_NAM,
+			CTT_YMD,
+			BEG_YMD,
+			RFN_YMD,
+			CNT_DES
+			<!-- ,WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE, -->
+		FROM
+			RDT_PTIM_HT
+		WHERE
+			IMP_IDN = #{impIdn}
+	</select>
+	
+	<insert id="rdtPtimHtInsert" parameterType="RdtPtimHt">
+		INSERT INTO
+			RDT_PTIM_HT(
+				IMP_IDN,
+				FTR_CDE,
+				FTF_CDE,
+				FTF_IDN,
+				PRJ_NAM,
+				CTT_YMD,
+				BEG_YMD,
+				RFN_YMD,
+				CNT_DES,
+				WRTER_ID,
+				FRST_RGSDE,
+				UPDUSR_ID,
+				LAST_UPDDE
+			)
+		VALUES(
+			#{impIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftfCde, jdbcType=VARCHAR},
+			#{ftfIdn, jdbcType=BIGINT},
+			#{prjNam, jdbcType=VARCHAR},
+			#{cttYmd, jdbcType=VARCHAR},
+			#{begYmd, jdbcType=VARCHAR},
+			#{rfnYmd, jdbcType=VARCHAR},
+			#{cntDes, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			#{frstRgsde, jdbcType=VARCHAR},
+			#{updusrId, jdbcType=VARCHAR},
+			#{lastUpdde, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="rdtPtimHtUpdate" parameterType="RdtPtimHt">
+		UPDATE
+			RDT_PTIM_HT
+		SET
+			IMP_IDN = #{impIdn, jdbcType=BIGINT},
+			FTR_CDE = #{ftrCde, jdbcType=VARCHAR},
+			FTF_CDE = #{ftfCde, jdbcType=VARCHAR},
+			FTF_IDN = #{ftfIdn, jdbcType=BIGINT},
+			PRJ_NAM = #{prjNam, jdbcType=VARCHAR},
+			CTT_YMD = #{cttYmd, jdbcType=VARCHAR},
+			BEG_YMD = #{begYmd, jdbcType=VARCHAR},
+			RFN_YMD = #{rfnYmd, jdbcType=VARCHAR},
+			CNT_DES = #{cntDes, jdbcType=VARCHAR},
+			<!-- WRTER_ID = #{wrterId, jdbcType=VARCHAR},
+			FRST_RGSDE = #{frstRgsde, jdbcType=VARCHAR}, -->
+			UPDUSR_ID = #{updusrId, jdbcType=VARCHAR},
+			LAST_UPDDE = #{lastUpdde, jdbcType=VARCHAR}
+		WHERE
+			IMP_IDN = #{impIdn}
+	</update>
+	
+	<delete id="rdtPtimHtDelete" parameterType="Long">
+		DELETE FROM
+			RDT_PTIM_HT
+		WHERE
+			IMP_IDN = #{impIdn}
+	</delete>
+</mapper>

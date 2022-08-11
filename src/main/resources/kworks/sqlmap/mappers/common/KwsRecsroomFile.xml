@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsRecsroomFileMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsRecsroomFileMap" type="kwsRecsroomFile">
+		<id property="recsroomNo" column="RECSROOM_NO" />
+		<id property="fileNo" column="FILE_NO" />
+		<result property="fileOrdr" column="FILE_ORDR"/>
+		<association property="kwsFile" column="FILE_NO" javaType="kwsFile" select="kr.co.gitt.kworks.mappers.KwsFileMapper.selectOne"/>
+	</resultMap>
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="java.util.Map" resultMap="kwsRecsroomFileMap">
+		SELECT
+			RECSROOM_NO,
+			FILE_NO,
+			FILE_ORDR
+		FROM KWS_RECSROOM_FILE
+		WHERE
+			RECSROOM_NO = #{recsroomNo}
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsRecsroomFile">
+		INSERT INTO KWS_RECSROOM_FILE (
+			RECSROOM_NO,
+			FILE_NO,
+			FILE_ORDR
+		) 
+		VALUES (
+			#{recsroomNo, jdbcType=BIGINT},
+			#{fileNo, jdbcType=BIGINT},
+			#{fileOrdr, jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="kwsRecsroomFile">
+		DELETE FROM KWS_RECSROOM_FILE
+		WHERE
+			RECSROOM_NO = #{recsroomNo} AND FILE_NO = #{fileNo}
+	</delete>
+
+</mapper>

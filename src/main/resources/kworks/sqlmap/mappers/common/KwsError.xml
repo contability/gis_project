@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsErrorMapper">
+	
+	<!-- SearchDTO 날짜조건 검색 -->
+	<sql id="where">
+		<where>
+			<if test="searchStartDt != null and searchStartDt != ''">
+				AND ERROR_DT <![CDATA[>]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD')
+			</if>
+			<if test="searchEndDt != null and searchEndDt != ''">
+				AND ERROR_DT <![CDATA[<]]> TO_DATE(#{searchEndDt}, 'YYYY-MM-DD')
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsError">
+		INSERT INTO KWS_ERROR (
+			ERROR_NO,
+			ERROR_MSSAGE,
+			ERROR_TRACE
+		) 
+		VALUES (
+			#{errorNo, jdbcType=BIGINT},
+			#{errorMssage, jdbcType=VARCHAR},
+			#{errorTrace, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 기간 내 에러 로그 수 -->
+	<select id="listCount" resultType="Integer" parameterType="searchDTO">
+		SELECT COUNT(*) AS CNT
+		FROM KWS_ERROR
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" resultType="KwsError" parameterType="searchDTO">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				ERROR_NO,
+				ERROR_MSSAGE,
+				ERROR_TRACE,
+				ERROR_DT
+			FROM KWS_ERROR
+			<include refid="where" />
+			ORDER BY ERROR_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 에러 로그 단건 조회 -->
+	<select id="selectOne" resultType="KwsError" parameterType="Integer">
+		SELECT
+			ERROR_NO,
+			ERROR_MSSAGE,
+			ERROR_TRACE,
+			ERROR_DT
+		FROM
+			KWS_ERROR
+		WHERE
+			ERROR_NO = #{errorNo}
+	</select>
+	
+	<!-- 엑셀다운로드용 리스트 조회 -->
+	<select id="listErrorLogExcel" parameterType="searchDTO" resultType="KwsError">
+		SELECT
+			ERROR_NO,
+			ERROR_MSSAGE,
+			ERROR_TRACE,
+			ERROR_DT
+		FROM KWS_ERROR
+		<include refid="where" />
+		ORDER BY ERROR_NO ASC
+	</select>
+
+</mapper>

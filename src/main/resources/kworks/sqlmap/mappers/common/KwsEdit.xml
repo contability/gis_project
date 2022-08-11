@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsEditMapper">
+	
+	<sql id="where">
+		<where>
+			<if test="dataCtgry != null and dataCtgry != '' and dataCtgry != 'all'">
+				AND DATA_CTGRY_ID = #{dataCtgry}
+			</if>	
+			
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND DATA_ID LIKE UPPER('%' || #{searchKeyword} || '%')
+				</if>
+				<if test="searchCondition == 2">
+					AND DATA_ALIAS LIKE UPPER('%' || #{searchKeyword} || '%')
+				</if>
+				<if test="searchCondition == 3">
+					AND EDIT_AT LIKE UPPER('%' || #{searchKeyword} || '%')
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM KWS_DATA
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="KwsEdit">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				DATA_ID,
+				DATA_ALIAS,
+				DATA_TY,
+				EDIT_AT
+			FROM KWS_DATA
+			<include refid="where" />
+			ORDER BY DATA_ID ASC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultType="KwsEdit">
+		SELECT
+			DATA_ID,
+			DATA_ALIAS,
+			EDIT_AT
+		FROM KWS_DATA
+		WHERE
+			DATA_ID = #{dataId}
+	</select>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="KwsEdit">
+		UPDATE KWS_DATA SET
+			EDIT_AT = #{editAt, jdbcType=VARCHAR}
+		WHERE
+			DATA_ID = #{dataId}
+	</update>
+	
+</mapper>

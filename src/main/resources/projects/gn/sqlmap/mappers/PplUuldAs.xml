@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.PplUuldAsMapper">
+	<insert id="buildUuld">
+		INSERT INTO PPL_UULD_AS(OBJECTID, GEOM, PRT_IDN, PBP_KND, PRT_NAM, OWN_NM, MESRV_NM, AMN_NM, MAN_NM)
+		(SELECT (SELECT NVL(MAX(OBJECTID)+1,1) FROM PPL_UULD_AS), GEOM, PRT_IDN, PBP_KND, PRT_NAM, OWN_NM, MESRV_NM, AMN_NM, MAN_NM FROM BML_PROP_AS WHERE PRT_IDN NOT IN (SELECT DISTINCT(PRT_IDN) FROM BML_LOAN_AS))
+	</insert>
+	
+	<delete id="deleteUuld">
+		TRUNCATE TABLE PPL_UULD_AS
+	</delete>
+</mapper>

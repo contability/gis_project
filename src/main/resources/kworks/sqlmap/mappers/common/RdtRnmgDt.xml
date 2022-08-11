@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdtRnmgDtMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="rdtRnmgDtMap" type="rdtRnmgDt">
+		<id property="rdnCde" column="RDN_CDE" />
+		<result property="rdnNam" column="RDN_NAM"/>
+		<collection property="rdlCtlrLss" column="RDN_CDE" javaType="java.util.ArrayList" ofType="rdlCtlrLs" select="kr.co.gitt.kworks.mappers.RdlCtlrLsMapper.listAll" ></collection>
+	</resultMap>
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultMap="rdtRnmgDtMap">
+		SELECT
+			RDN_CDE,
+			RDN_NAM
+		FROM RDT_RNMG_DT
+		WHERE
+			RDN_CDE = #{rdnCde}
+	</select>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="rdtRnmgDt">
+		UPDATE RDT_RNMG_DT
+		SET RDN_NAM = #{rdnNam}
+		WHERE RDN_CDE = #{rdnCde}
+	</update>
+
+</mapper>

@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.BmlBuidAsMapper">
+
+	<select id="selectOne" resultType="BmlBuidAs" parameterType="Long">
+		SELECT
+			OBJECTID,
+			PRT_IDN,
+			PBP_KND,
+			PRT_NAM,
+			OWN_CDE,
+			PRS_CDE,
+			AMN_CDE,
+			ACC_CDE,
+			MAN_CDE,
+			CHR_NAM,
+			MND_CDE,
+			PST_NUM,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			SPC_ADR,
+			SPC_DONG,
+			SPC_HO,
+			RN_ADDR,
+			PTY_PC,
+			AUT_AMNT,
+			ACQ_DEPT,
+			ACQ_PC,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PRV,
+			RST_YN,
+			LOAN_YN,
+			SALE_LMT,
+			RMK_EXP,
+			SRC_CDE,
+			RF_CDE,
+			GRD_CDE,
+			UGRD_CDE,
+			BLD_AREA,
+			BLD_DATE,
+			BLD_PRI,
+			BLD_SE,
+			BLD_PRP,
+			GRS_AREA,
+			ACS_AREA,
+			MESRV_NM,
+			AMN_NM,
+			ACC_NM,
+			MAN_NM,
+			MND_NM,
+			OWN_NM,
+			BJD_NM,
+			TONG,
+			BAN,
+			DISPO_YMD,
+			DISPO_MET,
+			MEANS_SE
+		FROM
+			BML_BUID_AS
+		WHERE 
+			PRT_IDN = #{prtIdn}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO
+			BML_BUID_AS(
+				OBJECTID,
+				<!-- GEOM, -->
+				PRT_IDN,
+				PBP_KND,
+				PRT_NAM,
+				OWN_CDE,
+				PRS_CDE,
+				AMN_CDE,
+				ACC_CDE,
+				MAN_CDE,
+				CHR_NAM,
+				MND_CDE,
+				PST_NUM,
+				BJD_CDE,
+				LOC_PLC,
+				MONUT,
+				BUN,
+				HO,
+				SPC_ADR,
+				SPC_DONG,
+				SPC_HO,
+				RN_ADDR,
+				PTY_PC,
+				AUT_AMNT,
+				ACQ_DEPT,
+				ACQ_PC,
+				ACQ_DATE,
+				ACQ_CDE,
+				ACQ_PRV,
+				RST_YN,
+				LOAN_YN,
+				SALE_LMT,
+				RMK_EXP,
+				SRC_CDE,
+				RF_CDE,
+				GRD_CDE,
+				UGRD_CDE,
+				BLD_AREA,
+				BLD_DATE,
+				BLD_PRI,
+				BLD_SE,
+				BLD_PRP,
+				GRS_AREA,
+				ACS_AREA,
+				MESRV_NM,
+				AMN_NM,
+				ACC_NM,
+				MAN_NM,
+				MND_NM,
+				OWN_NM,
+				BJD_NM,
+				TONG,
+				BAN,
+				DISPO_YMD,
+				DISPO_MET,
+				MEANS_SE
+			)
+		VALUES(
+			(SELECT NVL(MAX(OBJECTID) + 1, 1) FROM BML_BUID_AS),
+			<!-- (SELECT GEOM FROM LP_PA_CBND WHERE PNU = #{bjdCde}||#{monut}||LPAD(#{bun},4,0)||LPAD(#{ho},4,0)), -->
+			#{prtIdn, jdbcType=INTEGER},
+			#{pbpKnd, jdbcType=VARCHAR},
+			#{prtNam, jdbcType=VARCHAR},
+			#{ownCde, jdbcType=VARCHAR},
+			#{prsCde, jdbcType=VARCHAR},
+			#{amnCde, jdbcType=VARCHAR},
+			#{accCde, jdbcType=VARCHAR},
+			#{manCde, jdbcType=VARCHAR},
+			#{chrNam, jdbcType=VARCHAR},
+			#{mndCde, jdbcType=VARCHAR},
+			#{pstNum, jdbcType=VARCHAR},
+			#{bjdCde, jdbcType=VARCHAR},
+			#{locPlc, jdbcType=VARCHAR},
+			#{monut, jdbcType=VARCHAR},
+			#{bun, jdbcType=VARCHAR},
+			#{ho, jdbcType=VARCHAR},
+			#{spcAdr, jdbcType=VARCHAR},
+			#{spcDong, jdbcType=VARCHAR},
+			#{spcHo, jdbcType=VARCHAR},
+			#{rnAddr, jdbcType=VARCHAR},
+			#{ptyPc, jdbcType=VARCHAR},
+			#{autAmnt, jdbcType=VARCHAR},
+			#{acqDept, jdbcType=VARCHAR},
+			#{acqPc, jdbcType=VARCHAR},
+			#{acqDate, jdbcType=VARCHAR},
+			#{acqCde, jdbcType=VARCHAR},
+			#{acqPrv, jdbcType=VARCHAR},
+			#{rstYn, jdbcType=VARCHAR},
+			#{loanYn, jdbcType=VARCHAR},
+			#{saleLmt, jdbcType=VARCHAR},
+			#{rmkExp, jdbcType=VARCHAR},
+			#{srcCde, jdbcType=VARCHAR},
+			#{rfCde, jdbcType=VARCHAR},
+			#{grdCde, jdbcType=INTEGER},
+			#{ugrdCde, jdbcType=INTEGER},
+			#{bldArea, jdbcType=DOUBLE},
+			#{bldDate, jdbcType=VARCHAR},
+			#{bldPri, jdbcType=INTEGER},
+			#{bldSe, jdbcType=VARCHAR},
+			#{bldPrp, jdbcType=VARCHAR},
+			#{grsArea, jdbcType=DOUBLE},
+			#{acsArea, jdbcType=DOUBLE},
+			#{mesrvNm, jdbcType=VARCHAR},
+			#{amnNm, jdbcType=VARCHAR},
+			#{accNm, jdbcType=VARCHAR},
+			#{manNm, jdbcType=VARCHAR},
+			#{mndNm, jdbcType=VARCHAR},
+			#{ownNm, jdbcType=VARCHAR},
+			#{bjdNm, jdbcType=VARCHAR},
+			#{tong, jdbcType=VARCHAR},
+			#{ban, jdbcType=VARCHAR},
+			#{dispoYmd, jdbcType=VARCHAR},
+			#{dispoMet, jdbcType=VARCHAR},
+			#{meansSe, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="deleteBackup">
+		TRUNCATE TABLE BML_BUID_AS_BACKUP
+	</delete>
+	
+	<insert id="backup">
+		INSERT INTO BML_BUID_AS_BACKUP(
+			PRT_IDN,
+			PBP_KND,
+			PRT_NAM,
+			OWN_CDE,
+			PRS_CDE,
+			AMN_CDE,
+			ACC_CDE,
+			MAN_CDE,
+			CHR_NAM,
+			MND_CDE,
+			PST_NUM,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			SPC_ADR,
+			SPC_DONG,
+			SPC_HO,
+			RN_ADDR,
+			PTY_PC,
+			AUT_AMNT,
+			ACQ_DEPT,
+			ACQ_PC,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PRV,
+			RST_YN,
+			LOAN_YN,
+			SALE_LMT,
+			RMK_EXP,
+			SRC_CDE,
+			RF_CDE,
+			GRD_CDE,
+			UGRD_CDE,
+			BLD_AREA,
+			BLD_DATE,
+			BLD_PRI,
+			BLD_SE,
+			BLD_PRP,
+			GRS_AREA,
+			ACS_AREA,
+			MESRV_NM,
+			AMN_NM,
+			ACC_NM,
+			MAN_NM,
+			MND_NM,
+			OWN_NM,
+			BJD_NM,
+			TONG,
+			BAN,
+			DISPO_YMD,
+			DISPO_MET,
+			MEANS_SE)
+			(SELECT
+				PRT_IDN,
+				PBP_KND,
+				PRT_NAM,
+				OWN_CDE,
+				PRS_CDE,
+				AMN_CDE,
+				ACC_CDE,
+				MAN_CDE,
+				CHR_NAM,
+				MND_CDE,
+				PST_NUM,
+				BJD_CDE,
+				LOC_PLC,
+				MONUT,
+				BUN,
+				HO,
+				SPC_ADR,
+				SPC_DONG,
+				SPC_HO,
+				RN_ADDR,
+				PTY_PC,
+				AUT_AMNT,
+				ACQ_DEPT,
+				ACQ_PC,
+				ACQ_DATE,
+				ACQ_CDE,
+				ACQ_PRV,
+				RST_YN,
+				LOAN_YN,
+				SALE_LMT,
+				RMK_EXP,
+				SRC_CDE,
+				RF_CDE,
+				GRD_CDE,
+				UGRD_CDE,
+				BLD_AREA,
+				BLD_DATE,
+				BLD_PRI,
+				BLD_SE,
+				BLD_PRP,
+				GRS_AREA,
+				ACS_AREA,
+				MESRV_NM,
+				AMN_NM,
+				ACC_NM,
+				MAN_NM,
+				MND_NM,
+				OWN_NM,
+				BJD_NM,
+				TONG,
+				BAN,
+				DISPO_YMD,
+				DISPO_MET,
+				MEANS_SE
+			FROM
+				BML_BUID_AS)
+	</insert>
+	
+	<delete id="remove">
+		TRUNCATE TABLE BML_BUID_AS
+	</delete>
+	
+	<update id="geomUpdate">
+		UPDATE
+			BML_BUID_AS
+		SET
+			BML_BUID_AS.GEOM = LP_PA_CBND.GEOM FROM LP_PA_CBND WHERE LP_PA_CBND.PNU = BML_BUID_AS.BJD_CDE||BML_BUID_AS.MONUT||LPAD(BML_BUID_AS.BUN,4,0)||LPAD(BML_BUID_AS.HO,4,0) 
+	</update>
+	
+	<select id="mismatchBuid" resultType="Integer" parameterType="hashMap">
+		SELECT
+			COUNT(PRT_IDN)
+		FROM
+			BML_BUID_AS
+		WHERE
+			GEOM IS NULL
+		<if test="deptCode != null and deptCode != '' and deptCode != '42002450000'">
+		AND
+			MAN_CDE = #{deptCode}
+		</if>
+	</select>
+	
+	<select id="selectListArea" resultType="BmlBuidAs" parameterType="UseAreaSearchDTO">
+		SELECT
+			OBJECTID,
+			PRT_IDN,
+			PBP_KND,
+			PRT_NAM,
+			OWN_CDE,
+			PRS_CDE,
+			AMN_CDE,
+			ACC_CDE,
+			MAN_CDE,
+			CHR_NAM,
+			MND_CDE,
+			PST_NUM,
+			BJD_CDE,
+			LOC_PLC,
+			MONUT,
+			BUN,
+			HO,
+			SPC_ADR,
+			SPC_DONG,
+			SPC_HO,
+			RN_ADDR,
+			PTY_PC,
+			AUT_AMNT,
+			ACQ_DEPT,
+			ACQ_PC,
+			ACQ_DATE,
+			ACQ_CDE,
+			ACQ_PRV,
+			RST_YN,
+			LOAN_YN,
+			SALE_LMT,
+			RMK_EXP,
+			SRC_CDE,
+			RF_CDE,
+			GRD_CDE,
+			UGRD_CDE,
+			BLD_AREA,
+			BLD_DATE,
+			BLD_PRI,
+			BLD_SE,
+			BLD_PRP,
+			GRS_AREA,
+			ACS_AREA,
+			MESRV_NM,
+			AMN_NM,
+			ACC_NM,
+			MAN_NM,
+			MND_NM,
+			OWN_NM,
+			BJD_NM,
+			TONG,
+			BAN,
+			DISPO_YMD,
+			DISPO_MET,
+			MEANS_SE
+		FROM
+			BML_BUID_AS
+		WHERE
+			BJD_CDE = #{bjdCde}
+			AND
+			MONUT = #{monut}
+			AND
+			BUN = #{bun}
+			<if test="ho != null and ho != ''">
+				AND
+				HO = #{ho}
+			</if>
+	</select>
+	
+	<delete id="filterValidData">
+		DELETE FROM
+			BML_BUID_AS
+		WHERE
+			DISPO_MET != ''
+		OR
+			DISPO_MET != NULL
+	</delete>
+</mapper>

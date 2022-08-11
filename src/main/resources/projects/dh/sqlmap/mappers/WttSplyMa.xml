@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.WttSplyMaMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 시공자상호 -->
+			<if test="oprNam != null and oprNam != ''">
+				AND OPR_NAM = #{oprNam}
+			</if>
+			<!-- 착공일 -->
+			<if test="begYmdMin != null and begYmdMin != '' and begYmdMax != null and begYmdMax != ''">
+				AND BEG_YMD <![CDATA[>=]]> TO_DATE(#{begYmdMin}, 'YYYY-MM-DD')
+				AND BEG_YMD <![CDATA[<=]]> TO_DATE(#{begYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 준공일 -->
+			<if test="fnsYmdMin != null and fnsYmdMin != '' and fnsYmdMax != null and fnsYmdMax != ''">
+				AND FNS_YMD <![CDATA[>=]]> TO_DATE(#{fnsYmdMin}, 'YYYY-MM-DD')
+				AND FNS_YMD <![CDATA[<=]]> TO_DATE(#{fnsYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 공사비총액 -->
+			<if test="totAmtMin != null and totAmtMin != '' and totAmtMax != null and totAmtMax != ''">
+				AND TOT_AMT <![CDATA[>=]]> #{totAmtMin}
+				AND TOT_AMT <![CDATA[<=]]> #{totAmtMax}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 급수공사대장 리스트 -->
+	<select id="list" parameterType="wttSplyMa" resultType="wttSplyMa">
+		SELECT
+			FTR_IDN
+		FROM WTT_SPLY_MA
+		<include refid="where" />
+		ORDER BY FTR_IDN DESC
+	</select>
+	
+	<!-- 급수공사대장 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="wttSplyMa">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			BEG_YMD,
+			FNS_YMD,
+			GVR_AMT,
+			DFE_AMT,
+			PRV_AMT,
+			DIV_AMT,
+			TAX_AMT,
+			TOT_AMT,
+			ROR_AMT,
+			RCP_YMD,
+			GFE_AMT,
+			OPR_NAM,
+			FFE_AMT,
+			SVS_NAM,
+			FNS_NAM,
+			RCV_NUM,
+			ETC_AMT,
+			DPC_AMT,
+			APM_NAM,
+			APM_LOC,
+			APM_ADR,
+			APM_TEL,
+			MET_DIP
+		FROM WTT_SPLY_MA
+		WHERE FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 급수공사대장 수정 -->
+	<update id="update" parameterType="wttSplyMa">
+		UPDATE WTT_SPLY_MA SET
+			BEG_YMD = #{begYmd, jdbcType=VARCHAR},
+			FNS_YMD = #{fnsYmd, jdbcType=VARCHAR},
+			GVR_AMT = #{gvrAmt, jdbcType=BIGINT},
+			DFE_AMT = #{dfeAmt, jdbcType=BIGINT},
+			PRV_AMT = #{prvAmt, jdbcType=BIGINT},
+			DIV_AMT = #{divAmt, jdbcType=BIGINT},
+			TAX_AMT = #{taxAmt, jdbcType=BIGINT},
+			TOT_AMT = #{totAmt, jdbcType=BIGINT},
+			ROR_AMT = #{rorAmt, jdbcType=BIGINT},
+			RCP_YMD = #{rcpYmd, jdbcType=VARCHAR},
+			GFE_AMT = #{gfeAmt, jdbcType=BIGINT},
+			OPR_NAM = #{oprNam, jdbcType=VARCHAR},
+			FFE_AMT = #{ffeAmt, jdbcType=BIGINT},
+			SVS_NAM = #{svsNam, jdbcType=VARCHAR},
+			FNS_NAM = #{fnsNam, jdbcType=VARCHAR},
+			ETC_AMT = #{etcAmt, jdbcType=BIGINT}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 급수공사대장 등록 -->
+	<insert id="insert" parameterType="wttSplyMa">
+		INSERT INTO WTT_SPLY_MA (
+			FTR_CDE,
+			FTR_IDN,
+			BEG_YMD,
+			FNS_YMD,
+			GVR_AMT,
+			DFE_AMT,
+			PRV_AMT,
+			DIV_AMT,
+			TAX_AMT,
+			TOT_AMT,
+			ROR_AMT,
+			RCP_YMD,
+			GFE_AMT,
+			OPR_NAM,
+			FFE_AMT,
+			SVS_NAM,
+			FNS_NAM,
+			ETC_AMT
+		) VALUES (
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{begYmd, jdbcType=VARCHAR},
+			#{fnsYmd, jdbcType=VARCHAR},
+			#{gvrAmt, jdbcType=BIGINT},
+			#{dfeAmt, jdbcType=BIGINT},
+			#{prvAmt, jdbcType=BIGINT},
+			#{divAmt, jdbcType=BIGINT},
+			#{taxAmt, jdbcType=BIGINT},
+			#{totAmt, jdbcType=BIGINT},
+			#{rorAmt, jdbcType=BIGINT},
+			#{rcpYmd, jdbcType=VARCHAR},
+			#{gfeAmt, jdbcType=BIGINT},
+			#{oprNam, jdbcType=VARCHAR},
+			#{ffeAmt, jdbcType=BIGINT},
+			#{svsNam, jdbcType=VARCHAR},
+			#{fnsNam, jdbcType=VARCHAR},
+			#{etcAmt, jdbcType=BIGINT}
+		)
+	</insert>
+	
+</mapper>

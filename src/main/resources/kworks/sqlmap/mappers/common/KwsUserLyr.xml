@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsUserLyrMapper">
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="kwsUserLyr" resultType="kwsUserLyr">
+		SELECT
+			LYR_NO,
+			USER_ID,
+			LYR_NM,
+			GEOJSON
+		FROM KWS_USER_LYR
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsUser">
+		INSERT INTO KWS_USER_LYR (
+			LYR_NO,
+			USER_ID,
+			LYR_NM,
+			GEOJSON
+		)
+		VALUES (
+			#{lyrNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{lyrNm, jdbcType=VARCHAR},
+			#{geojson, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_USER_LYR
+		WHERE LYR_NO  = #{lyrNo}
+	</delete>
+	
+	
+	<!-- 유저 아이디로 삭제 -->
+	<delete id="deleteByUserId" parameterType="String">
+		DELETE FROM KWS_USER_LYR
+		WHERE USER_ID  = #{userId}
+	</delete>
+
+</mapper>

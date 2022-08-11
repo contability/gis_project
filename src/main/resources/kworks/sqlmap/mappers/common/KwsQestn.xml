@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsQestnMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND QESTN_SJ LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND QESTN_CN LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+			<if test="userId != ''">
+				AND WRTER_ID = #{userId}
+			</if>	
+		</where>
+	</sql>
+
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+			KWS_QESTN
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="kwsQestn">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				Q.QESTN_NO,
+				Q.QESTN_SJ,
+				Q.QESTN_CN,
+				Q.PROGRS_STTUS,
+				(SELECT DEPT_NM FROM KWS_DEPT WHERE DEPT_CODE = U.DEPT_CODE) || ' ' || USER_ID AS WRTER_ID,
+				Q.FRST_RGSDE,
+				Q.LAST_UPDDE
+			FROM KWS_QESTN Q
+			INNER JOIN KWS_USER U ON U.USER_ID = Q.WRTER_ID
+			INNER JOIN KWS_DEPT D ON U.DEPT_CODE = D.DEPT_CODE
+			<include refid="where"/>
+			ORDER BY QESTN_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsQestnMap" type="kwsQestn">
+		<id property="qestnNo" column="QESTN_NO" />
+		<result property="qestnSj" column="QESTN_SJ"/>
+		<result property="qestnCn" column="QESTN_CN"/>
+		<result property="progrsSttus" column="PROGRS_STTUS"/>
+		<result property="wrterId" column="WRTER_ID"/>
+		<result property="frstRgsde" column="FRST_RGSDE"/>
+		<result property="lastUpdde" column="LAST_UPDDE"/>
+		<association property="kwsAnswer" column="QESTN_NO" select="kr.co.gitt.kworks.mappers.KwsAnswerMapper.selectOne" />
+		<collection property="kwsQestnFiles" column="QESTN_NO" javaType="java.util.ArrayList" ofType="kwsQestnFile" select="kr.co.gitt.kworks.mappers.KwsQestnFileMapper.listAll"></collection>
+	</resultMap>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="kwsQestnMap">
+		SELECT
+			Q.QESTN_NO,
+			Q.QESTN_SJ,
+			Q.QESTN_CN,
+			Q.PROGRS_STTUS,
+			(SELECT DEPT_NM FROM KWS_DEPT WHERE DEPT_CODE = U.DEPT_CODE) || ' ' || USER_ID AS WRTER_ID,
+			Q.FRST_RGSDE,
+			Q.LAST_UPDDE
+		FROM KWS_QESTN Q
+		INNER JOIN KWS_USER U ON U.USER_ID = Q.WRTER_ID
+		INNER JOIN KWS_DEPT D ON U.DEPT_CODE = D.DEPT_CODE
+		WHERE
+			QESTN_NO = #{qestnNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsQestn">
+		INSERT INTO KWS_QESTN (
+			QESTN_NO,
+			QESTN_SJ,
+			QESTN_CN,
+			PROGRS_STTUS,
+			WRTER_ID
+		) 
+		VALUES (
+			#{qestnNo, jdbcType=BIGINT},
+			#{qestnSj, jdbcType=VARCHAR},
+			#{qestnCn, jdbcType=VARCHAR},
+			#{progrsSttus, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="kwsQestn">
+		UPDATE KWS_QESTN SET 
+			QESTN_SJ = #{qestnSj, jdbcType=VARCHAR},
+			QESTN_CN = #{qestnCn, jdbcType=VARCHAR},
+			LAST_UPDDE = <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />
+		WHERE
+			QESTN_NO = #{qestnNo}
+	</update>
+	
+	<!-- 진행상태 수정 -->
+	<update id="updateProgrsSttus" parameterType="kwsQestn">
+		UPDATE KWS_QESTN SET 
+			PROGRS_STTUS = #{progrsSttus}
+		WHERE
+			QESTN_NO = #{qestnNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_QESTN
+		WHERE
+			QESTN_NO = #{qestnNo}
+	</delete>
+
+</mapper>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.ss.mappers.BmlWellPsMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 관리번호 -->
+			<if test="mgNo != null and mgNo != ''">
+				AND MG_NO LIKE '%' || #{mgNo} || '%'
+			</if>
+			<!-- 허가신고번호 -->
+			<if test="permNtNo != null and permNtNo != ''">
+				AND PERM_NT_NO = #{permNtNo}
+			</if>
+			<!-- 시설구분 -->
+			<if test="permNtFormGbn != null and permNtFormGbn != ''">
+				AND PERM_NT_FORM_GBN = #{permNtFormGbn}
+			</if>
+			<!-- 세부용도 -->
+			<if test="uwaterDtlSrv != null and uwaterDtlSrv != ''">
+				AND UWATER_DTL_SRV = #{uwaterDtlSrv}
+			</if>
+			<!-- 이용자 구분 -->
+			<if test="rgtMbdGbn != null and rgtMbdGbn != ''">
+				AND RGT_MBD_GBN = #{rgtMbdGbn}
+			</if>
+			<!-- 상호(성명) -->
+			<if test="rgtMbdNm != null and rgtMbdNm != ''">
+				AND RGT_MBD_NM LIKE '%' || #{rgtMbdNm} || '%'
+			</if>
+			
+			<!-- 법인_사업자_생년월일 -->
+			<if test="rgtMbdRegNo != null and rgtMbdRegNo != ''">
+				AND RGT_MBD_REG_NO = #{rgtMbdRegNo}
+			</if>
+			
+			<!-- 개발위치_법정동코드 -->
+			<if test="dvopLocRegnCode != null and dvopLocRegnCode != ''">
+				AND DVOP_LOC_REGN_CODE = #{dvopLocRegnCode}
+			</if>
+			
+			<!-- 개발위치_본번 -->
+			<if test="dvopLocBunji != null and dvopLocBunji != ''">
+				AND DVOP_LOC_BUNJI = #{dvopLocBunji}
+			</if>
+			
+			<!-- 개발위치_부번 -->
+			<if test="dvopLocHo != null and dvopLocHo != ''">
+				AND DVOP_LOC_HO = #{dvopLocHo}
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="listCount" parameterType="bmlWellPs" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+			BML_WELL_PS
+		<include refid="where" />
+	</select>
+	
+	<select id="list" parameterType="bmlWellPs" resultType="bmlWellPs">
+		SELECT 
+			OBJECTID
+		FROM BML_WELL_PS
+		<include refid="where" />
+		ORDER BY OBJECTID DESC
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultType="bmlWellPs">
+		SELECT
+			OBJECTID,
+			FTR_CDE,
+			FTR_IDN,
+			PERM_NT_NO,
+			MG_NO,
+			PERM_NT_FORM_GBN,
+			RGT_MBD_GBN,
+			RGT_MBD_REG_NO,
+			RGT_MBD_NM,
+			NM,
+			RGT_MBD_ADDR,
+			RGT_MBD_RDN_ADDR,
+			DVOP_LOC_ADDR,
+			DVOP_LOC_RDN_ADDR,
+			DVOP_LOC_REGN_CODE,
+			DVOP_LOC_UMD_NAME,
+			DVOP_LOC_BUNJI,
+			DVOP_LOC_HO,
+			LITD_DG,
+			LITD_MINT,
+			LITD_SC,
+			LTTD_DG,
+			LTTD_MINT,
+			LTTD_SC,
+			UWATER_SRV,
+			UWATER_DTL_SRV,
+			UWATER_POTA_YN,
+			DIG_DPH,
+			DIG_DBT,
+			FRW_PLN_QUA,
+			ND_QT,
+			DYN_EQN_HRP,
+			PIPE_DIAM,
+			ESB_DPH,
+			RWT_CAP,
+			DVUS_END_NT_YMD,
+			LNHO_RAISE_YMD,
+			LNHO_RAISE_CAU,
+			LNHO_DEAL_MET,
+			OSTRS_MET,
+			LNHO_DPP_NM,
+			PERM_YN,
+			PERM_CANCEL_YN,
+			REM
+		FROM BML_WELL_PS
+		WHERE OBJECTID = #{objectid}
+	</select>
+	
+	<select id="listAll" parameterType="bmlWellPs" resultType="bmlWellPs">
+		SELECT
+			OBJECTID
+			, GEOM
+			, FTR_CDE
+			, FTR_IDN
+			, PERM_NT_NO
+			, MG_NO
+			, PERM_NT_FORM_GBN
+			, RGT_MBD_GBN
+			, RGT_MBD_REG_NO
+			, RGT_MBD_NM
+			, NM
+			, RGT_MBD_ADDR
+			, RGT_MBD_RDN_ADDR
+			, DVOP_LOC_ADDR
+			, DVOP_LOC_RDN_ADDR
+			, DVOP_LOC_REGN_CODE
+			, DVOP_LOC_UMD_NAME
+			, DVOP_LOC_BUNJI
+			, DVOP_LOC_HO
+			, LITD_DG
+			, LITD_MINT
+			, LITD_SC
+			, LTTD_DG
+			, LTTD_MINT
+			, LTTD_SC
+			, UWATER_SRV
+			, UWATER_DTL_SRV
+			, UWATER_POTA_YN
+			, DIG_DPH
+			, DIG_DBT
+			, FRW_PLN_QUA
+			, ND_QT
+			, DYN_EQN_HRP
+			, PIPE_DIAM
+			, ESB_DPH
+			, RWT_CAP
+			, DVUS_END_NT_YMD
+			, LNHO_RAISE_YMD
+			, LNHO_RAISE_CAU
+			, LNHO_DEAL_MET
+			, OSTRS_MET
+			, LNHO_DPP_NM
+			, PERM_YN
+			, PERM_CANCEL_YN
+			, REM
+		FROM BML_WELL_PS
+	</select>
+	
+	<select id="listAllGeomIsNull" parameterType="bmlWellPs" resultType="bmlWellPs">
+		SELECT
+			OBJECTID
+			, GEOM
+			, FTR_CDE
+			, FTR_IDN
+			, PERM_NT_NO
+			, MG_NO
+			, PERM_NT_FORM_GBN
+			, RGT_MBD_GBN
+			, RGT_MBD_REG_NO
+			, RGT_MBD_NM
+			, NM
+			, RGT_MBD_ADDR
+			, RGT_MBD_RDN_ADDR
+			, DVOP_LOC_ADDR
+			, DVOP_LOC_RDN_ADDR
+			, DVOP_LOC_REGN_CODE
+			, DVOP_LOC_UMD_NAME
+			, DVOP_LOC_BUNJI
+			, DVOP_LOC_HO
+			, LITD_DG
+			, LITD_MINT
+			, LITD_SC
+			, LTTD_DG
+			, LTTD_MINT
+			, LTTD_SC
+			, UWATER_SRV
+			, UWATER_DTL_SRV
+			, UWATER_POTA_YN
+			, DIG_DPH
+			, DIG_DBT
+			, FRW_PLN_QUA
+			, ND_QT
+			, DYN_EQN_HRP
+			, PIPE_DIAM
+			, ESB_DPH
+			, RWT_CAP
+			, DVUS_END_NT_YMD
+			, LNHO_RAISE_YMD
+			, LNHO_RAISE_CAU
+			, LNHO_DEAL_MET
+			, OSTRS_MET
+			, LNHO_DPP_NM
+			, PERM_YN
+			, PERM_CANCEL_YN
+			, REM
+		FROM BML_WELL_PS
+		WHERE GEOM IS NULL
+			AND LITD_DG IS NOT NULL
+			AND LTTD_DG IS NOT NULL
+	</select>
+	
+	<insert id="insert" parameterType="bmlWellPs">
+		INSERT INTO BML_WELL_PS(
+			OBJECTID
+			, FTR_CDE
+			, FTR_IDN
+			, PERM_NT_NO
+			, MG_NO
+			, PERM_NT_FORM_GBN
+			, RGT_MBD_GBN
+			, RGT_MBD_REG_NO
+			, RGT_MBD_NM
+			, NM
+			, RGT_MBD_ADDR
+			, RGT_MBD_RDN_ADDR
+			, DVOP_LOC_ADDR
+			, DVOP_LOC_RDN_ADDR
+			, DVOP_LOC_REGN_CODE
+			, DVOP_LOC_UMD_NAME
+			, DVOP_LOC_BUNJI
+			, DVOP_LOC_HO
+			, LITD_DG
+			, LITD_MINT
+			, LITD_SC
+			, LTTD_DG
+			, LTTD_MINT
+			, LTTD_SC
+			, UWATER_SRV
+			, UWATER_DTL_SRV
+			, UWATER_POTA_YN
+			, DIG_DPH
+			, DIG_DBT
+			, FRW_PLN_QUA
+			, ND_QT
+			, DYN_EQN_HRP
+			, PIPE_DIAM
+			, ESB_DPH
+			, RWT_CAP
+			, DVUS_END_NT_YMD
+			, LNHO_RAISE_YMD
+			, LNHO_RAISE_CAU
+			, LNHO_DEAL_MET
+			, OSTRS_MET
+			, LNHO_DPP_NM
+			, PERM_YN
+			, PERM_CANCEL_YN
+			, REM
+		)VALUES(
+			(SELECT NVL(MAX(OBJECTID)+1,1) FROM BML_WELL_PS),
+			'BW001',
+			(SELECT NVL(MAX(OBJECTID)+1,1) FROM BML_WELL_PS),
+			#{permNtNo, jdbcType=VARCHAR},
+			#{mgNo, jdbcType=VARCHAR},
+			#{permNtFormGbn, jdbcType=VARCHAR},
+			#{rgtMbdGbn, jdbcType=VARCHAR},
+			#{rgtMbdRegNo, jdbcType=VARCHAR},
+			#{rgtMbdNm, jdbcType=VARCHAR},
+			#{nm, jdbcType=VARCHAR},
+			#{rgtMbdAddr, jdbcType=VARCHAR},
+			#{rgtMbdRdnAddr, jdbcType=VARCHAR},
+			#{dvopLocAddr, jdbcType=VARCHAR},
+			#{dvopLocRdnAddr, jdbcType=VARCHAR},
+			#{dvopLocRegnCode, jdbcType=VARCHAR},
+			#{dvopLocUmdName, jdbcType=VARCHAR},
+			#{dvopLocBunji, jdbcType=VARCHAR},
+			#{dvopLocHo, jdbcType=VARCHAR},
+			#{litdDg, jdbcType=INTEGER},
+			#{litdMint, jdbcType=INTEGER},
+			#{litdSc, jdbcType=DOUBLE},
+			#{lttdDg, jdbcType=INTEGER},
+			#{lttdMint, jdbcType=INTEGER},
+			#{lttdSc, jdbcType=DOUBLE},
+			#{uwaterSrv, jdbcType=VARCHAR},
+			#{uwaterDtlSrv, jdbcType=VARCHAR},
+			#{uwaterPotaYn, jdbcType=VARCHAR},
+			#{digDph, jdbcType=DOUBLE},
+			#{digDbt, jdbcType=DOUBLE},
+			#{frwPlnQua, jdbcType=DOUBLE},
+			#{ndQt, jdbcType=INTEGER},
+			#{dynEqnHrp, jdbcType=DOUBLE},
+			#{pipeDiam, jdbcType=DOUBLE},
+			#{esbDph, jdbcType=DOUBLE},
+			#{rwtCap, jdbcType=DOUBLE},
+			#{dvusEndNtYmd, jdbcType=VARCHAR},
+			#{lnhoRaiseYmd, jdbcType=VARCHAR},
+			#{lnhoRaiseCau, jdbcType=VARCHAR},
+			#{lnhoDealMet, jdbcType=VARCHAR},
+			#{ostrsMet, jdbcType=VARCHAR},
+			#{lnhoDppNm, jdbcType=VARCHAR},
+			#{permYn, jdbcType=VARCHAR},
+			#{permCancelYn, jdbcType=VARCHAR},
+			#{rem, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="remove" parameterType="bmlWellPs">
+		DELETE FROM BML_WELL_PS
+		WHERE PERM_NT_NO = #{permNtNo, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="removeAll">
+		DELETE FROM BML_WELL_PS
+	</delete>
+	
+	<update id="geomModify" parameterType="bmlWellPs">
+		UPDATE BML_WELL_PS SET
+			GEOM = SDO_UTIL.FROM_WKTGEOMETRY(#{geom})
+		WHERE OBJECTID = #{objectid, jdbcType=BIGINT }
+	</update>
+	
+</mapper>

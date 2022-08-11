@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.PplMnupAsMapper">
+	<insert id="buildMnup">
+		INSERT INTO PPL_MNUP_AS(OBJECTID, GEOM, PRT_IDN, OCP_IDN, PBP_KND, OCP_ADR, MEANS_NM, MAN_CDE, MAN_NM)
+		(SELECT (SELECT NVL(MAX(OBJECTID)+1,1) FROM PPL_MNUP_AS), GEOM, PRT_IDN, OCP_IDN, PBP_KND, OCP_ADR, MEANS_NM, MAN_CDE, MAN_NM FROM BML_OCCP_AS)
+	</insert>
+	
+	<delete id="deleteMnup">
+		TRUNCATE TABLE PPL_MNUP_AS
+	</delete>
+</mapper>

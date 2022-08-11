@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.BmlOousAsMapper">
+
+	<delete id="delete" parameterType="Long">
+		DELETE FROM BML_OOUS_AS 
+		WHERE 
+			OCP_IDN = #{ocpIdn}
+	</delete>
+	
+	<select id="maxPk" resultType="Long">
+		SELECT 
+			ISNULL(MAX(OCP_IDN),0)+1 AS OCP_IDN
+		FROM 
+			BML_OOUS_AS
+	</select>
+	
+</mapper>

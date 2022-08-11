@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+    
+    <!-- datasource -->
+    <bean id="eaisDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${Contact.Eais.DriverClassName}"/>
+        <property name="url" value="${Contact.Eais.Url}" />
+        <property name="username" value="${Contact.Eais.UserName}"/>
+        <property name="password" value="${Contact.Eais.Password}"/>
+    </bean>
+    
+    <!-- sqlSession -->
+    <bean id="eaisSqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="eaisDataSource" />
+		<property name="configLocation" value="classpath:/contact/eais/sqlmap/config/sql-mapper-config.xml" />
+		<property name="mapperLocations">
+			<list>
+            	<value>classpath:projects/gs/sqlmap/contact/eais/mappers/*.xml</value>
+            </list>
+		</property>
+	</bean>
+	
+	<!-- mapperScannerConfigurer -->
+	<bean id="eaisMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="kr.co.gitt.kworks.projects.gs.contact.eais.mappers" />
+		<property name="sqlSessionFactoryBeanName" value="eaisSqlSession" />
+	</bean>
+    
+</beans>

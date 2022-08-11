@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsThemamapBaseMapMapper">
+
+	<!-- 전체 목록 검색 -->
+	<select id="list" parameterType="Long" resultType="kwsThemamapBaseMap">
+		SELECT
+			THEMAMAP_ID, 
+			MAP_NO,
+			SORT_ORDR,
+			VISIBLE_AT,
+			OPACITY
+		FROM
+			KWS_THEMAMAP_BASE_MAP
+		WHERE THEMAMAP_ID = #{themamapId}
+	</select>
+	
+	
+	<!-- 권한에 맞는 목록만 검색 -->
+	<select id="listByAuthor" parameterType="themamapSearchDTO" resultType="kwsThemamapBaseMap">
+		SELECT
+			THEMAMAP_ID, 
+			MAP_NO,
+			SORT_ORDR,
+			VISIBLE_AT,
+			OPACITY
+		FROM
+			KWS_THEMAMAP_BASE_MAP
+		WHERE 
+			THEMAMAP_ID = #{themamapId}
+			<if test="authorGroupNos != null and authorGroupNos.size > 0">
+				AND MAP_NO IN (SELECT MAP_NO FROM KWS_BASE_MAP_AUTHOR WHERE AUTHOR_GROUP_NO IN  
+				<foreach collection="authorGroupNos" item="authorGroupNo" open="(" close=")" separator=",">
+					#{authorGroupNo}
+				</foreach>
+				AND INDICT_AT = 'Y')
+			</if>
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsThemamapBaseMap" >
+		INSERT INTO KWS_THEMAMAP_BASE_MAP (
+			THEMAMAP_ID,
+			MAP_NO,
+			SORT_ORDR,
+			VISIBLE_AT,
+			OPACITY
+		)
+		VALUES (
+			#{themamapId, jdbcType=BIGINT},
+			#{mapNo, jdbcType=BIGINT},
+			#{sortOrdr, jdbcType=INTEGER},
+			#{visibleAt, jdbcType=VARCHAR},
+			#{opacity, jdbcType=DOUBLE}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long" >
+		DELETE FROM KWS_THEMAMAP_BASE_MAP
+		WHERE THEMAMAP_ID = #{themamapId}
+	</delete>
+
+</mapper>

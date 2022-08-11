@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.SwtSpmtMaMapper">
+	
+	<!-- 배수설비인허가 리스트 -->
+	<!--  작성자 : 이승재, 2019.12.09 -->
+	<select id="selectLpPaCbnd" parameterType="long" resultType="kr.co.gitt.kworks.model.LpPaCbnd">
+		SELECT 
+			ST_ASTEXT(CBND.GEOM) AS GEOM
+		FROM SWT_SPMT_MA SPMT
+		INNER JOIN LP_PA_CBND CBND ON SPMT.RPST_BJDCD||SPMT.RPST_MTLNB||LPAD(SPMT.RPST_MNNM, 4, '0')||LPAD(SPMT.RPST_SLNO, 4, '0') = CBND.PNU
+		WHERE SPMT.FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 배수설비인허가 단 건 조회 -->
+	<!-- 수정자 : 이승재, 2019.12.14 -->
+	<select id="selectOne" parameterType="Long" resultType="kr.co.gitt.kworks.projects.gn.dto.DrngEqpCnfmPrmisnDTO">
+		SELECT                                              
+			(SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0199' AND T.RPST_BJDCD = CODE_ID)||
+			DECODE(T.RPST_MTLNB, '2', ' 산', '')||' '||T.RPST_MNNM||
+			CASE T.RPST_SLNO
+				WHEN NULL THEN ''
+				WHEN '0' THEN ''
+				WHEN ' ' THEN ''
+				ELSE ' -'||T.RPST_SLNO
+			END AS RPST,
+			CASE
+				WHEN T.PMS_CDE = 'PMS999' THEN T.PMS_ETC
+				ELSE (SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0237' AND T.PMS_CDE = CODE_ID)
+			END AS PMS,
+			CASE T.LPR_YMD
+				WHEN NULL THEN ''
+				WHEN ' ' THEN ''
+				ELSE TO_CHAR(TO_DATE(T.LPR_YMD), 'YYYY-MM-DD') 
+			END AS LPR_DATE,
+			CASE T.BEG_YMD
+				WHEN NULL THEN ''
+				WHEN ' ' THEN ''
+				ELSE TO_CHAR(TO_DATE(T.BEG_YMD), 'YYYY-MM-DD') 
+			END AS BEG_DATE,
+			CASE T.CNT_YMD
+				WHEN NULL THEN ''
+				WHEN ' ' THEN ''
+				ELSE TO_CHAR(TO_DATE(T.CNT_YMD), 'YYYY-MM-DD') 
+			END AS CNT_DATE,
+			CASE
+				WHEN T.MOP_CDE = 'MOP999' THEN T.MOP_ETC
+				ELSE (SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0440' AND T.MOP_CDE = CODE_ID)
+			END AS MOP,
+			CASE
+				WHEN T.DIA_CDE = 'PCB999' THEN T.DIA_ETC
+				ELSE (SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0441' AND T.DIA_CDE = CODE_ID)
+			END AS DIA,
+			CASE
+				WHEN T.CN_MTH_CDE = 'JHM999' THEN T.CN_MTH_ETC
+				ELSE (SELECT CODE_NM FROM KWS_DOMN_CODE WHERE DOMN_ID = 'KWS-0442' AND T.CN_MTH_CDE = CODE_ID)
+			END AS CN_MTH,
+			FTR_CDE,
+			FTR_IDN,
+			LPR_YMD,
+			BUD_NAM,
+			RPST_BJDCD,
+			RPST_MTLNB,
+			RPST_MNNM,
+			RPST_SLNO,
+			BILD_LCPLC,
+			BLD_ARA,
+			REQST_AR,
+			SDR_VOL,
+			PMS_CDE,
+			PMS_ETC,
+			DSCSS,
+			DSCSS_ETC,
+			BILD_RNADR,
+			BLD_USE,
+			MAK_NAM,
+			BEG_YMD,
+			CNT_YMD,
+			MOP_CDE,
+			MOP_ETC,
+			DIA_CDE,
+			DIA_ETC,
+			PIP_LEN,
+			CN_MTH_CDE,
+			CN_MTH_ETC,
+			RMK_EXP,
+			PMT_YMD,
+			PRO_NAM,
+			CS_ALOTM	
+		FROM SWT_SPMT_MA T
+		WHERE T.FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<select id="searchWhereCbndObjectid" parameterType="String" resultType="SwtSpmtMa">
+		SELECT
+			T1.FTR_IDN AS FTR_IDN
+		FROM SWT_SPMT_MA T1
+		LEFT JOIN LP_PA_CBND T2 ON T2.PNU = T1.RPST_BJDCD||T1.RPST_MTLNB||LPAD(T1.RPST_MNNM, 4, '0')||LPAD(T1.RPST_SLNO, 4, '0')
+		WHERE T2.OBJECTID = #{objectid}
+	</select>
+	
+	<delete id="delete" parameterType="Long">
+		DELETE FROM SWT_SPMT_MA
+		WHERE FTR_IDN = #{ftrIdn}
+	</delete>
+	
+	<!-- 배수설비인허가 등록 -->
+	<insert id="insert" parameterType="swtSpmtMa">
+		INSERT INTO SWT_SPMT_MA (
+			FTR_CDE,
+			FTR_IDN,
+			LPR_YMD,
+			BUD_NAM,
+			RPST_BJDCD,
+			RPST_MTLNB,
+			RPST_MNNM,
+			RPST_SLNO,
+			BILD_LCPLC,
+			BLD_ARA,
+			REQST_AR,
+			SDR_VOL,
+			PMS_CDE,
+			PMS_ETC,
+			DSCSS,
+			DSCSS_ETC,
+			BILD_RNADR,
+			BLD_USE,
+			MAK_NAM,
+			BEG_YMD,
+			CNT_YMD,
+			MOP_CDE,
+			MOP_ETC,
+			DIA_CDE,
+			DIA_ETC,
+			PIP_LEN,
+			CN_MTH_CDE,
+			CN_MTH_ETC,
+			RMK_EXP,
+			PMT_YMD,
+			PRO_NAM,
+			CS_ALOTM	
+		) VALUES (
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{lprYmd, jdbcType=VARCHAR},
+			#{budNam, jdbcType=VARCHAR},
+			#{rpstBjdcd, jdbcType=VARCHAR},
+			#{rpstMtlnb, jdbcType=VARCHAR},
+			#{rpstMnnm, jdbcType=VARCHAR},
+			#{rpstSlno, jdbcType=VARCHAR},
+			#{bildLcplc, jdbcType=VARCHAR},
+			#{bldAra, jdbcType=DOUBLE},
+			#{reqstAr, jdbcType=DOUBLE},
+			#{sdrVol, jdbcType=DOUBLE},
+			#{pmsCde, jdbcType=VARCHAR},
+			#{pmsEtc, jdbcType=VARCHAR},
+			#{dscss, jdbcType=VARCHAR},
+			#{dscssEtc, jdbcType=VARCHAR},
+			#{bildRnadr, jdbcType=VARCHAR},
+			#{bldUse, jdbcType=VARCHAR},
+			#{makNam, jdbcType=VARCHAR},
+			#{begYmd, jdbcType=VARCHAR},
+			#{cntYmd, jdbcType=VARCHAR},
+			#{mopCde, jdbcType=VARCHAR},
+			#{mopEtc, jdbcType=VARCHAR},
+			#{diaCde, jdbcType=VARCHAR},
+			#{diaEtc, jdbcType=DOUBLE},
+			#{pipLen, jdbcType=DOUBLE},
+			#{cnMthCde, jdbcType=VARCHAR},
+			#{cnMthEtc, jdbcType=VARCHAR},
+			#{rmkExp, jdbcType=VARCHAR},
+			#{pmtYmd, jdbcType=VARCHAR},
+			#{proNam, jdbcType=VARCHAR},
+			#{csAlotm, jdbcType=DOUBLE}
+		)
+	</insert>
+	
+	<!-- 배수설비인허가 수정 -->
+	<update id="update" parameterType="swtSpmtMa">
+		UPDATE SWT_SPMT_MA SET
+			FTR_CDE = #{ftrCde, jdbcType=VARCHAR},
+			LPR_YMD = #{lprYmd, jdbcType=VARCHAR},
+			BUD_NAM = #{budNam, jdbcType=VARCHAR},
+			RPST_BJDCD = #{rpstBjdcd, jdbcType=VARCHAR},
+			RPST_MTLNB = #{rpstMtlnb, jdbcType=VARCHAR},
+			RPST_MNNM = #{rpstMnnm, jdbcType=VARCHAR},
+			RPST_SLNO = #{rpstSlno, jdbcType=VARCHAR},
+			BILD_LCPLC = #{bildLcplc, jdbcType=VARCHAR},
+			BLD_ARA = #{bldAra, jdbcType=DOUBLE},
+			REQST_AR = #{reqstAr, jdbcType=DOUBLE},
+			SDR_VOL = #{sdrVol, jdbcType=DOUBLE},
+			PMS_CDE = #{pmsCde, jdbcType=VARCHAR},
+			PMS_ETC = #{pmsEtc, jdbcType=VARCHAR},
+			DSCSS = #{dscss, jdbcType=VARCHAR},
+			DSCSS_ETC = #{dscssEtc, jdbcType=VARCHAR},
+			BILD_RNADR = #{bildRnadr, jdbcType=VARCHAR},
+			BLD_USE = #{bldUse, jdbcType=VARCHAR},
+			MAK_NAM = #{makNam, jdbcType=VARCHAR},
+			BEG_YMD = #{begYmd, jdbcType=VARCHAR},
+			CNT_YMD = #{cntYmd, jdbcType=VARCHAR},
+			MOP_CDE = #{mopCde, jdbcType=VARCHAR},
+			MOP_ETC = #{mopEtc, jdbcType=VARCHAR},
+			DIA_CDE = #{diaCde, jdbcType=VARCHAR},
+			DIA_ETC = #{diaEtc, jdbcType=DOUBLE},
+			PIP_LEN = #{pipLen, jdbcType=DOUBLE},
+			CN_MTH_CDE = #{cnMthCde, jdbcType=VARCHAR},
+			CN_MTH_ETC = #{cnMthEtc, jdbcType=VARCHAR},
+			RMK_EXP = #{rmkExp, jdbcType=VARCHAR},
+			PMT_YMD = #{pmtYmd, jdbcType=VARCHAR},
+			PRO_NAM = #{proNam, jdbcType=VARCHAR},
+			CS_ALOTM = #{csAlotm, jdbcType=DOUBLE}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+</mapper>

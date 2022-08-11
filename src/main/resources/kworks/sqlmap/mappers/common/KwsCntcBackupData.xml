@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsCntcBackupDataMapper">
+
+	<!-- 연계 데이터 아이디 검색 -->
+	<select id="listDistinctDataId" resultType="String">
+		SELECT
+			DISTINCT(DATA_ID)
+		FROM 
+			KWS_CNTC_BACKUP_DATA
+	</select>
+
+	
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="String" resultType="kwsCntcBackupData">
+		SELECT 
+			BACKUP_ID,
+			DATA_ID,
+			BACKUP_DE,
+			BACKUP_DATA_ID,
+			BACKUP_DATA_CO,
+			BACKUP_DATA_PATH
+		FROM
+			KWS_CNTC_BACKUP_DATA
+		WHERE
+			DATA_ID = #{dataId}
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="kwsCntcBackupData">
+		SELECT 
+			BACKUP_ID,
+			DATA_ID,
+			BACKUP_DE,
+			BACKUP_DATA_ID,
+			BACKUP_DATA_CO,
+			BACKUP_DATA_PATH
+		FROM
+			KWS_CNTC_BACKUP_DATA
+		WHERE
+			BACKUP_ID = #{backupId}
+	</select>
+
+</mapper>

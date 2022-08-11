@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsNoticeMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND NOTICE_SJ LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND NOTICE_CN LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>		
+		</where>
+	</sql>
+
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+			KWS_NOTICE
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="kwsNotice">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				NOTICE_NO,
+				NOTICE_SJ,
+				NOTICE_CN,
+				RDCNT,
+				WRTER_ID,
+				FRST_RGSDE,
+				UPDUSR_ID,
+				LAST_UPDDE,
+				POPUP_START,
+				POPUP_END
+			FROM KWS_NOTICE
+			ORDER BY FRST_RGSDE DESC
+			<include refid="where"/>
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsNoticeMap" type="kwsNotice">
+		<id property="noticeNo" column="NOTICE_NO" />
+		<result property="noticeSj" column="NOTICE_SJ"/>
+		<result property="noticeCn" column="NOTICE_CN"/>
+		<result property="rdCnt" column="RDCNT"/>
+		<result property="wrterId" column="WRTER_ID"/>
+		<result property="frstRgsde" column="FRST_RGSDE"/>
+		<result property="updusrId" column="UPDUSR_ID"/>
+		<result property="lastUpdde" column="LAST_UPDDE"/>
+		<result property="popupStart" column="POPUP_START" />
+		<result property="popupEnd" column="POPUP_END" />
+		<collection property="kwsNoticeFiles" column="NOTICE_NO" javaType="java.util.ArrayList" ofType="kwsNoticeFile" select="kr.co.gitt.kworks.mappers.KwsNoticeFileMapper.listAll" ></collection>
+	</resultMap>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="kwsNoticeMap">
+		SELECT
+			NOTICE_NO,
+			NOTICE_SJ,
+			NOTICE_CN,
+			RDCNT,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE,
+			POPUP_START,
+			POPUP_END
+		FROM KWS_NOTICE
+		WHERE
+			NOTICE_NO = #{noticeNo}
+	</select>
+	
+	<select id="selectWherePopup" resultMap="kwsNoticeMap">
+		SELECT
+			NOTICE_NO,
+			NOTICE_SJ,
+			NOTICE_CN,
+			RDCNT,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE,
+			POPUP_START,
+			POPUP_END
+		FROM
+			KWS_NOTICE
+		WHERE
+			(TO_DATE(POPUP_START,'YYYY-MM-DD') IS NOT NULL
+		AND
+			TO_DATE(POPUP_START,'YYYY-MM-DD') <![CDATA[<=]]> TO_DATE(TO_CHAR(<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,'YYYY-MM-DD'),'YYYY-MM-DD')
+		AND
+			TO_DATE(POPUP_END,'YYYY-MM-DD') <![CDATA[>=]]> TO_DATE(TO_CHAR(<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,'YYYY-MM-DD'),'YYYY-MM-DD'))
+		OR
+			(TO_DATE(POPUP_START,'YYYY-MM-DD') IS NOT NULL
+		AND
+			TO_DATE(POPUP_START,'YYYY-MM-DD') <![CDATA[<=]]> TO_DATE(TO_CHAR(<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,'YYYY-MM-DD'),'YYYY-MM-DD')
+		AND
+			TO_DATE(POPUP_END,'YYYY-MM-DD') IS NULL)
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsNotice">
+		INSERT INTO KWS_NOTICE (
+			NOTICE_NO,
+			NOTICE_SJ,
+			NOTICE_CN,
+			WRTER_ID,
+			UPDUSR_ID,
+			POPUP_START,
+			POPUP_END
+		) 
+		VALUES (
+			#{noticeNo, jdbcType=BIGINT},
+			#{noticeSj, jdbcType=VARCHAR},
+			#{noticeCn, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			#{updusrId, jdbcType=VARCHAR},
+			#{popupStart, jdbcType=DATE},
+			#{popupEnd, jdbcType=DATE}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="kwsNotice">
+		UPDATE KWS_NOTICE SET 
+			NOTICE_SJ = #{noticeSj, jdbcType=VARCHAR},
+			NOTICE_CN = #{noticeCn, jdbcType=VARCHAR},
+			UPDUSR_ID = #{updusrId, jdbcType=VARCHAR},
+			LAST_UPDDE = <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,
+			<!-- POPUP_START = TO_DATE(#{popupStart, jdbcType=DATE}, 'YYYY-MM-DD'), -->
+			<!-- POPUP_START = #{popupStart, jdbcType=DATE}, -->
+			POPUP_START = #{popupStart, jdbcType=VARCHAR},
+			<!-- POPUP_END = TO_DATE(#{popupEnd, jdbcType=DATE}, 'YYYY-MM-DD') -->
+			<!-- POPUP_END = #{popupEnd, jdbcType=DATE} -->
+			POPUP_END = #{popupEnd, jdbcType=VARCHAR}
+		WHERE
+			NOTICE_NO = #{noticeNo}
+	</update>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateRdcnt" parameterType="Long">
+		UPDATE KWS_NOTICE
+		SET
+			RDCNT = RDCNT + 1
+		WHERE NOTICE_NO = #{noticeNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_NOTICE
+		WHERE
+			NOTICE_NO = #{noticeNo}
+	</delete>
+
+</mapper>

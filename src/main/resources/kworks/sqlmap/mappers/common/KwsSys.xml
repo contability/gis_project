@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsSysMapper">
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" resultType="kwsSys">
+		SELECT
+			SYS_ID,
+			SYS_NM,
+			SYS_TY,
+			SYS_ALIAS,
+			SYS_DC,
+			THEMAMAP_ID
+		FROM
+			KWS_SYS
+		<where>
+			<if test="sysTy != null and sysTy != ''">
+				AND SYS_TY = #{sysTy}
+			</if>		
+		</where>
+		ORDER BY SYS_ID
+	</select>
+	
+	<!-- 시스템 목록 검색 -->
+	<select id="listSys" resultType="kwsSys">
+		SELECT
+			SYS_ID,
+			SYS_NM,
+			SYS_TY,
+			SYS_ALIAS,
+			SYS_DC,
+			THEMAMAP_ID
+		FROM
+			KWS_SYS
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsSysMap" type="kwsSys">
+		<id property="sysId" column="SYS_ID" />
+		<result property="sysNm" column="SYS_NM"/>
+		<result property="sysTy" column="SYS_TY"/>
+		<result property="sysAlias" column="SYS_ALIAS"/>
+		<result property="sysDc" column="SYS_DC"/>
+		<result property="themamapId" column="THEMAMAP_ID"/>
+		<collection property="kwsSysDataCtgrys" column="SYS_ID" javaType="java.util.ArrayList" ofType="kwsSysDataCtgry" select="kr.co.gitt.kworks.mappers.KwsSysDataCtgryMapper.listAll" ></collection>
+	</resultMap>
+	<!-- 단 건 검색 -->
+	<select id="selectOne" resultMap="kwsSysMap">
+		SELECT
+			SYS_ID,
+			SYS_NM,
+			SYS_TY,
+			SYS_ALIAS,
+			SYS_DC,
+			THEMAMAP_ID
+		FROM
+			KWS_SYS
+		WHERE
+			SYS_ID = #{sysId}
+	</select>
+	
+	<!-- 수정 -->
+	<update id="updateBassThemamap" parameterType="kwsThemamap">
+		UPDATE KWS_SYS SET 
+			THEMAMAP_ID = #{themamapId, jdbcType=BIGINT}
+		WHERE
+			SYS_ID = #{sysId}
+	</update>
+
+	<!-- 사용자 시스템 등록  : THEMAMAP_ID 은 SYS_ID 1 번 테마맵을 따라감, SYS_TY은 USER로 고정-->
+	<insert id="selfSysInsert" parameterType="kwsSys">
+		INSERT INTO KWS_SYS
+		(	
+			SYS_ID,
+			SYS_NM,
+			SYS_ALIAS,
+			SYS_DC,
+			THEMAMAP_ID,
+			SYS_TY
+		)
+		VALUES	
+		(
+			#{sysId},
+			'SELF_SYSTEM',
+			#{sysAlias},
+			#{sysDc},
+			(SELECT THEMAMAP_ID FROM KWS_SYS WHERE SYS_ID = 1),
+			'USER'
+		)
+	</insert>
+	
+	<!-- 사용자 시스템 수정  : SYS_ALIAS, SYS_DC 만 수정 가능-->
+	<update id="selfSysUpdate" parameterType="kwsSys">
+		UPDATE KWS_SYS SET 
+			SYS_ALIAS = #{sysAlias},
+			SYS_DC = #{sysDc}
+		WHERE 
+			SYS_ID = #{sysId}
+			AND SYS_TY = 'USER'
+	</update>
+	
+	<!-- 사용자 시스템 삭제  -->
+	<delete id="selfSysDelete" parameterType="kwsSys">
+		DELETE FROM KWS_SYS
+		WHERE 
+			SYS_ID = #{sysId}
+			AND SYS_TY = 'USER'
+	</delete>
+</mapper>

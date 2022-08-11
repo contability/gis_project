@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdtAlcnDtMapper">
+
+	<!-- 검색 -->
+	<select id="listAll" parameterType="Long" resultType="rdtAlcnDt">
+		SELECT
+			SEC_IDN,
+			RDL_IDN
+		FROM RDT_ALCN_DT
+		WHERE
+			SEC_IDN = #{secIdn}
+	</select>
+
+</mapper>

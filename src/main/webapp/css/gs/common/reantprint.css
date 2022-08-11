@@ -1,0 +1,47 @@
+/*	생태계 교란식물 작업일지 양식 */
+
+/* 빈줄 */
+.div_replant_blank { width:100%; height:2%; }
+
+/*	문서 제목 */
+.div_replant_title { width:100%; height:6%; text-align:center; vertical-align:bottom; font-family:'Malgun Gothic'; font-weight:bold; font-size:10mm; }
+
+/* 결재란 */
+.approval_table { border-collapse:collapse; border-spacing:0; float:right; margin:0% 0% 1% 0%; width:30%; }
+.approval_table th { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.approval_table td { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.approval_table .th_approval { height:6mm; font-size:5mm; text-align:center; }
+.approval_table .td_approval { height:18mm; width:10mm; height:12mm; }
+
+/* 작업내용 표 */
+.job_table { width:98%; border-collapse:collapse; border-spacing:0; align:center; margin-left:1.5%; }
+.job_table th { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.job_table td { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.job_table .th_job { height:6mm; font-size:5mm; text-align:center; }
+.job_table .td_job { height:25mm; font-size:4mm; text-align:left; vertical-align:top; padding-top:1%; padding-left:2%; }
+
+/*	추진실적  제목 */
+.div_sub_title { height:4%; float:left; font-family:'Malgun Gothic'; font-weight:bold; font-size:7mm; padding-left:1%;}
+.div_unit { height:4%; float:right; font-family:'Malgun Gothic'; font-weight:bold; font-size:5mm; padding-right:1%;}
+
+/* 추진실적 표 */
+.performance_table { width:98%; border-collapse:collapse; border-spacing:0; align:center; margin-left:1.5%;}
+.performance_table th { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.performance_table td { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.performance_table .th_area { height:6mm; font-size:5mm; vertical-align:middle; text-align:center; }
+.performance_table .td_area { height:6mm; font-size:5mm; vertical-align:moddle; text-align:center; }
+.performance_table .td_value { height:6mm; font-size:3mm; vertical-align:moddle; text-align:right; padding-right:0.5%;}
+
+/* 특이사항 */
+.remark_title { height:3%; font-family:'Malgun Gothic'; font-weight:bold; font-size:5mm; text-align:left; padding-left:3%;} 
+.remark_note { height:3%; font-family:'Malgun Gothic'; font-weight:bold; font-size:4mm; text-align:left; padding-left:5%;}
+
+
+.photo_table { width:98%; border-collapse:collapse; border-spacing:0; align:center; margin-left:1.5%;}
+.photo_table th { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.photo_table td { font-family:'Malgun Gothic'; font-weight:normal; border-style:solid; border-width:1px; overflow:hidden; word-break:normal; border-color:black; }
+.photo_table .th_photo_title { height:6mm; font-size:4mm; vertical-align:middle; text-align:center; }
+.photo_table .td_photo_note { height:6mm; font-size:4mm; vertical-align:moddle; text-align:center; }
+.photo_table .td_photo { width:45mm; height:50mm; text-align:center; vertical-align:center; }
+.photo_table .div_photo { width:40mm; height:60mm; text-align:center; vertical-align:center; }
+.photo_table .photo_style { width:auto; max-height:60mm; text-align:center; vertical-align:center; }

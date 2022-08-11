@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportFileMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsExportFileMap" type="kwsExportFile">
+		<id property="exportNo" column="EXPORT_NO" />
+		<id property="fileNo" column="FILE_NO" />
+		<result property="fileOrdr" column="FILE_ORDR"/>
+		<association property="kwsFile" column="FILE_NO" javaType="kwsFile" select="kr.co.gitt.kworks.mappers.KwsFileMapper.selectOne"/>
+	</resultMap>
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="java.util.Map" resultMap="kwsExportFileMap">
+		SELECT
+			EXPORT_NO,
+			FILE_NO,
+			FILE_ORDR
+		FROM KWS_EXPORT_FILE
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExportFile">
+		INSERT INTO KWS_EXPORT_FILE (
+			EXPORT_NO,
+			FILE_NO,
+			FILE_ORDR
+		) 
+		VALUES (
+			#{exportNo, jdbcType=BIGINT},
+			#{fileNo, jdbcType=BIGINT},
+			#{fileOrdr, jdbcType=INTEGER}
+		)
+	</insert>
+	
+	
+
+</mapper>

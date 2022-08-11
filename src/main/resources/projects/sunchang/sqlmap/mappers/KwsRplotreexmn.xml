@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.sunchang.mappers.RplotreexmnMapper">
+
+	<resultMap type="KwsRplotreexmn" id="kwsRplotreexmnMap">
+		<id column="RPLOTREEXMN_NO " property="rplotreexmnNo "></id>
+		<result column="BSNS_AREA_NM " property="bsnsAreaNm "></result>
+		<result column="BSNS_SE" property="bsnsSe"></result>
+		<result column="BSNS_RPLOT_YR " property="bsnsRplotYr "></result>
+		<result column="CHANGE_YMD " property="changeYmd "></result>
+		<result column="ENFORCEMEN " property="enforcemen "></result>
+		<result column="OWNER_NM " property="ownerNm "></result>
+		<result column="OWNER_BRTHDY " property="ownerBrthdy "></result>
+		<result column="RMK_EXP " property="rmkExp "></result>
+	</resultMap>
+	
+	<resultMap type="KwsRplotreexmnLgstr" id="kwsRplotreexmnLgstrMap">
+		<id column="RPLOTREEXMN_LGSTR_NO" property="rplotreexmnLgstrNo"></id>
+		<result column="RPLOTREEXMN_NO " property="rplotreexmnNo "></result>
+		<result column="BRFTR_SE" property="brftrSe"></result>
+		<result column="PNU" property="pnu"></result>
+		<result column="RPLOT_LNDCGR " property="rplotLndcgr "></result>
+		<result column="RPLOT_AR " property="rplotAr "></result>
+		<result column="RPLOTREEXMN_NM" property="rplotreexmnNm"></result>
+	</resultMap>
+	
+	<select id="listCount" parameterType="kwsRplotreexmnLgstrDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			KWS_RPLOTREEXMN_LGSTR KRL
+		JOIN
+			KWS_RPLOTREEXMN KR
+		ON
+			KRL.RPLOTREEXMN_NO = KR.RPLOTREEXMN_NO
+		WHERE 
+			KRL.PNU LIKE #{searchKeyword}
+			AND
+			KR.BSNS_SE = #{searchCondition}
+			<if test="bsnsAreaNm != null and bsnsAreaNm != ''">
+			AND
+			BSNS_AREA_NM LIKE '%'||#{bsnsAreaNm}||'%'
+			</if>
+	</select>
+	
+	<select id="selectOne" resultMap="kwsRplotreexmnMap">
+		SELECT
+			RPLOTREEXMN_NO,
+			BSNS_AREA_NM,
+			BSNS_SE,
+			BSNS_RPLOT_YR,
+			CHANGE_YMD,
+			ENFORCEMEN,
+			OWNER_NM,
+			OWNER_BRTHDY,
+			RMK_EXP
+		FROM
+			KWS_RPLOTREEXMN
+		WHERE RPLOTREEXMN_NO = #{rplotreexmnNo}
+	</select>
+	
+	<select id="selectListLgstr" parameterType="kwsRplotreexmnLgstrDTO" resultMap="kwsRplotreexmnLgstrMap">
+		SELECT
+			KRL.RPLOTREEXMN_LGSTR_NO,
+			KRL.RPLOTREEXMN_NO,
+			KRL.BRFTR_SE,
+			KRL.PNU,
+			KRL.RPLOT_LNDCGR, 
+			KRL.RPLOT_AR,
+			KRL.RPLOTREEXMN_NM
+		FROM
+			KWS_RPLOTREEXMN_LGSTR KRL
+		JOIN
+			KWS_RPLOTREEXMN KR
+		ON
+			KRL.RPLOTREEXMN_NO = KR.RPLOTREEXMN_NO
+		WHERE 
+			KRL.PNU LIKE #{searchKeyword}
+			AND
+			KR.BSNS_SE = #{searchCondition}
+			<if test="bsnsAreaNm != null and bsnsAreaNm != ''">
+			AND
+			BSNS_AREA_NM LIKE '%'||#{bsnsAreaNm}||'%'
+			</if>
+		ORDER BY RPLOTREEXMN_NM ASC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectLgstrByFk" resultMap="kwsRplotreexmnLgstrMap">
+		SELECT
+			RPLOTREEXMN_LGSTR_NO,
+			RPLOTREEXMN_NO,
+			BRFTR_SE,
+			PNU,
+			RPLOT_LNDCGR, 
+			RPLOT_AR,
+			RPLOTREEXMN_NM
+		FROM
+			KWS_RPLOTREEXMN_LGSTR
+		WHERE RPLOTREEXMN_NO = #{rplotreexmnNo}
+	</select>
+	
+	<select id="selectForAfter" resultMap="kwsRplotreexmnLgstrMap">
+		SELECT
+			RPLOTREEXMN_LGSTR_NO,
+			RPLOTREEXMN_NO,
+			BRFTR_SE,
+			PNU,
+			RPLOT_LNDCGR, 
+			RPLOT_AR,
+			RPLOTREEXMN_NM
+		FROM
+			KWS_RPLOTREEXMN_LGSTR
+		WHERE 
+			RPLOTREEXMN_NO = #{rplotreexmnNo}
+			AND
+			BRFTR_SE = '2'
+	</select>
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdlCtlrLsMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="rdlCtlrLsMap" type="rdlCtlrLs">
+		<id property="objectid" column="OBJECTID" />
+		<result property="ftrCde" column="FTR_CDE"/>
+		<result property="secIdn" column="SEC_IDN"/>
+		<result property="jygCde" column="JYG_CDE"/>
+		<result property="lodYmd" column="LOD_YMD"/>
+		<result property="rdnCde" column="RDN_CDE"/>
+		<collection property="rdtAlcnDts" column="SEC_IDN" javaType="java.util.ArrayList" ofType="rdtAlcnDt" select="kr.co.gitt.kworks.mappers.RdtAlcnDtMapper.listAll" ></collection>
+	</resultMap>
+
+	<!-- 검색 -->
+	<select id="listAll" parameterType="String" resultMap="rdlCtlrLsMap">
+		SELECT
+			OBJECTID,
+			FTR_CDE,
+			SEC_IDN,
+			JYG_CDE,
+			LOD_YMD,
+			RDN_CDE
+		FROM RDL_CTLR_LS
+		WHERE
+			RDN_CDE = #{rdnCde}
+	</select>
+
+</mapper>

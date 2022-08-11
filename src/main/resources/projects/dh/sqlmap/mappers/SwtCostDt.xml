@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.SwtCostDtMapper">
+
+	<!-- 하수 공사대장 공사비 지급 내역 리스트 -->
+	<select id="list" parameterType="swtCostDt" resultType="swtCostDt">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			SHT_IDN,
+			PAY_CDE,
+			PAY_YMD,
+			PAY_AMT,
+			PAY_CON,
+			PAY_ETC,
+			JAM_AMT
+		FROM SWT_COST_DT
+		WHERE FTR_IDN = #{ftrIdn}
+		ORDER BY SHT_IDN DESC
+	</select>
+	
+	<!-- 하수 공사대장 공사비 지급 내역 단 건 검색 -->
+	<select id="selectOne" parameterType="cntrwkRegstrDTO" resultType="swtCostDt">
+		SELECT
+			FTR_CDE,
+			FTR_IDN,
+			SHT_IDN,
+			PAY_CDE,
+			PAY_YMD,
+			PAY_AMT,
+			PAY_CON,
+			PAY_ETC,
+			JAM_AMT
+		FROM SWT_COST_DT
+		WHERE FTR_IDN = #{ftrIdn}
+		AND SHT_IDN = #{shtIdn}
+	</select>
+	
+	<!-- 하수 공사대장 공사비 지급 내역 수정 -->
+	<update id="update" parameterType="swtCostDt">
+		UPDATE SWT_COST_DT SET
+			PAY_CDE = #{payCde, jdbcType=VARCHAR},
+			PAY_YMD = #{payYmd, jdbcType=VARCHAR},
+			PAY_AMT = #{payAmt, jdbcType=BIGINT},
+			PAY_CON = #{payCon, jdbcType=VARCHAR},
+			PAY_ETC = #{payEtc, jdbcType=VARCHAR},
+			JAM_AMT = #{jamAmt, jdbcType=BIGINT}
+		WHERE FTR_IDN = #{ftrIdn}
+		AND SHT_IDN = #{shtIdn}
+	</update>
+	
+	<!-- 하수공사대장 공사비 지급 내역 등록 -->
+	<insert id="insert" parameterType="swtCostDt">
+		INSERT INTO SWT_COST_DT (
+			FTR_CDE,
+			FTR_IDN,
+			SHT_IDN,
+			PAY_CDE,
+			PAY_YMD,
+			PAY_AMT,
+			PAY_CON,
+			PAY_ETC,
+			JAM_AMT
+		) VALUES (
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{shtIdn, jdbcType=BIGINT},
+			#{payCde, jdbcType=VARCHAR},
+			#{payYmd, jdbcType=VARCHAR},
+			#{payAmt, jdbcType=BIGINT},
+			#{payCon, jdbcType=VARCHAR},
+			#{payEtc, jdbcType=VARCHAR},
+			#{jamAmt, jdbcType=BIGINT}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM SWT_COST_DT
+		WHERE
+			SHT_IDN = #{shtIdn}
+	</delete>
+	
+</mapper>

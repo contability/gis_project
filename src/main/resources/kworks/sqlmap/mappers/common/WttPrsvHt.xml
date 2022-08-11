@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.WttPrsvHtMapper">
+
+	<!-- 관리이력 리스트 - 상수 -->
+	<select id="listManageHistWater" parameterType="Long" resultType="wttPrsvHt">
+		SELECT
+			WTT.SHT_IDN,
+			WTT.FTR_CDE,
+			WTT.FTR_IDN,
+			WTT.MNH_CDE,
+			DOMN.CODE_NM AS MNH_NAM,
+			WTT.CNT_IDN,
+			WTT.SBJ_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.DOMN_ID = 'KWS-0034' AND DOMN.CODE_ID = WTT.SBJ_CDE) AS SBJ_NAM,
+			WTT.RER_DES,
+			WTT.REP_DES,
+			WTT.SRE_YMD,
+			WTT.ERE_YMD,
+			WTT.OPR_NAM
+		FROM WTT_PRSV_HT WTT
+		LEFT OUTER JOIN KWS_DOMN_CODE DOMN ON WTT.MNH_CDE = DOMN.CODE_ID
+		WHERE
+			WTT.FTR_IDN = #{ftrIdn}
+		ORDER BY WTT.CNT_IDN ASC
+	</select>
+	
+	<resultMap id="wttPrsvHtMap" type="wttPrsvHt">
+		<id property="ftrIdn" column="FTR_IDN" />
+		<result property="shtIdn" column="SHT_IDN" />
+		<result property="ftrCde" column="FTR_CDE" />
+		<result property="mnhCde" column="MNH_CDE" />
+		<result property="cntIdn" column="CNT_IDN" />
+		<result property="sbjCde" column="SBJ_CDE" />
+		<result property="sbjNam" column="SBJ_NAM" />
+		<result property="rerDes" column="RER_DES" />
+		<result property="repDes" column="REP_DES" />
+		<result property="sreYmd" column="SRE_YMD" />
+		<result property="ereYmd" column="ERE_YMD" />
+		<result property="oprNam" column="OPR_NAM" />
+	</resultMap>
+	
+	<!-- 관리이력구분 -->
+	<select id="listMnh" parameterType="String" resultType="wttPrsvHt">
+		SELECT
+			DOMN_ID,
+			CODE_ID,
+			CODE_NM,
+			USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE DOMN_ID = #{domnId}
+	</select>
+	
+	<!-- 지형지물부호 조회 -->
+	<select id="selectOneFtrCde" resultMap="wttPrsvHtMap">
+		SELECT
+			DOMN_ID,
+			CODE_ID,
+			CODE_NM,
+			USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE 
+			DOMN_ID = 'KWS-000'
+		AND 
+			CODE_ID = #{ftrCde, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 관리이력 상세정보 - 상수 -->
+	<select id="selectOneManageHistWater" parameterType="Long" resultMap="wttPrsvHtMap">
+		SELECT
+			WTT.SHT_IDN,
+			WTT.FTR_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.DOMN_ID = 'KWS-000' AND DOMN.CODE_ID = WTT.FTR_CDE) AS FTR_NAM,
+			WTT.FTR_IDN,
+			WTT.MNH_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.CODE_ID = WTT.MNH_CDE) AS MNH_NAM,
+			WTT.CNT_IDN,
+			WTT.SBJ_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.DOMN_ID = 'KWS-0034' AND DOMN.CODE_ID = WTT.SBJ_CDE) AS SBJ_NAM,
+			WTT.RER_DES,
+			WTT.REP_DES,
+			WTT.SRE_YMD,
+			WTT.ERE_YMD,
+			WTT.OPR_NAM
+		FROM WTT_PRSV_HT WTT
+		WHERE
+			WTT.SHT_IDN = #{shtIdn}
+	</select>
+	
+	<!-- 관리이력 수정 - 상수 -->
+	<update id="updateManageHistWater" parameterType="wttPrsvHt">
+		UPDATE WTT_PRSV_HT SET
+			MNH_CDE = #{mnhCde, jdbcType=VARCHAR},
+			SBJ_CDE = #{sbjCde, jdbcType=VARCHAR},
+			RER_DES = #{rerDes, jdbcType=VARCHAR},
+			REP_DES = #{repDes, jdbcType=VARCHAR},
+			SRE_YMD = #{sreYmd, jdbcType=VARCHAR},
+			ERE_YMD = #{ereYmd, jdbcType=VARCHAR}
+		WHERE 
+			SHT_IDN = #{shtIdn}
+	</update>
+	
+	<!-- 관리이력 등록 - 상수 -->
+	<insert id="insertManageHistWater" parameterType="wttPrsvHt">
+		INSERT INTO WTT_PRSV_HT	(
+			SHT_IDN,
+			FTR_CDE, 
+			FTR_IDN,
+			MNH_CDE,
+			CNT_IDN,
+			SBJ_CDE,
+			RER_DES,
+			REP_DES,
+			SRE_YMD,
+			ERE_YMD
+		)
+		VALUES (
+			#{shtIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{mnhCde, jdbcType=VARCHAR},
+			#{cntIdn, jdbcType=BIGINT},
+			#{sbjCde, jdbcType=VARCHAR},
+			#{rerDes, jdbcType=VARCHAR},
+			#{repDes, jdbcType=VARCHAR},
+			#{sreYmd, jdbcType=VARCHAR},
+			#{ereYmd, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+</mapper>

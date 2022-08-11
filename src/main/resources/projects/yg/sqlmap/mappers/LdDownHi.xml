@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yg.mappers.LdDownHiMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 공사번호 -->
+			<if test="cntIdn != null and cntIdn != ''">
+				AND CNT_IDN = #{cntIdn}
+			</if>
+			<!-- 이력번호 -->
+			<if test="hisNo != null and hisNo != ''">
+				AND HIS_NO = #{hisNo}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 토지공사대장 첨푸파일 목록갯수 -->
+	<select id="listCount" resultType="Integer" parameterType="searchDTO">
+		SELECT
+			COUNT(*) AS HIS_NO
+		FROM LD_DOWN_HI
+	</select>
+
+	<!-- 토지공사대장 첨부파일 목록 -->
+	<select id="list" resultType="ldDownHi" parameterType="searchDTO">
+		<!-- <include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" /> -->
+		SELECT
+			HIS_NO,
+			CNT_IDN,
+			CNT_NAM,
+			LUI_IDN,
+			DW_YMD,
+			DOC_CDE,
+			DEPT_CDE,
+			USER_ID
+		FROM LD_DOWN_HI
+		ORDER BY HIS_NO DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		<!-- <include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" /> -->
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 전체목록 -->
+	<select id="listAll" parameterType="ldDownHi" resultType="ldDownHi">
+		SELECT
+			HIS_NO,
+			CNT_IDN,
+			CNT_NAM,
+			LUI_IDN,
+			DW_YMD,
+			DOC_CDE,
+			DEPT_CDE,
+			USER_ID
+		FROM LD_DOWN_HI
+		<include refid="where" />
+		ORDER BY HIS_NO DESC
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 단건조회 -->
+	<select id="selectOne" parameterType="Long" resultType="ldDownHi">
+		SELECT
+			HIS_NO,
+			CNT_IDN,
+			CNT_NAM,
+			LUI_IDN,
+			DW_YMD,
+			DOC_CDE,
+			DEPT_CDE,
+			USER_ID
+		FROM LD_DOWN_HI
+		WHERE HIS_NO = #{hisNo}
+	</select>
+	
+	<!-- 토지공사대장 첨부파일 수정 -->
+	<update id="update" parameterType="ldDownHi">
+		UPDATE LD_DOWN_HI SET
+			CNT_IDN = #{cntIdn, jdbcType=BIGINT},
+			CNT_NAM = #{cntNam, jdbcType=VARCHAR},
+			LUI_IDN = #{luiIdn, jdbcType=BIGINT},
+			DW_YMD = #{dwYmd, jdbcType=VARCHAR},
+			DOC_CDE = #{docCde, jdbcType=VARCHAR},
+			DEPT_CDE = #{deptCde, jdbcType=VARCHAR},
+			USER_ID = #{userId, jdbcType=VARCHAR}
+		WHERE
+			HIS_NO = #{hisNo}
+	</update>
+	
+	<!-- 토지공사대장 첨부파일 등록 -->
+	<insert id="insert" parameterType="ldDownHi">
+		INSERT INTO LD_DOWN_HI (
+			HIS_NO,
+			CNT_IDN,
+			CNT_NAM,
+			LUI_IDN,
+			DW_YMD,
+			DOC_CDE,
+			DEPT_CDE,
+			USER_ID
+		) VALUES (
+			#{hisNo, jdbcType=BIGINT},
+			#{cntIdn, jdbcType=BIGINT},
+			#{cntNam, jdbcType=VARCHAR},
+			#{luiIdn, jdbcType=BIGINT},
+			#{dwYmd, jdbcType=VARCHAR},
+			#{docCde, jdbcType=VARCHAR},
+			#{deptCde, jdbcType=VARCHAR},
+			#{userId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 토지공사대장 첨부파일 삭제 -->
+	<delete id="delete" parameterType="ldDownHi">
+		DELETE FROM LD_DOWN_HI
+		WHERE
+			HIS_NO = #{hisNo}
+	</delete>
+	
+</mapper>

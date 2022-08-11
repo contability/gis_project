@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsDeptSubMapper">
+	
+	<select id="list" parameterType="kwsDeptSub" resultType="kwsDeptSub">
+		SELECT
+			DEPT_CODE,
+			DEPT_SUB_NM,
+			DEPT_SUB_CODE,
+			USE_AT
+		FROM KWS_DEPT_SUB
+		WHERE USE_AT = 'Y'
+		AND DEPT_CODE = #{deptCode}
+		ORDER BY DEPT_CODE
+	</select>
+
+	<select id="deptSubNmReturn" resultType="String" parameterType="String">
+		SELECT 
+			DEPT_SUB_NM
+		FROM 
+			KWS_DEPT_SUB
+		WHERE 
+			DEPT_SUB_CODE = #{deptSubCode}
+	</select>
+	
+	<select id="forDeptCode" resultType="String" parameterType="String">
+		SELECT
+			DEPT_CODE
+		FROM
+			KWS_DEPT_SUB
+		WHERE 
+			DEPT_SUB_CODE = #{deptSbCd}
+	</select>
+	
+</mapper>

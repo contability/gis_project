@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsUserMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		WHERE U.USE_AT = 'Y'
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 1">
+					AND USER_NM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 2">
+					AND U.USER_ID LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="searchCondition == 3">
+					AND U.DEPT_CODE IN (SELECT DEPT_CODE FROM KWS_DEPT WHERE DEPT_NM LIKE '%' || #{searchKeyword} || '%')
+				</if>
+			</if>
+			<if test="searchCondition == 4">
+				AND U.USER_ID IN (SELECT USER_ID FROM KWS_USER_AUTHOR WHERE AUTHOR_GROUP_NO = #{authorGroupNo})
+			</if>
+	</sql>
+
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="userSearchDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			KWS_USER U
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="userSearchDTO" resultType="kwsUser">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				USER_ID,
+				DEPT_CODE,
+				USER_NM,
+				USER_GRAD,
+				USER_TYPE
+			FROM 
+				KWS_USER U
+			<include refid="where" />
+			ORDER BY USER_NM DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<select id="listInfo" parameterType="userSearchDTO" resultType="kwsUser">
+			SELECT
+				USER_ID,
+				DEPT_CODE,
+				USER_NM,
+				USER_GRAD,
+				USER_TYPE
+			FROM 
+				KWS_USER U
+			<where>
+				USER_ID = #{userId}
+			</where>
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsUserMap" type="kwsUser">
+		<id property="userId" column="USER_ID" />
+		<result property="deptCode" column="DEPT_CODE"/>
+		<result property="deptNm" column="DEPT_NM" />
+		<result property="userNm" column="USER_NM"/>
+		<result property="userGrad" column="USER_GRAD"/>
+		<result property="userType" column="USER_TYPE"/>
+		<collection property="kwsAuthorGroups" ofType="KwsAuthorGroup">
+			<id property="authorGroupNo" column="AUTHOR_GROUP_NO" />
+			<result property="authorGroupNm" column="AUTHOR_GROUP_NM" />
+		</collection>
+	</resultMap>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultMap="kwsUserMap">
+		SELECT
+			U.USER_ID,
+			U.DEPT_CODE,
+			U.USER_NM,
+			U.USER_GRAD,
+			U.USER_TYPE,
+			A.AUTHOR_GROUP_NO,
+			A.AUTHOR_GROUP_NM
+		FROM 
+			KWS_USER U 
+			INNER JOIN KWS_USER_AUTHOR UA ON U.USER_ID = UA.USER_ID
+			INNER JOIN KWS_AUTHOR_GROUP A ON UA.AUTHOR_GROUP_NO = A.AUTHOR_GROUP_NO
+		WHERE
+			U.USER_ID = #{userId}
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOneUserInfo" parameterType="String" resultMap="kwsUserMap">
+		SELECT
+			U.USER_ID,
+			U.DEPT_CODE,
+			U.USER_NM,
+			U.PASSWORD,
+			U.USER_GRAD,
+			U.USER_TYPE,
+			--D.DEPT_NM,
+			(SELECT DEPT_NM FROM KWS_DEPT WHERE DEPT_CODE = U.DEPT_CODE) AS DEPT_NM,
+			AG.AUTHOR_GROUP_NO,
+			AG.AUTHOR_GROUP_NM
+		FROM 
+			KWS_USER U
+			--INNER JOIN KWS_DEPT D ON U.DEPT_CODE = D.DEPT_CODE
+			INNER JOIN KWS_USER_AUTHOR UA ON U.USER_ID = UA.USER_ID
+			INNER JOIN KWS_AUTHOR_GROUP AG ON UA.AUTHOR_GROUP_NO = AG.AUTHOR_GROUP_NO
+		WHERE 
+			U.USER_ID = #{userId}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsUser">
+		INSERT INTO KWS_USER (
+			USER_ID, 
+			DEPT_CODE, 
+			USER_NM, 
+			PASSWORD,
+			USER_GRAD, 
+			USER_TYPE,
+			USE_AT
+		)
+		VALUES (
+			#{userId, jdbcType=VARCHAR},
+			#{deptCode, jdbcType=VARCHAR},
+			#{userNm, jdbcType=VARCHAR},
+			#{password, jdbcType=VARCHAR},
+			#{userGrad, jdbcType=VARCHAR},
+			#{userType, jdbcType=VARCHAR},
+			'Y'
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="kwsUser">
+		UPDATE KWS_USER SET
+			<if test="deptCode != null">
+				DEPT_CODE = #{deptCode, jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				PASSWORD = #{password, jdbcType=VARCHAR},
+			</if>
+			<if test="userNm != null and userNm != ''">
+				USER_NM = #{userNm, jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null and userType != ''">
+				USER_TYPE = #{userType, jdbcType=VARCHAR},
+			</if>
+			USER_GRAD = #{userGrad, jdbcType=VARCHAR}
+		WHERE
+			USER_ID = #{userId}
+	</update>
+	
+	<!-- 이승재, 2021.02.22, 임시 - 강릉시 사용자성명이 깨지는 현상 처리 후 기존 깨져서 들어간 성명을 바로 잡기 위하여 임시로 사용자성명 저장 -->
+	<update id="updateUserInfo" parameterType="kwsUser">
+		UPDATE KWS_USER SET
+				USER_NM = #{userNm, jdbcType=VARCHAR},
+			<if test="password != null">
+				PASSWORD = #{password, jdbcType=VARCHAR},
+			</if>
+				DEPT_CODE = #{deptCode, jdbcType=VARCHAR}
+		WHERE
+			USER_ID = #{userId}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteEnvrn" parameterType="String">
+		DELETE FROM KWS_USER_ENVRN
+		WHERE
+			USER_ID =#{userId}
+	</delete>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM KWS_USER
+		WHERE
+			USER_ID =#{userId}
+	</delete>
+	
+	<!-- 엑셀다운로드용 리스트 조회 -->
+	<select id="listUserExcel" parameterType="userSearchDTO" resultType="kwsUser">
+		 SELECT
+			U.USER_ID,
+			U.DEPT_CODE,
+			U.USER_NM,
+			D.DEPT_NM,
+			U.USER_GRAD,
+			U.USER_TYPE,
+			A.AUTHOR_GROUP_NO,
+			A.AUTHOR_GROUP_NM
+		FROM 
+			KWS_USER U 
+			INNER JOIN KWS_USER_AUTHOR UA ON U.USER_ID = UA.USER_ID
+			INNER JOIN KWS_DEPT D ON U.DEPT_CODE = D.DEPT_CODE
+			INNER JOIN KWS_AUTHOR_GROUP A ON UA.AUTHOR_GROUP_NO = A.AUTHOR_GROUP_NO
+		<include refid="where" />
+	</select>
+	
+</mapper>

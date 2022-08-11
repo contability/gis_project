@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gs.contact.eais.mappers.DjrBldRgstMapper">
+
+	<resultMap id="djrBldRgstMap" type="djrBldRgst">
+		<id property="bldrgstPk" column="BLDRGST_PK"/>
+		<result property="regstrGbCd" column="REGSTR_GB_CD"/>
+		<result property="regstrGbCdNm" column="REGSTR_GB_CD_NM"/>
+		<result property="regstrKindCd" column="REGSTR_KIND_CD"/>
+		<result property="regstrKindCdNm" column="REGSTR_KIND_CD_NM"/>
+		<result property="sigunguCd" column="SIGUNGU_CD"/>
+		<result property="bjdongCd" column="BJDONG_CD"/>
+		<result property="platGbCd" column="PLAT_GB_CD"/>
+		<result property="bun" column="BUN"/>
+		<result property="ji" column="JI"/>
+		<result property="splotNm" column="SPLOT_NM"/>
+		<result property="block" column="BLOCK"/>
+		<result property="lot" column="LOT"/>
+		<result property="bldNm" column="BLD_NM"/>
+		<result property="bylotCnt" column="BYLOT_CNT"/>
+		<result property="etcRcdItem" column="ETC_RCD_ITEM"/>
+		<result property="violBldYn" column="VIOL_BLD_YN"/>
+		<result property="cmprsGb" column="CMPRS_GB"/>
+		<result property="cdCmprsDay" column="CD_CMPRS_DAY"/>
+		<result property="entirCmprsDay" column="ENTIR_CMPRS_DAY"/>
+		<result property="upperBldrgstPk" column="UPPER_BLDRGST_PK"/>
+		<result property="regstrSeqno" column="REGSTR_SEQNO"/>
+		<result property="naRoadCd" column="NA_ROAD_CD"/>
+		<result property="naBjdongCd" column="NA_BJDONG_CD"/>
+		<result property="naUgrndCd" column="NA_UGRND_CD"/>
+		<result property="naUgrndCdNm" column="NA_UGRND_CD_NM"/>
+		<result property="naMainBun" column="NA_MAIN_BUN"/>
+		<result property="naSubBun" column="NA_SUB_BUN"/>
+		<result property="totarea" column="TOTAREA"/>
+		<result property="dongNm" column="DONG_NM"/>
+	</resultMap>
+	
+	<select id="listDjrBldRgst" parameterType="djrBldRgst" resultMap="djrBldRgstMap">
+		SELECT
+			BLDRGST_PK,
+			REGSTR_GB_CD,		--DJ001		1: 일반,	2: 집합
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'DJ001' AND SGRP_CD = REGSTR_GB_CD) AS REGSTR_GB_CD_NM,
+			REGSTR_KIND_CD,		--DJ002		1:총괄표제부	2:일반건축물	3: 표제부	4: 전유부
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'DJ002' AND SGRP_CD = REGSTR_KIND_CD) AS REGSTR_KIND_CD_NM,
+			SIGUNGU_CD,
+			BJDONG_CD,
+			PLAT_GB_CD,
+			BUN,
+			JI,
+			SPLOT_NM,
+			BLOCK,
+			LOT,
+			BLD_NM,
+			BYLOT_CNT,
+			ETC_RCD_ITEM,
+			VIOL_BLD_YN,		-- 1: 위반
+			CMPRS_GB,
+			CD_CMPRS_DAY,
+			ENTIR_CMPRS_DAY,
+			UPPER_BLDRGST_PK,
+			REGSTR_SEQNO,
+			NA_ROAD_CD,
+			NA_BJDONG_CD,
+			NA_UGRND_CD,		--NA001
+			(SELECT CD_NM FROM V_CMPCOMMCDMGM WHERE LGRP_CD = 'NA001' AND SGRP_CD = NA_UGRND_CD) AS NA_UGRND_CD_NM,
+			NA_MAIN_BUN,
+			NA_SUB_BUN,
+			(SELECT DONG_NM FROM V_DJRTITLE_GIS WHERE BLDRGST_PK = V_DJRBLDRGST_GIS.BLDRGST_PK) AS DONG_NM
+		FROM 
+			V_DJRBLDRGST_GIS
+		WHERE SIGUNGU_CD = #{sigunguCd}
+		AND BJDONG_CD = #{bjdongCd}
+		AND PLAT_GB_CD = #{platGbCd}
+		AND BUN = #{bun}
+		AND JI = #{ji}
+	</select>
+</mapper>

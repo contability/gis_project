@@ -1,0 +1,11 @@
+.connectBtn{
+	cursor:pointer;
+}
+#div_connect_select{
+	height:200px;
+	display:none;
+}
+.connCount {font-size:13px;}
+.connRed{color : red; font-weight:bold;}
+.connGreen{color : green; font-weight:bold;}
+.connBlue{color : blue; font-weight:bold;}

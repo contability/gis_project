@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.CmtCnrsMapMapper">
+	
+	<!-- 일괄 Insert -->
+	<insert id="insertAll" parameterType="java.util.Map">
+		INSERT INTO CMT_CNRS_MAP (FTR_IDN, FTR_CDE, POI_SJ, POI_CN, LC_X, LC_Y, WRTER_ID, UPDUSR_ID, FRST_RGSDE, LAST_UPDDE)
+		VALUES
+			<foreach collection="list" separator="," item="item">
+				(#{item.ftrIdn}, #{item.ftrCde}, #{item.poiSj}, #{item.poiCn}, #{item.lcX}, #{item.lcY}, #{item.wrterId}, #{item.updusrId}, <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />, <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />)
+			</foreach>
+	</insert>
+	
+	<!-- 전체 검색 -->
+	<select id="listAll" resultType="SharingMapDTO">
+		SELECT
+			CCM.POI_SJ,
+			CCM.POI_CN,
+			CCM.FTR_CDE,
+			CCM.FTR_IDN,
+			CCM.LC_X,
+			CCM.LC_Y,
+			CCM.WRTER_ID,
+			CCM.FRST_RGSDE,
+			CCM.UPDUSR_ID,
+			CCM.LAST_UPDDE,
+			KI.IMAGE_NO,
+			KI.IMAGE_FILE_NO,
+			KI.THUMB_FILE_NO,
+			KI.OUTPT_FILE_NO
+		FROM CMT_CNRS_MAP CCM
+		LEFT OUTER JOIN KWS_IMAGE KI ON KI.FTR_CDE = CCM.FTR_CDE AND KI.FTR_IDN = CCM.FTR_IDN
+	</select>
+	
+	<!-- 단건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="cmtCnrsMap">
+		SELECT
+			POI_SJ,
+			POI_CN,
+			FTR_CDE,
+			FTR_IDN,
+			LC_X,
+			LC_Y,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE
+		FROM
+			CMT_CNRS_MAP
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="CmtCnrsMap">
+		UPDATE CMT_CNRS_MAP SET
+			POI_SJ = #{poiSj},
+			POI_CN = #{poiCn},
+			LC_X = #{lcX},
+			LC_Y = #{lcY},
+			UPDUSR_ID = #{updusrId},
+			LAST_UPDDE = <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM CMT_CNRS_MAP
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</delete>
+	
+</mapper>

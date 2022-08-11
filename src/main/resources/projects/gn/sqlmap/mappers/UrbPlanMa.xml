@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.UrbPlanMaMapper">
+
+	<!-- 등록 -->
+	<insert id="insert">
+		INSERT INTO URB_PLAN_MA (
+			FTR_IDN,
+			FTR_CDE,
+			UPR_IDN,
+			UPR_BJD,
+			UPR_NAM,
+			UPR_GRD,
+			UPR_TYP,
+			UPR_NUM,
+			UPR_WID,
+			UPR_LEN,
+			UPR_STR,
+			UPR_END,
+			UPR_FCN,
+			UPR_UTY,
+			STR_NTC,
+			STR_YMD,
+			LST_NTC,
+			LST_YMD,
+			PMT_NTC,
+			PMT_YMD,
+			DIS_NTC,
+			DIS_YMD,
+			RMK_EXP
+		) VALUES (
+			#{data.ftrIdn, jdbcType=BIGINT},
+			#{data.ftrCde, jdbcType=VARCHAR},
+			#{data.uprIdn, jdbcType=VARCHAR},
+			#{data.uprBjd, jdbcType=VARCHAR},
+			#{data.uprNam, jdbcType=VARCHAR},
+			#{data.uprGrd, jdbcType=VARCHAR},
+			#{data.uprTyp, jdbcType=VARCHAR},
+			#{data.uprNum, jdbcType=VARCHAR},
+			#{data.uprWid, jdbcType=REAL},
+			#{data.uprLen, jdbcType=REAL},
+			#{data.uprStr, jdbcType=VARCHAR},
+			#{data.uprEnd, jdbcType=VARCHAR},
+			#{data.uprFcn, jdbcType=VARCHAR},
+			#{data.uprUty, jdbcType=VARCHAR},
+			#{data.strNtc, jdbcType=VARCHAR},
+			#{data.strYmd, jdbcType=VARCHAR},
+			#{data.lstNtc, jdbcType=VARCHAR},
+			#{data.lstYmd, jdbcType=VARCHAR},
+			#{data.pmtNtc, jdbcType=VARCHAR},
+			#{data.pmtYmd, jdbcType=VARCHAR},
+			#{data.disNtc, jdbcType=VARCHAR},
+			#{data.disYmd, jdbcType=VARCHAR},
+			#{data.rmkExp, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 수정 -->
+	<update id="update">
+		UPDATE 
+			URB_PLAN_MA
+		SET 
+			UPR_IDN = #{data.uprIdn, jdbcType=BIGINT},
+			UPR_BJD = #{data.uprBjd, jdbcType=VARCHAR},
+			UPR_NAM = #{data.uprNam, jdbcType=VARCHAR},
+			UPR_GRD = #{data.uprGrd, jdbcType=VARCHAR},
+			UPR_TYP = #{data.uprTyp, jdbcType=VARCHAR},
+			UPR_NUM = #{data.uprNum, jdbcType=VARCHAR},
+			UPR_WID = #{data.uprWid, jdbcType=REAL},		
+			UPR_LEN = #{data.uprLen, jdbcType=REAL},
+			UPR_STR = #{data.uprStr, jdbcType=VARCHAR},
+			UPR_END = #{data.uprEnd, jdbcType=VARCHAR},
+			UPR_FCN = #{data.uprFcn, jdbcType=VARCHAR},
+			UPR_UTY = #{data.uprUty, jdbcType=VARCHAR},
+			STR_NTC = #{data.strNtc, jdbcType=VARCHAR},
+			STR_YMD = #{data.strYmd, jdbcType=VARCHAR},
+			LST_NTC = #{data.lstNtc, jdbcType=VARCHAR},
+			LST_YMD = #{data.lstYmd, jdbcType=VARCHAR},
+			PMT_NTC = #{data.pmtNtc, jdbcType=VARCHAR},
+			PMT_YMD = #{data.pmtYmd, jdbcType=VARCHAR},
+			DIS_NTC = #{data.disNtc, jdbcType=VARCHAR},
+			DIS_YMD = #{data.disYmd, jdbcType=VARCHAR},
+			RMK_EXP = #{data.rmkExp, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete">
+		DELETE FROM 
+			URB_PLAN_MA
+		WHERE 
+			FTR_IDN = #{ftrIdn}
+	</delete>
+		
+</mapper>

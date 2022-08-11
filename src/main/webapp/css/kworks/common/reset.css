@@ -1,0 +1,23 @@
+@charset "utf-8";
+
+/* reset */
+* {margin:0; padding:0;}
+ul, ol {list-style:none;}
+img {border:none;}
+fieldset {border:0;}
+caption, legend { font-size: 0; height: 0;  line-height: 0; overflow: hidden;  visibility: hidden;  width: 0;}
+select, input, textarea {vertical-align: middle; font-family: Dotum,Arial,sans-serif; font-size:11px;}
+table {border-collapse: collapse;} 
+table td img {vertical-align:top;}
+
+a:link, a:visited {color:#666; text-decoration:none; border:0;}
+a:hover, a:active, a:focus {color: #666; text-decoration:none; border:0;}
+
+select {margin-bottom:4px; color:#666; }
+label {cursor:pointer;}
+input.check {width:13px; height:13px;}
+input.radio {width:13px; height:13px;}
+input.iptxt {border:1px solid #d0d0d0; padding:0 3px; height:18px; line-height:18px; color:#666;}
+
+html, body {height:100%;}
+body {font-family:"Malgun Gothic", "돋움", dotum }

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.sunchang.mappers.IprvarMapper">
+
+	<resultMap type="KwsIprvarDt" id="kwsIprvarDtMap">
+		<id column="IPRVAR_NO" property="iprvarNo" />
+		<result column="PNU" property="pnu"></result>
+		<result column="IPRVAR_LNDCGR" property="iprvarLndcgr"></result>
+		<result column="IPRVAR_AR" property="iprvarAr"></result>
+		<result column="IPRVAR_SC" property="iprvarSc"></result>
+		<result column="IPRVAR_DOHO" property="iprvarDoho"></result>
+		<result column="UPDT_IEM" property="updtIem"></result>
+		<result column="IPRVAR_WHY" property="iprvarWhy"></result>
+		<result column="RMK_EXP" property="rmkExp"></result>
+	</resultMap>
+	
+	<resultMap type="KwsIprvarDtFile" id="kwsIprvarDtFileMap">
+		<id column="IPRVAR_FILE_NO" property="iprvarFileNo"/>
+		<result column="IPRVAR_NO" property="iprvarNo"/>
+		<result column="FILE_NO" property="fileNo"/>
+		<result column="IPRVAR_FILE_SJ" property="iprvarFileSj"/>
+	</resultMap>
+	
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM
+			KWS_IPRVAR_DT
+		WHERE PNU LIKE #{searchKeyword}
+	</select>
+	
+	<select id="selectList" parameterType="searchDTO" resultMap="kwsIprvarDtMap">
+		SELECT
+			IPRVAR_NO,
+			PNU,
+			IPRVAR_LNDCGR,
+			IPRVAR_AR,
+			IPRVAR_SC,
+			IPRVAR_DOHO,
+			UPDT_IEM,
+			IPRVAR_WHY,
+			RMK_EXP
+		FROM
+			KWS_IPRVAR_DT
+		WHERE PNU LIKE #{searchKeyword}
+		ORDER BY IPRVAR_NO ASC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectOne" resultMap="kwsIprvarDtMap">
+		SELECT
+			IPRVAR_NO,
+			PNU,
+			IPRVAR_LNDCGR,
+			IPRVAR_AR,
+			IPRVAR_SC,
+			IPRVAR_DOHO,
+			UPDT_IEM,
+			IPRVAR_WHY,
+			RMK_EXP
+		FROM
+			KWS_IPRVAR_DT
+		WHERE IPRVAR_NO = #{iprvarNo}
+	</select>
+	
+	<insert id="insert" parameterType="KwsIprvarDt">
+		INSERT INTO KWS_IPRVAR_DT(
+			IPRVAR_NO,
+			PNU,
+			IPRVAR_LNDCGR,
+			IPRVAR_AR,
+			IPRVAR_SC,
+			IPRVAR_DOHO,
+			UPDT_IEM,
+			IPRVAR_WHY,
+			RMK_EXP,
+			WRTER_ID,
+			UPDUSR_ID
+		)
+		VALUES(
+			#{iprvarNo, jdbcType=BIGINT},
+			#{pnu, jdbcType=VARCHAR},
+			#{iprvarLndcgr, jdbcType=VARCHAR},
+			#{iprvarAr, jdbcType=NUMERIC},
+			#{iprvarSc, jdbcType=BIGINT},
+			#{iprvarDoho, jdbcType=VARCHAR},
+			#{updtIem, jdbcType=VARCHAR},
+			#{iprvarWhy, jdbcType=VARCHAR},
+			#{rmkExp, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			#{updusrId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="KwsIprvarDt">
+		UPDATE KWS_IPRVAR_DT
+		SET
+			PNU = #{pnu, jdbcType=VARCHAR},
+			IPRVAR_LNDCGR = #{iprvarLndcgr, jdbcType=VARCHAR},
+			IPRVAR_AR = #{iprvarAr, jdbcType=NUMERIC},
+			IPRVAR_SC = #{iprvarSc, jdbcType=BIGINT},
+			IPRVAR_DOHO = #{iprvarDoho, jdbcType=VARCHAR},
+			UPDT_IEM = #{updtIem, jdbcType=VARCHAR},
+			IPRVAR_WHY = #{iprvarWhy, jdbcType=VARCHAR},
+			RMK_EXP = #{rmkExp, jdbcType=VARCHAR},
+			UPDUSR_ID = #{updusrId, jdbcType=VARCHAR},
+			LAST_UPDDE = DEFAULT
+		WHERE
+			IPRVAR_NO = #{iprvarNo}
+	</update>
+	
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_IPRVAR_DT
+		WHERE IPRVAR_NO = #{iprvarNo}
+	</delete>
+	
+	<select id="chkPnu" resultType="Integer">
+		SELECT COUNT(*)
+		FROM LP_PA_CBND
+		WHERE PNU = #{pnu}
+	</select>
+	
+	<select id="fileSelectList" resultMap="kwsIprvarDtFileMap">
+		SELECT
+			IPRVAR_FILE_NO,
+			IPRVAR_NO,
+			FILE_NO,
+			IPRVAR_FILE_SJ
+		FROM
+			KWS_IPRVAR_DT_FILE
+		WHERE
+			IPRVAR_NO = #{iprvarNo}
+	</select>
+	
+	<insert id="fileInsert" parameterType="KwsIprvarDtFile">
+		INSERT INTO KWS_IPRVAR_DT_FILE(
+			IPRVAR_FILE_NO,
+			IPRVAR_NO,
+			FILE_NO,
+			IPRVAR_FILE_SJ,
+			WRTER_ID,
+			FRST_RGSDE
+		)
+		VALUES(
+			#{iprvarFileNo, jdbcType=BIGINT},
+			#{iprvarNo, jdbcType=BIGINT},
+			#{fileNo, jdbcType=BIGINT},
+			#{iprvarFileSj, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			DEFAULT
+		);
+	</insert>
+	
+	<delete id="fileDelete" parameterType="Long">
+		DELETE FROM
+			KWS_IPRVAR_DT_FILE
+		WHERE
+			IPRVAR_FILE_NO = #{iprvarFileNo}
+	</delete>
+</mapper>

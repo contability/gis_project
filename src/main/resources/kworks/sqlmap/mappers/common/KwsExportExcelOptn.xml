@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportExcelOptnMapper">
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="kwsExportExcelOptn">
+		SELECT
+			EXPORT_NO,
+			FIELD_NM_INDICT_AT
+		FROM KWS_EXPORT_EXCEL_OPTN
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExportExcelOptn">
+		INSERT INTO KWS_EXPORT_EXCEL_OPTN (
+			EXPORT_NO,
+			FIELD_NM_INDICT_AT
+		) 
+		VALUES (
+			#{exportNo, jdbcType=BIGINT},
+			#{fieldNmIndictAt, jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

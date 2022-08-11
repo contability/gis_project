@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsDomnMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				AND DOMN_NM LIKE '%' || #{searchKeyword} || '%'
+			</if>		
+		</where>
+	</sql>
+	
+	<select id="list" parameterType="searchDTO" resultType="KwsDomn">
+		SELECT
+			DOMN_ID
+			, DOMN_NM
+		FROM KWS_DOMN
+		<include refid="where" />
+		ORDER BY DOMN_ID
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultType="KwsDomn">
+		SELECT
+			DOMN_ID
+			, DOMN_NM
+		FROM KWS_DOMN
+		WHERE
+			DOMN_ID = #{domnId}
+	</select>
+	
+	<insert id="insert" parameterType="KwsDomn">
+		INSERT INTO KWS_DOMN
+					(DOMN_ID,
+					 DOMN_NM)
+		VALUES		(#{domnId},
+					 #{domnNm})
+	</insert>
+	
+	<update id="update" parameterType="KwsDomn">
+		UPDATE KWS_DOMN
+		SET DOMN_NM = #{domnNm}
+		WHERE DOMN_ID = #{domnId}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM KWS_DOMN
+		WHERE DOMN_ID = #{domnId}
+	</delete>
+	
+	<delete id="deleteCode" parameterType="String">
+		DELETE FROM KWS_DOMN_CODE
+		WHERE DOMN_ID = #{domnId}
+	</delete>
+	
+</mapper>

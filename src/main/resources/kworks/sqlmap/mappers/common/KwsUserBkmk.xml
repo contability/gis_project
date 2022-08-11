@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsUserBkmkMapper">
+
+	<!--목록 검색 -->
+	<select id="listAll" parameterType="kwsUserBkmk" resultType="kwsUserBkmk" >
+		SELECT
+			BKMK_NO,
+			USER_ID,
+			BKMK_NM,
+			CENTER_X,
+			CENTER_Y,
+			SC
+		FROM
+			KWS_USER_BKMK
+		WHERE
+			USER_ID = #{userId}
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="kwsUserBkmk" resultType="kwsUserBkmk">
+		SELECT
+			BKMK_NO,
+			USER_ID,
+			BKMK_NM,
+			CENTER_X,
+			CENTER_Y,
+			SC
+		FROM KWS_USER_BKMK
+		WHERE
+			USER_ID = #{userId}
+			AND BKMK_NM = #{bkmkNm}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsUserBkmk">
+		INSERT INTO KWS_USER_BKMK (
+			BKMK_NO,
+			USER_ID,
+			BKMK_NM,
+			CENTER_X,
+			CENTER_Y,
+			SC
+		)
+		VALUES (
+			#{bkmkNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{bkmkNm, jdbcType=VARCHAR},
+			#{centerX, jdbcType=DOUBLE},
+			#{centerY, jdbcType=DOUBLE},
+			#{sc, jdbcType=BIGINT}
+		)
+	</insert>
+
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_USER_BKMK
+		WHERE BKMK_NO = #{bkmkNo}
+	</delete>
+	
+	<!-- USER_ID로 삭제 -->
+	<delete id="deleteByUserId" parameterType="String">
+		DELETE FROM KWS_USER_BKMK
+		WHERE USER_ID = #{userId}
+	</delete>
+	
+</mapper>

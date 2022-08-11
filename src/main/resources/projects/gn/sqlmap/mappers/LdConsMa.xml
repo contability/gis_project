@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.LdConsMaMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 공사번호 -->
+			<if test="cntIdn != null and cntIdn != ''">
+				AND CNT_IDN = #{cntIdn}
+			</if>
+			<!-- 공사명 -->
+			<if test="cntNam != null and cntNam != ''">
+				AND CNT_NAM LIKE '%' || #{cntNam} || '%'
+			</if>
+			<!-- 계약일 -->
+			<if test="cttYmdMin != null and cttYmdMin != '' and cttYmdMax != null and cttYmdMax != ''">
+				AND CTT_YMD <![CDATA[>=]]> TO_DATE(#{cttYmdMin}, 'YYYY-MM-DD')
+				AND CTT_YMD <![CDATA[<=]]> TO_DATE(#{cttYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 착공일 -->
+			<if test="begYmdMin != null and begYmdMin != '' and begYmdMax != null and begYmdMax != ''">
+				AND BEG_YMD <![CDATA[>=]]> TO_DATE(#{begYmdMin}, 'YYYY-MM-DD')
+				AND BEG_YMD <![CDATA[<=]]> TO_DATE(#{begYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 준공일 -->
+			<if test="rfnYmdMin != null and rfnYmdMin != '' and rfnYmdMax != null and rfnYmdMax != ''">
+				AND RFN_YMD <![CDATA[>=]]> TO_DATE(#{rfnYmdMin}, 'YYYY-MM-DD')
+				AND RFN_YMD <![CDATA[<=]]> TO_DATE(#{rfnYmdMax}, 'YYYY-MM-DD') + 1
+			</if>
+			<!-- 계약금액 -->
+			<if test="totAmtMin != null and totAmtMin != '' and totAmtMax != null and totAmtMax != ''">
+				AND TOT_AMT <![CDATA[>=]]> #{totAmtMax}
+				AND TOT_AMT <![CDATA[<=]]> #{totAmtMax}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 토지중심공사명 전체리스트 -->
+	<select id="listAll" parameterType="ldConsMa" resultType="ldConsMa">
+		SELECT
+			CNT_NAM,
+			CNT_IDN
+		FROM LD_CONS_MA
+		ORDER BY CNT_IDN DESC
+	</select>
+	
+	<!-- 토지중심공사대장 리스트 -->
+	<select id="list" parameterType="ldConsMa" resultType="ldConsMa">
+		SELECT
+			CNT_IDN,
+			CNT_NAM,
+			GCN_NAM,
+			POC_NAM,
+			(SELECT DEPT_NM FROM KWS_DEPT WHERE DEPT_NM = T.CNT_DEPT) AS CNT_DEPT,
+			TOT_AMT,
+			CTT_YMD,
+			FNS_YMS,
+			BEG_YMD,
+			RFN_YMD,
+			FCH_YMD,
+			REMARK
+		FROM LD_CONS_MA T
+		<include refid="where" />
+		ORDER BY CNT_IDN DESC
+	</select>
+	
+	<!-- 토지중심공사명 전체리스트 -->
+	<select id="cntSelectOne" parameterType="long" resultType="ldConsMa">
+		SELECT
+			CNT_NAM,
+			CNT_IDN
+		FROM LD_CONS_MA
+		WHERE CNT_IDN = #{cntIdn}
+	</select>
+	
+	<!-- 토지중심공사대장 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="ldConsMa">
+		SELECT
+			CNT_IDN,
+			CNT_NAM,
+			GCN_NAM,
+			POC_NAM,
+			CNT_DEPT,
+			TOT_AMT,
+			CTT_YMD,
+			FNS_YMS,
+			BEG_YMD,
+			RFN_YMD,
+			FCH_YMD,
+			REMARK
+		FROM LD_CONS_MA
+		WHERE CNT_IDN = #{cntIdn}
+	</select>
+	
+	<!-- 토지중심공사대장 수정 -->
+	<update id="update" parameterType="ldConsMa">
+		UPDATE Ld_CONS_MA SET	
+			CNT_NAM = #{cntNam, jdbcType=VARCHAR},
+			GCN_NAM = #{gcnNam, jdbcType=VARCHAR},
+			POC_NAM = #{pocNam, jdbcType=VARCHAR},
+			CNT_DEPT = #{cntDept, jdbcType=VARCHAR},
+			TOT_AMT = #{totAmt, jdbcType=BIGINT},
+			CTT_YMD = #{cttYmd, jdbcType=VARCHAR},
+			FNS_YMS = #{fnsYms, jdbcType=VARCHAR},
+			BEG_YMD = #{begYmd, jdbcType=VARCHAR},
+			RFN_YMD = #{rfnYmd, jdbcType=VARCHAR},
+			FCH_YMD = #{fchYmd, jdbcType=VARCHAR},
+			REMARK = #{remark, jdbcType=VARCHAR}
+		WHERE
+			CNT_IDN = #{cntIdn}
+	</update>
+	
+	<!-- 토지중심공사대장 등록 -->
+	<insert id="insert" parameterType="ldConsMa">
+		INSERT INTO LD_CONS_MA (
+			CNT_IDN,
+			CNT_NAM,
+			GCN_NAM,
+			POC_NAM,
+			CNT_DEPT,
+			TOT_AMT,
+			CTT_YMD,
+			FNS_YMS,
+			BEG_YMD,
+			RFN_YMD,
+			FCH_YMD,
+			REMARK
+		) VALUES (
+			#{cntIdn, jdbcType=BIGINT},
+			#{cntNam, jdbcType=VARCHAR},
+			#{gcnNam, jdbcType=VARCHAR},
+			#{pocNam, jdbcType=VARCHAR},
+			#{cntDept, jdbcType=VARCHAR},
+			#{totAmt, jdbcType=BIGINT},
+			#{cttYmd, jdbcType=VARCHAR},
+			#{fnsYms, jdbcType=VARCHAR},
+			#{begYmd, jdbcType=VARCHAR},
+			#{rfnYmd, jdbcType=VARCHAR},
+			#{fchYmd, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 토지중심공사대장 삭제 -->
+	<delete id="delete" parameterType="ldConsMa">
+		DELETE FROM LD_CONS_MA
+		WHERE
+			CNT_IDN = #{cntIdn}
+	</delete>
+	
+</mapper>

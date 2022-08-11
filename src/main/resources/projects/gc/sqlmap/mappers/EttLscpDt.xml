@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gc.mappers.EttLscpDtMapper">
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 점번호 -->
+			<if test="bseNam != null and bseNam != ''">
+				AND BSE_NAM = #{bseNam}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 망실신고 리스트 -->
+	<select id="list" parameterType="ettLscpDt" resultType="ettLscpDt">
+		SELECT
+			SHT_IDN,
+			BSE_NAM
+		FROM ETT_LSCP_DT
+		<include refid="where" />
+		ORDER BY SHT_IDN DESC
+	</select>
+	
+	<!-- 망실신고 단 건 검색 -->
+	<select id="selectOne" parameterType="lossSttemntDTO" resultType="ettLscpDt">
+		SELECT
+			SHT_IDN,
+			FTR_CDE,
+			FTR_IDN,
+			LPT_DES,
+			LPC_EXP,
+			LPR_YMD,
+			LPA_CDE,
+			LPA_EXP,
+			USR_DES,
+			BSE_NAM
+		FROM ETT_LSCP_DT
+		WHERE SHT_IDN = #{shtIdn}
+	</select>
+	
+	<!-- 망실신고 등록 -->
+	<insert id="insert" parameterType="ettLscpDt">
+		INSERT INTO ETT_LSCP_DT (
+			SHT_IDN,
+			FTR_CDE,
+			FTR_IDN,
+			LPT_DES,
+			LPC_EXP,
+			LPR_YMD,
+			LPA_CDE,
+			LPA_EXP,
+			USR_DES,
+			BSE_NAM
+		) VALUES (
+			#{shtIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{lptDes, jdbcType=VARCHAR},
+			#{lpcExp, jdbcType=VARCHAR},
+			#{lprYmd, jdbcType=VARCHAR},
+			#{lpaCde, jdbcType=VARCHAR},
+			#{lpaExp, jdbcType=VARCHAR},
+			#{usrDes, jdbcType=VARCHAR},
+			#{bseNam, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+</mapper>

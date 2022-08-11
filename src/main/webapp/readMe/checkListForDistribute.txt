@@ -1,0 +1,30 @@
+////////////////////////////////////////////////////////////
+2022.02.28		이승재
+
+배포 내용 : 로그인 창에에서 admin, 유관기관사용자만 로그인가능하도록
+적용 시스템 : 지지체 전체
+
+-----------QUERY
+
+INSERT INTO KWS_ACCES_AUTHOR (URL_PTTRN, USER_GRAD, SORT_ORDR) VALUES ('/getUserType.do.*', 'ROLE_ANONYMOUS', 1);
+COMMIT;
+
+////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////
+2021.12.02		정신형
+
+배포 내용 : 공지사항 팝업 기능 선행 개발
+적용 시스템 :  지자체 전체
+
+-----------QUERY
+
+--NOT POSTGRESQL 
+ALTER TABLE KWS_NOTICE ADD POPUP_START VARCHAR2(10);
+ALTER TABLE KWS_NOTICE ADD POPUP_END VARCHAR2(10);
+
+--POSTGRESQL
+ALTER TABLE KWS_NOTICE ADD POPUP_START character varying(10);
+ALTER TABLE KWS_NOTICE ADD POPUP_END character varying(10);
+
+////////////////////////////////////////////////////////////

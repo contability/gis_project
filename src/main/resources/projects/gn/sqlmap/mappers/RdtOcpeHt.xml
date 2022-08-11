@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.RdtOcpeHtMapper">
+
+	<!-- 변경이력 -->
+
+	<!-- 조회 -->
+	<select id="list" parameterType="rdtOcpeHt" resultType="rdtOcpeHt">
+		SELECT
+			HIST_NO,
+			FTR_CDE,
+			FTR_IDN,
+			HIST_DOC,
+			HIST_NUM,
+			RMK_EXP
+		FROM
+			RDT_OCPE_HT
+		WHERE
+			FTR_IDN = #{ftrIdn} AND FTR_CDE = #{ftrCde}
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="selectOne" parameterType="rdtOcpeHt" resultType="rdtOcpeHt">
+		SELECT
+			HIST_NO,
+			FTR_CDE,
+			FTR_IDN,
+			HIST_DOC,
+			HIST_NUM,
+			RMK_EXP
+		FROM
+			RDT_OCPE_HT
+		WHERE
+			HIST_NO = #{histNo}
+	</select>
+	
+		<!-- 등록 -->
+	<insert id="insert" parameterType="rdtOcpeHt">
+		INSERT INTO RDT_OCPE_HT (
+			HIST_NO,
+			FTR_IDN,
+			FTR_CDE,
+			HIST_DOC,
+			HIST_NUM,
+			RMK_EXP
+		) VALUES (
+			#{histNo, jdbcType=BIGINT},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{histDoc, jdbcType=VARCHAR},
+			#{histNum, jdbcType=VARCHAR},
+			#{rmkExp, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 수정-->
+	<update id="update" parameterType="rdtOcpeHt">
+		UPDATE RDT_OCPE_HT SET	
+			<!-- HIST_NO = #{histNo, jdbcType=BIGINT}, -->
+			FTR_IDN = #{ftrIdn, jdbcType=BIGINT},
+			FTR_CDE = #{ftrCde, jdbcType=VARCHAR},
+			HIST_DOC = #{histDoc, jdbcType=VARCHAR},
+			HIST_NUM = #{histNum, jdbcType=VARCHAR},
+			RMK_EXP = #{rmkExp, jdbcType=VARCHAR}
+		WHERE
+			HIST_NO = #{histNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="rdtOcpeHt">
+		DELETE FROM 
+			RDT_OCPE_HT
+		WHERE
+			HIST_NO = #{histNo}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsAnswerMapper">
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultType="kwsAnswer">
+		SELECT
+			ANSWER_NO,
+			QESTN_NO,
+			ANSWER_CN,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE
+		FROM KWS_ANSWER
+		WHERE
+			QESTN_NO = #{qestnNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsAnswer">
+		INSERT INTO KWS_ANSWER (
+			QESTN_NO,
+			ANSWER_NO,
+			ANSWER_CN,
+			WRTER_ID,
+			UPDUSR_ID
+		) 
+		VALUES (
+			#{qestnNo, jdbcType=BIGINT},
+			#{answerNo, jdbcType=BIGINT},
+			#{answerCn, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			#{updUsrid, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="kwsAnswer">
+		UPDATE KWS_ANSWER SET 
+			ANSWER_CN = #{answerCn, jdbcType=VARCHAR},
+			LAST_UPDDE = <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,
+			UPDUSR_ID = #{updUsrid, jdbcType=VARCHAR}
+		WHERE
+			ANSWER_NO = #{answerNo}
+	</update>
+
+</mapper>

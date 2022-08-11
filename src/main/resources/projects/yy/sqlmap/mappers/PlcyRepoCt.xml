@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.PlcyRepoCtMapper">
+	
+	<!-- 단건조회 사용 -->
+	<select id="list" parameterType="plcyRepoCt" resultType="plcyRepoCt">
+		SELECT 
+			REPO_IDN,
+			REPO_VER,
+			REPO_DOC,
+			REPO_PRT,
+			REPO_LST,
+			EDIT_YMD
+		FROM
+			PLCY_REPO_CT
+		WHERE
+			REPO_IDN = #{repoIdn, jdbcType=INTEGER}
+		AND
+			REPO_VER = #{repoVer, jdbcType=INTEGER}
+	</select>
+	
+	<!-- 등록/편집 사용 -->
+	<insert id="insert" parameterType="plcyRepoMa">
+		INSERT INTO
+			PLCY_REPO_CT (
+				REPO_IDN,
+				REPO_VER,
+				REPO_PRT,
+				REPO_DOC,
+				REPO_LST
+			)values(
+				#{repoIdn, jdbcType=BIGINT},
+				#{repoVer, jdbcType=BIGINT},
+				#{repoPrt, jdbcType=VARCHAR},
+				#{repoDoc, jdbcType=VARCHAR},
+				#{repoLst, jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<!-- 단건조회사용 -->
+	<select id="selectOne" resultType="policyRepoRegisterDTO">
+		SELECT 
+			T1.REPO_IDN,
+			T1.FTR_IDN,
+			T1.REPO_IDN,
+			T1.REPO_TIT,
+			T1.REPO_VER,
+			T1.REPO_MAK,
+			T1.REPO_LST,
+			T2.REPO_DOC
+		FROM 
+			PLCY_REPO_MA T1 
+		LEFT JOIN
+			PLCY_REPO_CT T2
+		ON 
+			T1.REPO_IDN = T2.REPO_IDN
+		AND 
+			T1.REPO_VER = T2.REPO_VER
+		WHERE 
+			T1.FTR_IDN = #{ftrIdn, jdbcType=INTEGER}
+	</select>
+	
+	<delete id = "delete">
+		DELETE
+		FROM 
+			PLCY_REPO_CT
+		WHERE
+			REPO_IDN = #{repoIdn}
+	</delete>
+	
+</mapper>

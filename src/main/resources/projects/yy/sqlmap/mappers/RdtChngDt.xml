@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.RdtChngDtMapper">
+
+	<!-- 도로 공사대장 설계 변경 내역 리스트 -->
+	<select id="list" parameterType="rdtChngDt" resultType="rdtChngDt">
+		SELECT
+			FTR_IDN,
+			FTR_CDE,
+			SHT_IDN,
+			CHG_YMD,
+			INC_AMT,
+			IGV_AMT,
+			CHG_AMT,
+			CHG_ETC,
+			CHG_DES,
+			CGV_DES,
+			CHG_CDE
+		FROM RDT_CHNG_DT
+		WHERE FTR_IDN = #{ftrIdn}
+		ORDER BY SHT_IDN DESC
+	</select>
+	
+	<!-- 도로 공사대장 설계 변경 내역 단 건 검색 -->
+	<select id="selectOne" parameterType="cntrwkRegstrDTO" resultType="rdtChngDt">
+		SELECT
+			FTR_IDN,
+			FTR_CDE,
+			SHT_IDN,
+			CHG_YMD,
+			INC_AMT,
+			IGV_AMT,
+			CHG_AMT,
+			CHG_ETC,
+			CHG_DES,
+			CGV_DES,
+			CHG_CDE
+		FROM RDT_CHNG_DT
+		WHERE FTR_IDN = #{ftrIdn}
+		AND SHT_IDN = #{shtIdn}
+	</select>
+	
+	<!-- 도로 공사대장 설계 변경 내역 수정 -->
+	<update id="update" parameterType="rdtChngDt">
+		UPDATE RDT_CHNG_DT SET
+			CHG_YMD = #{chgYmd, jdbcType=VARCHAR},
+			INC_AMT = #{incAmt, jdbcType=BIGINT},
+			IGV_AMT = #{igvAmt, jdbcType=BIGINT},
+			CHG_AMT = #{chgAmt, jdbcType=BIGINT},
+			CHG_ETC = #{chgEtc, jdbcType=VARCHAR},
+			CHG_DES = #{chgDes, jdbcType=VARCHAR},
+			CGV_DES = #{cgvDes, jdbcType=VARCHAR},
+			CHG_CDE = #{chgCde, jdbcType=VARCHAR}
+		WHERE FTR_IDN = #{ftrIdn}
+		AND SHT_IDN = #{shtIdn}
+	</update>
+	
+	<!-- 도로 공사대장 설계 변경 내역 등록 -->
+	<insert id="insert" parameterType="rdtChngDt">
+		INSERT INTO RDT_CHNG_DT (
+			FTR_IDN,
+			FTR_CDE,
+			SHT_IDN,
+			CHG_YMD,
+			INC_AMT,
+			IGV_AMT,
+			CHG_AMT,
+			CHG_ETC,
+			CHG_DES,
+			CGV_DES,
+			CHG_CDE
+		) VALUES (
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{shtIdn, jdbcType=BIGINT},
+			#{chgYmd, jdbcType=VARCHAR},
+			#{incAmt, jdbcType=BIGINT},
+			#{igvAmt, jdbcType=BIGINT},
+			#{chgAmt, jdbcType=BIGINT},
+			#{chgEtc, jdbcType=VARCHAR},
+			#{chgDes, jdbcType=VARCHAR},
+			#{cgvDes, jdbcType=VARCHAR},
+			#{chgCde, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM RDT_CHNG_DT
+		WHERE
+			SHT_IDN = #{shtIdn}
+	</delete>
+	
+</mapper>

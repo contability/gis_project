@@ -1,0 +1,38 @@
+#iprvarFileTable {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#iprvarFileTable thead {
+	float: left;
+	width: 687px;
+}
+
+#iprvarFileTable tbody {
+	overflow-y: auto;
+	overflow-x: hidden;
+	float: left;
+	width: 687px;
+	max-height: 146px;
+}
+
+#iprvarFileTable tbody tr {
+	/* display: list-item; */
+	width: 687px;
+}
+
+#iprvarFileTable th:nth-child(odd) {
+	width: 78px;
+}
+
+/* #iprvarFileTable td:nth-child(odd) {
+	width: 78px;
+} */
+
+#iprvarFileTable th:nth-child(even) {
+	width: 639px;
+}
+
+/* #iprvarFileTable td:nth-child(even) {
+	width: 613px;
+} */

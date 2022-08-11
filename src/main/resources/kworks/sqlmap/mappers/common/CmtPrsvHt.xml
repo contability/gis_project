@@ -1,0 +1,228 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.CmtPrsvHtMapper">
+
+	<!-- 관리이력 리스트 - 공통 -->
+	<select id="listManageHistCommon" parameterType="cmtPrsvHt" resultType="cmtPrsvHt">
+		SELECT
+			CMT.SHT_IDN,
+			CMT.FTR_CDE,
+			CMT.FTR_IDN,
+			CMT.MNH_CDE,
+			DOMN.CODE_NM AS MNH_NAM,
+			CMT.CNT_IDN,
+			CMT.SBJ_CDE,
+			CODE.CODE_NM AS SBJ_NAM,
+			CMT.RER_DES,
+			CMT.REP_DES,
+			CMT.SRE_YMD,
+			CMT.ERE_YMD,
+			CMT.OPR_NAM
+		FROM CMT_PRSV_HT CMT
+		LEFT OUTER JOIN KWS_DOMN_CODE DOMN ON CMT.MNH_CDE = DOMN.CODE_ID
+		LEFT OUTER JOIN KWS_DOMN_CODE CODE ON CMT.SBJ_CDE = CODE.CODE_ID
+		WHERE
+			CMT.FTR_IDN = #{ftrIdn}
+			AND CMT.FTR_CDE = #{ftrCde}
+		ORDER BY CMT.CNT_IDN ASC
+	</select>
+	
+	<!-- 관리이력 리스트 - 도로공사대장 연계 -->
+	<select id="listRoadCntrwkRegstrManageHistCommon" parameterType="cmtPrsvHt" resultType="cmtPrsvHt">
+		SELECT
+			CMT.SHT_IDN,
+			CMT.FTR_CDE,
+			CMT.FTR_IDN,
+			CMT.MNH_CDE,
+			DOMN.CODE_NM AS MNH_NAM,
+			CMT.CNT_IDN,
+			CMT.SBJ_CDE,
+			CODE.CODE_NM AS SBJ_NAM,
+			CMT.RER_DES,
+			CMT.REP_DES,
+			CMT.SRE_YMD,
+			CMT.ERE_YMD,
+			CMT.OPR_NAM,
+			RDT.FTR_IDN AS REGSTR_FTR_IDN
+		FROM CMT_PRSV_HT CMT
+		LEFT OUTER JOIN RDT_CONS_MA RDT ON CMT.CNT_IDN = RDT.FTR_IDN
+		LEFT OUTER JOIN KWS_DOMN_CODE DOMN ON CMT.MNH_CDE = DOMN.CODE_ID
+		LEFT OUTER JOIN KWS_DOMN_CODE CODE ON CMT.SBJ_CDE = CODE.CODE_ID
+		WHERE
+			CMT.FTR_IDN = #{ftrIdn}
+			AND CMT.FTR_CDE = #{ftrCde}
+		ORDER BY CMT.CNT_IDN ASC
+	</select>
+	
+	<!-- 관리이력 리스트 - 상수공사대장 연계 -->
+	<select id="listWrppCntrwkRegstrManageHistCommon" parameterType="cmtPrsvHt" resultType="cmtPrsvHt">
+		SELECT
+			CMT.SHT_IDN,
+			CMT.FTR_CDE,
+			CMT.FTR_IDN,
+			CMT.MNH_CDE,
+			DOMN.CODE_NM AS MNH_NAM,
+			CMT.CNT_IDN,
+			CMT.SBJ_CDE,
+			CODE.CODE_NM AS SBJ_NAM,
+			CMT.RER_DES,
+			CMT.REP_DES,
+			CMT.SRE_YMD,
+			CMT.ERE_YMD,
+			CMT.OPR_NAM,
+			WTT.FTR_IDN AS REGSTR_FTR_IDN
+		FROM CMT_PRSV_HT CMT
+		LEFT OUTER JOIN WTT_CONS_MA WTT ON CMT.CNT_IDN = WTT.FTR_IDN
+		LEFT OUTER JOIN KWS_DOMN_CODE DOMN ON CMT.MNH_CDE = DOMN.CODE_ID
+		LEFT OUTER JOIN KWS_DOMN_CODE CODE ON CMT.SBJ_CDE = CODE.CODE_ID
+		WHERE
+			CMT.FTR_IDN = #{ftrIdn}
+			AND CMT.FTR_CDE = #{ftrCde}
+		ORDER BY CMT.CNT_IDN ASC
+	</select>
+	
+	<!-- 관리이력 리스트 - 하수공사대장 연계 -->
+	<select id="listSwgeCntrwkRegstrManageHistCommon" parameterType="cmtPrsvHt" resultType="cmtPrsvHt">
+		SELECT
+			CMT.SHT_IDN,
+			CMT.FTR_CDE,
+			CMT.FTR_IDN,
+			CMT.MNH_CDE,
+			DOMN.CODE_NM AS MNH_NAM,
+			CMT.CNT_IDN,
+			CMT.SBJ_CDE,
+			CODE.CODE_NM AS SBJ_NAM,
+			CMT.RER_DES,
+			CMT.REP_DES,
+			CMT.SRE_YMD,
+			CMT.ERE_YMD,
+			CMT.OPR_NAM,
+			SWT.FTR_IDN AS REGSTR_FTR_IDN 
+		FROM CMT_PRSV_HT CMT
+		LEFT OUTER JOIN SWT_CONS_MA SWT ON CMT.CNT_IDN = SWT.FTR_IDN
+		LEFT OUTER JOIN KWS_DOMN_CODE DOMN ON CMT.MNH_CDE = DOMN.CODE_ID
+		LEFT OUTER JOIN KWS_DOMN_CODE CODE ON CMT.SBJ_CDE = CODE.CODE_ID
+		WHERE
+			CMT.FTR_IDN = #{ftrIdn}
+			AND CMT.FTR_CDE = #{ftrCde}
+		ORDER BY CMT.CNT_IDN ASC
+	</select>
+	
+	<resultMap id="cmtPrsvHtMap" type="cmtPrsvHt">
+		<id property="ftrIdn" column="FTR_IDN" />
+		<result property="shtIdn" column="SHT_IDN" />
+		<result property="ftrCde" column="FTR_CDE" />
+		<result property="ftrNam" column="FTR_NAM" />
+		<result property="mnhCde" column="MNH_CDE" />
+		<result property="cntIdn" column="CNT_IDN" />
+		<result property="rerDes" column="RER_DES" />
+		<result property="repDes" column="REP_DES" />
+		<result property="sreYmd" column="SRE_YMD" />
+		<result property="ereYmd" column="ERE_YMD" />
+		<result property="sbjCde" column="SBJ_CDE" />
+		<result property="sbjNam" column="SBJ_NAM" />
+		<result property="oprNam" column="OPR_NAM" />
+		<result property="cntCde" column="CNT_CDE" />
+	</resultMap>
+	
+	<!-- 관리이력구분 -->
+	<select id="listMnh" parameterType="String" resultType="cmtPrsvHt">
+		SELECT
+			DOMN_ID,
+			CODE_ID,
+			CODE_NM,
+			USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE DOMN_ID = #{domnId}
+	</select>
+	
+	<!-- 지형지물부호 조회 -->
+	<select id="selectOneFtrCde" resultMap="cmtPrsvHtMap">
+		SELECT
+			DOMN_ID,
+			CODE_ID,
+			CODE_NM,
+			USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE 
+			DOMN_ID = 'KWS-000'
+		AND 
+			CODE_ID = #{ftrCde, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 관리이력 상세정보 - 공통 -->
+	<select id="selectOneManageHistCommon" parameterType="Long" resultMap="cmtPrsvHtMap">
+		SELECT
+			CMT.SHT_IDN,
+			CMT.FTR_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.DOMN_ID = 'KWS-000' AND DOMN.CODE_ID = CMT.FTR_CDE) AS FTR_NAM,
+			CMT.FTR_IDN,
+			CMT.MNH_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE DOMN WHERE DOMN.CODE_ID = CMT.MNH_CDE) AS MNH_NAM,
+			CMT.CNT_IDN,
+			CMT.SBJ_CDE,
+			(SELECT CODE_NM FROM KWS_DOMN_CODE CODE WHERE CODE.CODE_ID = CMT.SBJ_CDE) AS SBJ_NAM,
+			CMT.RER_DES,
+			CMT.REP_DES,
+			CMT.SRE_YMD,
+			CMT.ERE_YMD,
+			CMT.OPR_NAM
+		FROM CMT_PRSV_HT CMT
+		WHERE
+			CMT.SHT_IDN = #{shtIdn}
+	</select>
+	
+	<!-- 관리이력 수정 - 공통 -->
+	<update id="updateManageHistCommon" parameterType="cmtPrsvHt">
+		UPDATE CMT_PRSV_HT SET
+			MNH_CDE = #{mnhCde, jdbcType=VARCHAR},
+			SBJ_CDE = #{sbjCde, jdbcType=VARCHAR},
+			RER_DES = #{rerDes, jdbcType=VARCHAR},
+			REP_DES = #{repDes, jdbcType=VARCHAR},
+			SRE_YMD = #{sreYmd, jdbcType=VARCHAR},
+			ERE_YMD = #{ereYmd, jdbcType=VARCHAR},
+			OPR_NAM = #{oprNam, jdbcType=VARCHAR}
+		WHERE 
+			SHT_IDN = #{shtIdn}
+	</update>
+	
+	<!-- 관리이력 등록 - 공통 -->
+	<insert id="insertManageHistCommon" parameterType="cmtPrsvHt">
+		INSERT INTO CMT_PRSV_HT	(
+			SHT_IDN,
+			FTR_CDE, 
+			FTR_IDN,
+			MNH_CDE,
+			CNT_IDN,
+			SBJ_CDE,
+			RER_DES,
+			REP_DES,
+			SRE_YMD,
+			ERE_YMD,
+			OPR_NAM,
+			CNT_CDE
+		)
+		VALUES (
+			#{shtIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=BIGINT},
+			#{mnhCde, jdbcType=VARCHAR},
+			#{cntIdn, jdbcType=BIGINT},
+			#{sbjCde, jdbcType=VARCHAR},
+			#{rerDes, jdbcType=VARCHAR},
+			#{repDes, jdbcType=VARCHAR},
+			#{sreYmd, jdbcType=VARCHAR},
+			#{ereYmd, jdbcType=VARCHAR},
+			#{oprNam, jdbcType=VARCHAR},
+			#{cntCde, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 시설물 조회 -->
+	<select id="listFacilities" parameterType="cmtPrsvHt" resultType="facilityResultDTO" >
+		SELECT DF.DATA_ID, HT.FTR_IDN
+		FROM CMT_PRSV_HT HT INNER JOIN KWS_DATA_FTR_CDE DF ON HT.FTR_CDE = DF.CODE_ID
+		WHERE HT.CNT_CDE = #{cntCde} AND HT.CNT_IDN = #{ftrIdn}
+	</select>
+	
+</mapper>

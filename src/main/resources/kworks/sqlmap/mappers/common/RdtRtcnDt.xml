@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdtRtcnDtMapper">
+
+	<!-- 검색 결과 맵 -->
+	<resultMap id="rdtRtcnDtMap" type="rdtRtcnDt">
+		<id property="secIdn" column="SEC_IDN" />
+		<result property="ftrIdn" column="FTR_IDN"/>
+		<collection property="rdtAlcnDts" column="SEC_IDN" javaType="java.util.ArrayList" ofType="rdtAlcnDt" select="kr.co.gitt.kworks.mappers.RdtAlcnDtMapper.listAll" ></collection>
+	</resultMap>
+
+	<!-- 검색 -->
+	<select id="listAll" parameterType="Long" resultMap="rdtRtcnDtMap">
+		SELECT
+			SEC_IDN,
+			FTR_IDN
+		FROM RDT_RTCN_DT
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</select>
+
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsMenuConectLogMapper">
+
+	<sql id="where">
+		<where>
+			<if test="searchStartDt != null and searchStartDt != ''">
+				AND CONECT_DT <![CDATA[>]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD')
+			</if>
+			<if test="searchEndDt != null and searchEndDt != ''">
+				AND CONECT_DT <![CDATA[<]]> TO_DATE(#{searchEndDt}, 'YYYY-MM-DD')
+			</if>
+		</where>
+	</sql>
+	
+	<insert id="insert" parameterType="kwsMenuConectLog">
+		INSERT INTO KWS_MENU_CONECT_LOG (
+			LOG_NO,
+			USER_ID,
+			USER_NM,
+			MENU_ID,
+			MENU_NM,
+			DEPT_CODE,
+			DEPT_NM,
+			DAY_OF_WEEK,
+			CONECT_DT
+		)
+		VALUES (
+			#{logNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{userNm, jdbcType=VARCHAR},
+			#{menuId, jdbcType=BIGINT},
+			#{menuNm, jdbcType=VARCHAR},
+			#{deptCode, jdbcType=VARCHAR},
+			#{deptNm, jdbcType=VARCHAR},
+			#{dayOfWeek, jdbcType=VARCHAR},
+			#{conectDt, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="listCount" parameterType="SearchDTO" resultType="Integer">
+		SELECT COUNT(*) AS ROWCOUNT
+		FROM KWS_MENU_CONECT_LOG
+		<include refid="where" />
+	</select>
+	
+	<select id="listSearch" parameterType="SearchDTO" resultType="KwsMenuConectLog">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT 
+				(SELECT USER_NM FROM KWS_USER WHERE USER_ID = LOG.USER_ID) AS USER_NM, 
+			    (SELECT KWS_DEPT.DEPT_NM FROM KWS_DEPT WHERE DEPT_CODE = LOG.DEPT_CODE) AS DEPT_NM, 
+			    (SELECT KWS_MENU.MENU_NM FROM KWS_MENU WHERE MENU_ID = LOG.MENU_ID) AS MENU_NM, 
+				CONECT_DT
+			FROM KWS_MENU_CONECT_LOG LOG
+			<include refid="where" />
+			ORDER BY CONECT_DT DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 메뉴로그 엑셀다운로드용 리스트 조회 -->
+	<select id="listMenuLogExcel" parameterType="SearchDTO" resultType="KwsMenuConectLog">
+		SELECT 
+		  (SELECT USER_NM FROM KWS_USER WHERE USER_ID = MENU.USER_ID) AS USER_NM, 
+		  (SELECT KWS_DEPT.DEPT_NM FROM KWS_DEPT WHERE DEPT_CODE = MENU.DEPT_CODE) AS DEPT_NM, 
+		  (SELECT KWS_MENU.MENU_NM FROM KWS_MENU WHERE MENU_ID = MENU.MENU_ID) AS MENU_NM, 
+		  CONECT_DT
+		FROM KWS_MENU_CONECT_LOG MENU
+		<include refid="where" />
+		ORDER BY CONECT_DT ASC
+	</select>
+	
+</mapper>

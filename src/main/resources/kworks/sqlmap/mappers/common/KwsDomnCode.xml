@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsDomnCodeMapper">
+
+	<sql id="where">
+		<where>
+			<if test="domnId != null and domnId != ''">
+				AND DOMN_ID = #{domnId}		
+			</if>
+			<if test="searchCondition == 1">
+				<if test="searchKeyword != null and searchKeyword != ''">
+					AND ( CODE_ID LIKE '%' || #{searchKeyword} || '%' OR CODE_NM LIKE '%' || #{searchKeyword} || '%' )
+				</if>
+			</if>
+			<if test="searchCondition == 2">
+				AND DOMN_ID = #{domnId}
+				<if test="searchKeyword != null and searchKeyword != ''">
+					AND ( CODE_ID LIKE '%' || #{searchKeyword} || '%' OR CODE_NM LIKE '%' || #{searchKeyword} || '%' )
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="deleteWhere">
+		<where>
+			AND DOMN_ID = #{domnId}
+			<if test="codeId != null and codeId != ''">
+				AND CODE_ID = #{codeId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="listCount" parameterType="String" resultType="kwsDomnCode">
+		SELECT
+			COUNT(*)
+		FROM KWS_DOMN_CODE
+		WHERE DOMN_ID = #{donmId}
+	</select>
+
+	<select id="list" parameterType="kwsDomnCode" resultType="kwsDomnCode">
+		SELECT
+			DOMN_ID
+			, CODE_ID
+			, CODE_NM
+			, USE_AT
+		FROM KWS_DOMN_CODE
+		<include refid="where" />
+		ORDER BY DOMN_ID, CODE_ID
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultType="kwsDomnCode">
+		SELECT
+			DOMN_ID
+			, CODE_ID
+			, CODE_NM
+			, USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE CODE_NM = #{codeNm}
+	</select>
+
+	<select id="selectOneById" resultType="kwsDomnCode">
+		SELECT
+			DOMN_ID
+			, CODE_ID
+			, CODE_NM
+			, USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE 
+			DOMN_ID = #{domnId}
+		AND
+			CODE_ID = #{codeId}
+	</select>
+
+	<select id="selectCodeIdByName" resultType="kwsDomnCode">
+		SELECT
+			DOMN_ID
+			, CODE_ID
+			, CODE_NM
+			, USE_AT
+		FROM KWS_DOMN_CODE
+		WHERE 
+			DOMN_ID = #{domnId}
+		AND
+			CODE_NM = #{codeNm}
+	</select>
+		
+	<insert id="insert" parameterType="kwsDomnCode">
+		INSERT INTO KWS_DOMN_CODE
+					(DOMN_ID,
+					CODE_ID,
+					CODE_NM,
+					USE_AT)
+		VALUES		(#{domnId},
+					#{codeId},
+					#{codeNm},
+					#{useAt})
+	</insert>
+	
+	<update id="update" parameterType="kwsDomnCode">
+		UPDATE KWS_DOMN_CODE
+		SET
+			CODE_NM = #{codeNm}
+			, USE_AT = #{useAt}
+		WHERE
+			DOMN_ID = #{domnId}
+			AND CODE_ID = #{codeId}
+	</update>
+	
+	<delete id="delete" parameterType="kwsDomnCode">
+		DELETE FROM KWS_DOMN_CODE
+		<include refid="deleteWhere" />
+	</delete>
+
+</mapper>

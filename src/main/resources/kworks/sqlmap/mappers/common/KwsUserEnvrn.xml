@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsUserEnvrnMapper">
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultType="kwsUserEnvrn" >
+		SELECT
+			USER_ID,
+			MAP_TOOL_LC,
+			INDEX_WINDOW_LC,
+			INDEX_WINDOW_SIZE,
+			SC_BAR_LC,
+			CENTER_POINT_TY,
+			CENTER_POINT_LC,
+			ZOOM_LENS_SIZE,
+			XRAY_LENS_SIZE,
+			THEMAMAP_ID,
+			INIT_CENTER_X,
+			INIT_CENTER_Y,
+			INIT_SC
+		FROM KWS_USER_ENVRN
+		WHERE USER_ID = #{userId}
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsUserEnvrn">
+		INSERT INTO KWS_USER_ENVRN (
+			USER_ID,
+			MAP_TOOL_LC,
+			INDEX_WINDOW_LC,
+			INDEX_WINDOW_SIZE,
+			SC_BAR_LC,
+			CENTER_POINT_TY,
+			CENTER_POINT_LC,
+			ZOOM_LENS_SIZE,
+			XRAY_LENS_SIZE,
+			THEMAMAP_ID,
+			INIT_CENTER_X,
+			INIT_CENTER_Y,
+			INIT_SC
+		)
+		VALUES (
+			#{userId, jdbcType=VARCHAR},
+			#{mapToolLc, jdbcType=VARCHAR},
+			#{indexWindowLc, jdbcType=VARCHAR},
+			#{indexWindowSize, jdbcType=INTEGER},
+			#{scBarLc, jdbcType=VARCHAR},
+			#{centerPointTy, jdbcType=VARCHAR},
+			#{centerPointLc, jdbcType=VARCHAR},
+			#{zoomLensSize, jdbcType=INTEGER},
+			#{xrayLensSize, jdbcType=INTEGER},
+			#{themamapId, jdbcType=BIGINT},
+			#{initCenterX, jdbcType=DOUBLE},
+			#{initCenterY, jdbcType=DOUBLE},
+			#{initSc, jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="kwsUserEnvrn">
+		UPDATE KWS_USER_ENVRN 
+		SET
+			MAP_TOOL_LC = #{mapToolLc, jdbcType=VARCHAR},
+			INDEX_WINDOW_LC = #{indexWindowLc, jdbcType=VARCHAR},
+			INDEX_WINDOW_SIZE = #{indexWindowSize, jdbcType=INTEGER},
+			SC_BAR_LC = #{scBarLc, jdbcType=VARCHAR},
+			CENTER_POINT_TY = #{centerPointTy, jdbcType=VARCHAR},
+			CENTER_POINT_LC = #{centerPointLc, jdbcType=VARCHAR},
+			ZOOM_LENS_SIZE = #{zoomLensSize, jdbcType=INTEGER},
+			XRAY_LENS_SIZE = #{xrayLensSize, jdbcType=INTEGER},
+			THEMAMAP_ID = #{themamapId, jdbcType=BIGINT},
+			INIT_CENTER_X = #{initCenterX, jdbcType=DOUBLE},
+			INIT_CENTER_Y = #{initCenterY, jdbcType=DOUBLE},
+			INIT_SC = #{initSc, jdbcType=INTEGER}
+		WHERE USER_ID = #{userId}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id ="delete" parameterType="String">
+		DELETE FROM KWS_USER_ENVRN
+		WHERE USER_ID = #{userId}
+	</delete>
+</mapper>

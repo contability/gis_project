@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.RdtLoclMaMapper">
+
+	<!-- 단위도면 결과 맵 -->
+	<resultMap id="rdtLoclMaMap" type="rdtLoclMa">
+		<id property="fileNo" column="FILE_NO" />
+		<result property="ftrIdn" column="FTR_IDN"/>
+		<result property="secDis" column="SEC_DIS"/>
+		<result property="lclCde" column="LCL_CDE"/>
+		<result property="frstRgsde" column="FRST_RGSDE"/>
+		<result property="docFile" column="DOC_FILE"/>
+	</resultMap>
+	
+	<!-- 검색조건 -->
+	<sql id="where">
+		<where>
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+			<if test="fileNo != null and fileNo != ''">
+				AND FILE_NO = #{fileNo}
+			</if>
+			<if test="docFile != null and docFile != ''">
+				AND DOC_FILE = #{docFile}
+			</if>
+			<if test="secDis != null and secDis != ''">
+				AND SEC_DIS = #{secDis}
+			</if>
+				<if test="lclCde != null and lclCde != ''">
+				AND LCL_CDE = #{lclCde}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="listAll" parameterType="rdtLoclMa" resultType="rdtLoclMa">
+		SELECT
+			FTR_IDN,
+			FILE_NO,
+			DOC_FILE,
+			SEC_DIS,
+			LCL_CDE,
+			FRST_RGSDE
+		FROM
+			RDT_LOCL_MA
+		WHERE
+			FTR_IDN = #{ftrIdn}
+		AND
+			DOC_FILE != ''
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOneByFtrIdn" parameterType="Long" resultMap="rdtLoclMaMap">
+		SELECT
+			DISTINCT
+				MA.FTR_IDN,
+				LS.ROT_NAM,
+				LS.ROT_IDN,
+				LS.SEC_IDN
+			FROM
+				RDT_LOCL_MA MA
+			LEFT OUTER JOIN
+				RDL_SECT_LS LS
+			ON 
+				MA.FTR_IDN = LS.FTR_IDN
+			WHERE
+				MA.FTR_IDN = #{ftrIdn}
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="rdtLoclMaMap">
+		SELECT
+			MA.FTR_IDN,
+			MA.FILE_NO,
+			MA.SEC_DIS,
+			MA.LCL_CDE,
+			MA.DOC_FILE,
+			MA.FRST_RGSDE,
+			LS.ROT_NAM,
+			LS.ROT_IDN,
+			LS.SEC_IDN
+		FROM
+			RDT_LOCL_MA MA
+		LEFT OUTER JOIN
+			RDL_SECT_LS LS
+		ON
+			MA.FTR_IDN = LS.FTR_IDN
+		WHERE
+			FILE_NO = #{fileNo}
+	</select>
+	
+	<insert id="insert" parameterType="rdtLoclMa">
+		INSERT INTO RDT_LOCL_MA (
+			FTR_IDN,
+			FILE_NO,
+			DOC_FILE,
+			SEC_DIS,
+			LCL_CDE,
+			FRST_RGSDE
+		) VALUES (
+			#{ftrIdn, jdbcType=BIGINT},
+			#{fileNo, jdbcType=BIGINT},
+			#{docFile, jdbcType=VARCHAR},
+			#{secDis, jdbcType=VARCHAR},
+			#{lclCde, jdbcType=VARCHAR},
+			#{frstRgsde, jdbcType=VARCHAR}
+		)
+		
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="deleteByFileNo" parameterType="Long">
+		DELETE FROM RDT_LOCL_MA
+		WHERE
+			FILE_NO = #{fileNo}
+	</delete>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="rdtLoclMa">
+		DELETE FROM RDT_LOCL_MA
+		<include refid="where" />
+	</delete>
+</mapper>

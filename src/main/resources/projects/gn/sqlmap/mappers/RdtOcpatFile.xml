@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.RdtOcpatFileMapper">
+   
+   <resultMap id="rdtOcpatFileMap" type="rdtOcpatFile">
+      <id property="ocpatFileNo" column="OCPAT_FILE_NO" />
+      <result property="fileSj" column="FILE_SJ" />
+      <result property="fileCn" column="FILE_CN" />
+      <result property="ftrCde" column="FTR_CDE" />
+      <result property="ftrIdn" column="FTR_IDN" />
+      <result property="fileNo" column="FILE_NO" />
+      <result property="wrterId" column="WRTER_ID" />
+      <result property="frstRgsde" column="FRST_RGSDE" />
+      <result property="updusrId" column="UPDUSR_ID" />
+      <result property="lastUpdde" column="LAST_UPDDE" />
+   </resultMap>
+   
+   <select id="listAll" resultMap="rdtOcpatFileMap">
+      SELECT
+         OCPAT_FILE_NO,
+         FILE_SJ,
+         FILE_CN,
+         FTR_CDE,
+         FTR_IDN,
+         FILE_NO,
+         WRTER_ID,
+         FRST_RGSDE,
+         UPDUSR_ID,
+         LAST_UPDDE
+      FROM
+         RDT_OCPAT_FILE
+      <where>
+         <if test="ftrCde != null and ftrCde != ''">
+            AND FTR_CDE = #{ftrCde}
+         </if>
+         <if test="ftrIdn != null and ftrIdn != ''">
+            AND FTR_IDN = #{ftrIdn}
+         </if>
+      </where>
+   </select>
+   
+   <select id="listAllFile" resultMap="rdtOcpatFileMap">
+      SELECT
+         KOF.OCPAT_FILE_NO,
+         KOF.FILE_SJ,
+         KOF.FILE_CN,
+         KOF.FTR_CDE,
+         KOF.FTR_IDN,
+         KOF.FILE_NO,
+         KOF.WRTER_ID,
+         KOF.FRST_RGSDE,
+         KOF.UPDUSR_ID,
+         KOF.LAST_UPDDE,
+         FL.FILE_EXTSN
+      FROM
+         RDT_OCPAT_FILE KOF
+      LEFT OUTER JOIN KWS_FILE FL ON KOF.FILE_NO = FL.FILE_NO
+      <where>
+         <if test="ftrCde != null and ftrCde != ''">
+            AND KOF.FTR_CDE = #{ftrCde}
+         </if>
+         <if test="ftrIdn != null and ftrIdn != ''">
+            AND KOF.FTR_IDN = #{ftrIdn}
+         </if>
+         <if test="ocpatFileNo != null and ocpatFileNo != ''">
+            AND KOF.OCPAT_FILE_NO = #{ocpatFileNo}
+         </if>
+      </where>
+   </select>
+   
+   <select id="selectOne" resultMap="rdtOcpatFileMap">
+      SELECT
+         OCPAT_FILE_NO,
+         FILE_SJ,
+         FILE_CN,
+         FTR_CDE,
+         FTR_IDN,
+         FILE_NO,
+         WRTER_ID,
+         FRST_RGSDE,
+         UPDUSR_ID,
+         LAST_UPDDE
+      FROM
+         RDT_OCPAT_FILE
+      WHERE
+         OCPAT_FILE_NO = #{ocpatFileNo}
+   </select>
+   
+   <select id="selectOneByFileNo" resultMap="rdtOcpatFileMap">
+      SELECT
+         OCPAT_FILE_NO,
+         FILE_SJ,
+         FILE_CN,
+         FTR_CDE,
+         FTR_IDN,
+         FILE_NO,
+         WRTER_ID,
+         FRST_RGSDE,
+         UPDUSR_ID,
+         LAST_UPDDE
+      FROM
+         RDT_OCPAT_FILE
+      WHERE
+         FILE_NO = #{fileNo}
+   </select>
+   
+   <insert id="insert" parameterType="rdtOcpatFile">
+      INSERT INTO RDT_OCPAT_FILE(
+         OCPAT_FILE_NO,
+         FILE_SJ,
+         FILE_CN,
+         FTR_CDE,
+         FTR_IDN,
+         FILE_NO,
+         WRTER_ID,
+         FRST_RGSDE,
+         UPDUSR_ID,
+         LAST_UPDDE
+      )
+      VALUES (
+         RDT_OCPAT_FILE_SEQ.NEXTVAL,
+         #{fileSj, jdbcType=VARCHAR},
+         #{fileCn, jdbcType=VARCHAR},
+         #{ftrCde, jdbcType=VARCHAR},
+         #{ftrIdn, jdbcType=BIGINT},
+         #{fileNo, jdbcType=BIGINT},
+         #{wrterId, jdbcType=VARCHAR},
+         #{frstRgsde, jdbcType=DATE},
+         #{updusrId, jdbcType=VARCHAR},
+         #{lastUpdde, jdbcType=DATE}
+         )
+   </insert>
+   
+   <update id="update" parameterType="rdtOcpatFile">
+      UPDATE 
+         RDT_OCPAT_FILE 
+      SET 
+         FILE_SJ = #{fileSj, jdbcType=VARCHAR},
+         FILE_CN = #{fileCn, jdbcType=VARCHAR},
+         FILE_NO = #{fileNo, jdbcType=BIGINT},
+         UPDUSR_ID = #{updusrId, jdbcType=VARCHAR},
+         LAST_UPDDE = #{lastUpdde, jdbcType=DATE}
+      WHERE 
+         OCPAT_FILE_NO = #{ocpatFileNo}
+   </update>
+   
+   <delete id="delete" parameterType="Long">
+      DELETE FROM 
+         RDT_OCPAT_FILE
+      WHERE
+         OCPAT_FILE_NO = #{ocpatFileNo}
+   </delete>
+   
+</mapper>

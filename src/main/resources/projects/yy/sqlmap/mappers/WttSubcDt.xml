@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.yy.mappers.WttSubcDtMapper">
+
+	<!-- 상수 공사대장 하도급 내역 리스트 -->
+	<select id="list" parameterType="wttSubcDt" resultType="wttSubcDt">
+		SELECT
+			FTR_IDN,
+			FTR_CDE,
+			SHT_IDN,
+			SUB_NAM,
+			PSB_NAM,
+			SUB_ADR,
+			SUB_TEL
+		FROM WTT_SUBC_DT
+		WHERE FTR_IDN = #{ftrIdn}
+		ORDER BY SHT_IDN DESC
+	</select>
+	
+	<!-- 상수 공사대장 하도급 내역 단 건 검색 -->
+	<select id="selectOne" parameterType="cntrwkRegstrDTO" resultType="wttSubcDt">
+		SELECT
+			FTR_IDN,
+			FTR_CDE,
+			SHT_IDN,
+			SUB_NAM,
+			PSB_NAM,
+			SUB_ADR,
+			SUB_TEL
+		FROM WTT_SUBC_DT
+		WHERE FTR_IDN = #{ftrIdn}
+		AND SHT_IDN = #{shtIdn}
+	</select>
+	
+	<!-- 상수 공사대장 하도급 내역 수정 -->
+	<update id="update" parameterType="wttSubcDt">
+		UPDATE WTT_SUBC_DT SET
+			SUB_NAM = #{subNam, jdbcType=VARCHAR},
+			PSB_NAM = #{psbNam, jdbcType=VARCHAR},
+			SUB_ADR = #{subAdr, jdbcType=VARCHAR},
+			SUB_TEL = #{subTel, jdbcType=VARCHAR}
+		WHERE FTR_IDN = #{ftrIdn}
+		AND SHT_IDN = #{shtIdn}
+	</update>
+	
+	<!-- 상수 공사대장 하도급 내역 등록 -->
+	<insert id="insert" parameterType="wttSubcDt">
+		INSERT INTO WTT_SUBC_DT (
+			FTR_IDN,
+			FTR_CDE,
+			SHT_IDN,
+			SUB_NAM,
+			PSB_NAM,
+			SUB_ADR,
+			SUB_TEL
+		) VALUES (
+			#{ftrIdn, jdbcType=BIGINT},
+			#{ftrCde, jdbcType=VARCHAR},
+			#{shtIdn, jdbcType=BIGINT},
+			#{subNam, jdbcType=VARCHAR},
+			#{psbNam, jdbcType=VARCHAR},
+			#{subAdr, jdbcType=VARCHAR},
+			#{subTel, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM WTT_SUBC_DT
+		WHERE
+			SHT_IDN = #{shtIdn}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.ChgDtlsDtMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="wrterYear != null and wrterYear != ''">
+				AND WRTER_YEAR = #{wrterYear}
+			</if>
+			<if test="chngeDetctSj != null and chngeDetctSj != ''">
+				AND CHNGE_DETCT_SJ LIKE '%' || #{chngeDetctSj} || '%'
+			</if>
+		</where>
+	</sql>
+
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="chgDtlsDt" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			CHG_DTLS_DT
+		<include refid="where" />
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="chgDtlsDt" resultType="chgDtlsDt">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				CHNGE_DETCT_NO,
+				WRTER_YEAR,
+				CHNGE_DETCT_SJ,
+				CHNGE_DETCT_SY,
+				WRTER_ID,
+				FRST_RGSDE,
+				UPDUSR_ID ,
+				LAST_UPDDE
+			FROM CHG_DTLS_DT
+			<include refid="where"/>
+			ORDER BY CHNGE_DETCT_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="chgDtlsDtMap" type="chgDtlsDt">
+		<id property="chngeDetctNo" column="CHNGE_DETCT_NO" />
+		<result property="wrterYear" column="WRTER_YEAR"/>
+		<result property="chngeDetctSj" column="CHNGE_DETCT_SJ"/>
+		<result property="chngeDetctSy" column="CHNGE_DETCT_SY"/>
+		<result property="wrterId" column="WRTER_ID"/>
+		<result property="frstRgsde" column="FRST_RGSDE"/>
+		<result property="updusrId" column="UPDUSR_ID"/>
+		<result property="lastUpdde" column="LAST_UPDDE"/>
+	</resultMap>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="chgDtlsDt">
+		INSERT INTO CHG_DTLS_DT (
+			CHNGE_DETCT_NO,
+			WRTER_YEAR,
+			CHNGE_DETCT_SJ,
+			CHNGE_DETCT_SY,
+			WRTER_ID,
+			UPDUSR_ID
+		)
+		VALUES (
+			#{chngeDetctNo, jdbcType=BIGINT},
+			#{wrterYear, jdbcType=VARCHAR},
+			#{chngeDetctSj, jdbcType=VARCHAR},
+			#{chngeDetctSy, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			#{updusrId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="Long" resultMap="chgDtlsDtMap">
+		SELECT
+			CHNGE_DETCT_NO,
+			WRTER_YEAR,
+			CHNGE_DETCT_SJ,
+			CHNGE_DETCT_SY,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID ,
+			LAST_UPDDE
+		FROM CHG_DTLS_DT
+		WHERE
+			CHNGE_DETCT_NO = #{chngeDetctNo}
+	</select>
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="chgDtlsDt">
+		UPDATE CHG_DTLS_DT SET 
+			CHNGE_DETCT_SJ = #{chngeDetctSj, jdbcType=VARCHAR},
+			CHNGE_DETCT_SY = #{chngeDetctSy, jdbcType=VARCHAR},
+			UPDUSR_ID = #{updusrId, jdbcType=VARCHAR},
+			LAST_UPDDE = <include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />
+		WHERE CHNGE_DETCT_NO = #{chngeDetctNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM CHG_DTLS_DT
+		WHERE CHNGE_DETCT_NO = #{chngeDetctNo}
+	</delete>
+
+</mapper>

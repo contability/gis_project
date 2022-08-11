@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.contact.ehojo.mappers.CntrctRegstrMapper">
+
+	<!-- 계약대장 결과 맵 -->
+	<resultMap id="cntrctRegstrDTOMap" type="cntrctRegstrDTO">
+		<id property="ctrtAcctBookMngNo" column="CTRT_ACCT_BOOK_MNG_NO" />
+		<result property="ctrtKind" column="CTRT_KIND"/>
+		<result property="fisYear" column="FIS_YEAR"/>
+		<result property="ctrtNm" column="CTRT_NM"/>
+		<result property="ctrtYmd" column="CTRT_YMD"/>
+		<result property="firstSummaryCtrtAmt" column="FIRST_SUMMARY_CTRT_AMT"/>
+		<result property="summaryCtrtTotAmt" column="SUMMARY_CTRT_TOT_AMT"/>
+		<result property="splyCmmsnFee" column="SPLY_CMMSN_FEE"/>
+		<result property="compltSchdYmd" column="COMPLT_SCHD_YMD"/>
+		<result property="ctrtMethNm" column="CTRT_METH_NM"/>
+		<result property="ctrtTypeNm" column="CTRT_TYPE_NM"/>
+		<result property="ctrtOutline" column="CTRT_OUTLINE"/>
+		<result property="custNm" column="CUST_NM"/>
+		<result property="ctrtGovNm" column="CTRT_GOV_NM"/>
+		<result property="ctrtFgNm" column="CTRT_FG_NM"/>
+		<result property="startWorkYmd" column="START_WORK_YMD"/>
+		<result property="firstContPrd" column="FIRST_CONT_PRD"/>
+		<result property="expFg" column="EXP_FG"/>
+		<result property="delayCompenRate" column="DELAY_COMPEN_RATE"/>
+		<result property="compltYmd" column="COMPLT_YMD"/>
+		<result property="ctrtRsn" column="CTRT_RSN"/>
+		<result property="collabCtrtFg" column="COLLAB_CTRT_FG"/>
+		<result property="liabBundAmt" column="LIAB_BUND_AMT"/>
+		<result property="bizCont" column="BIZ_CONT"/>
+		<result property="locatNm" column="LOCAT_NM"/>
+		<result property="rouestYn" column="ROUEST_YN"/>
+		<result property="splyFg" column="SPLY_FG"/>
+		<result property="splyMngNo" column="SPLY_MNG_NO"/>
+		<result property="beforeSummaryCtrtAmt" column="BEFORE_SUMMARY_CTRT_AMT"/>
+		<result property="causeActAmt" column="CAUSE_ACT_AMT"/>
+	</resultMap>
+	
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<if test="fisYear != null and fisYear != ''">
+				AND CTBK.FIS_YEAR = #{fisYear}
+			</if>
+			<if test="ctrtKind != null and ctrtKind != ''">
+				AND SU.CTRT_KIND = #{ctrtKind}
+			</if>
+			<if test="ctrtAcctBookMngNo != null and ctrtAcctBookMngNo != ''">
+				AND SU.CTRT_ACCT_BOOK_MNG_NO LIKE '%' || #{ctrtAcctBookMngNo} || '%'
+			</if>
+			<if test="ctrtNm != null and ctrtNm != ''">
+				AND SU.CTRT_NM LIKE '%' || #{ctrtNm} || '%'
+			</if>
+			<if test="ctrtYmdStart != null and ctrtYmdStart != '' and ctrtYmdEnd != null and ctrtYmdEnd != ''">
+				AND BIZSU.CTRT_YMD >= #{ctrtYmdStart} AND BIZSU.CTRT_YMD &lt;= #{ctrtYmdEnd}
+			</if>
+			<if test="compltSchdYmdStart != null and compltSchdYmdStart != '' and compltSchdYmdEnd != null and compltSchdYmdEnd != ''">
+				AND CTBK.COMPLT_SCHD_YMD >= #{compltSchdYmdStart} AND CTBK.COMPLT_SCHD_YMD &lt;= #{compltSchdYmdEnd}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="cntrctRegstrSearchDTO" resultType="Integer">
+		SELECT 
+			COUNT(*)
+		FROM 
+			V_TCM_SUMMARYLIST SU
+			LEFT OUTER JOIN V_TCM_BIZSUMMARY BIZSU ON SU.CTRT_ACCT_BOOK_MNG_NO = BIZSU.CTRT_ACCT_BOOK_MNG_NO
+			LEFT OUTER JOIN V_TCM_CTRTBOOKS_LINK CTBK ON SU.CTRT_ACCT_BOOK_MNG_NO = CTBK.CTRT_ACCT_BOOK_MNG_NO
+		<include refid="where" />		 
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="cntrctRegstrSearchDTO" resultType="cntrctRegstrDTO">
+		SELECT 
+			T2.* 
+		FROM (
+			SELECT ROWNUM AS RNUM, T1.* FROM (
+				SELECT
+					SU.CTRT_KIND,
+					CTBK.CTRT_ACCT_BOOK_MNG_NO,
+					CTBK.FIS_YEAR,
+					CTBK.CTRT_NM,
+					BIZSU.CTRT_YMD,
+					CTBK.FIRST_SUMMARY_CTRT_AMT,
+					CTBK.SUMMARY_CTRT_TOT_AMT,
+					CTBK.SPLY_CMMSN_FEE,
+					CTBK.COMPLT_SCHD_YMD,
+					BIZSU.CTRT_METH_NM,
+					BIZSU.CTRT_TYPE_NM,
+					CTBK.CTRT_OUTLINE,
+					BIZSU.CUST_NM,
+					SU.CTRT_GOV_NM
+				FROM V_TCM_SUMMARYLIST SU
+				LEFT OUTER JOIN V_TCM_BIZSUMMARY BIZSU ON SU.CTRT_ACCT_BOOK_MNG_NO = BIZSU.CTRT_ACCT_BOOK_MNG_NO
+				LEFT OUTER JOIN V_TCM_CTRTBOOKS_LINK CTBK ON SU.CTRT_ACCT_BOOK_MNG_NO = CTBK.CTRT_ACCT_BOOK_MNG_NO
+				<include refid="where" />				
+				ORDER BY CTRT_ACCT_BOOK_MNG_NO DESC
+			) T1
+			WHERE ROWNUM <![CDATA[<=]]> #{lastIndex}
+		) T2 WHERE RNUM > #{firstIndex}
+	</select>
+	
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="String" resultMap="cntrctRegstrDTOMap">
+		SELECT
+			CTBK.FIS_YEAR,  -- 회계년도
+			-- 계약서구분
+			CTBK.CTRT_ACCT_BOOK_MNG_NO, -- 계약번호
+			CTBK.CTRT_NM, -- 계약명
+			BIZSU.CTRT_FG_NM, -- 계약형태
+			-- 관급자재
+			SU.CTRT_KIND, -- 계약종류
+			BIZSU.CTRT_TYPE_NM, -- 계약유형
+			BIZSU.CTRT_YMD, -- 계약일자
+			CTBK.SUMMARY_CTRT_TOT_AMT,  -- 계약금액
+			CTBK.START_WORK_YMD,  -- 착공(예정)일자
+			CTBK.FIRST_CONT_PRD, -- 절대공기
+			CTBK.FIRST_SUMMARY_CTRT_AMT,  -- 최초계약금액
+			CTBK.COMPLT_SCHD_YMD, -- 준공예정일자
+			CTBK.EXP_FG,  -- 경비구분(코드)
+			CTBK.DELAY_COMPEN_RATE,  -- 지체상율
+			CTBK.COMPLT_YMD,  -- 준공/납품일자
+			-- 직불여부
+			-- 계약방법 시작 / 3개임 / 순서대로
+			-- 계약방법1
+			BIZSU.CTRT_METH_NM, -- 계약방법 2
+			BIZSU.CTRT_RSN,  -- 계약방법 3
+			-- 계약방법 끝 / 3개임 / 순서대로
+			-- 리스여부
+			--CTBK.COLLAB_CTRT_FG,  -- 공동계약구분(코드)
+			(SELECT DETL_CD_NM FROM V_TCM_COMMCD_LINK WHERE CL_CD='CM016' AND DETL_CD=CTBK.COLLAB_CTRT_FG) AS COLLAB_CTRT_FG,
+			CTBK.LIAB_BUND_AMT, -- 채무부담행위액
+			BIZSU.BIZ_CONT,  -- 계약개요
+			-- 총액계약번호
+			-- 총액계약일자
+			CTBK.LOCAT_NM,  --위치(납품장소)
+			-- 총액계약금액
+			-- 계약사유 BIZSU.CTRT_RSN ???
+			CTBK.ROUEST_YN, -- 개산계약여부
+			-- CTBK.SPLY_FG, -- 조달구분코드
+			(SELECT DETL_CD_NM FROM V_TCM_COMMCD_LINK WHERE CL_CD='CM002' AND DETL_CD=CTBK.SPLY_FG) AS SPLY_FG,
+			CTBK.SPLY_MNG_NO,  -- 조달관리번호
+			-- 조달진행구분
+			-- 계약담당자
+			CTBK.BEFORE_SUMMARY_CTRT_AMT -- 기지출액
+			-- 개발공채
+			--INSP.CAUSE_ACT_AMT -- 원인행위총액
+			-- 물품구입총계
+			-- 수입인지
+			-- 계약금액조정방법
+			-- 종합관리사업명
+		FROM V_TCM_SUMMARYLIST SU
+		LEFT OUTER JOIN V_TCM_BIZSUMMARY BIZSU ON SU.CTRT_ACCT_BOOK_MNG_NO = BIZSU.CTRT_ACCT_BOOK_MNG_NO
+		LEFT OUTER JOIN V_TCM_CTRTBOOKS_LINK CTBK ON SU.CTRT_ACCT_BOOK_MNG_NO = CTBK.CTRT_ACCT_BOOK_MNG_NO
+		--LEFT OUTER JOIN V_TCM_INSPECTIONDETL_LINK INSP ON SU.CTRT_ACCT_BOOK_MNG_NO = INSP.CTRT_ACCT_BOOK_MNG_NO
+		WHERE
+			SU.CTRT_ACCT_BOOK_MNG_NO = #{ctrtAcctBookMngNo}
+	</select>
+	
+	<!-- 회계년도 반환 -->
+	<select id="listYears" resultType="String">
+		SELECT 
+			DISTINCT(FIS_YEAR) 
+		FROM V_TCM_CTRTBOOKS_LINK 
+		ORDER BY FIS_YEAR DESC
+	</select>
+	
+	<!-- 코드 값 반환 -->
+	<select id="listCodes" parameterType="String" resultType="String">
+		SELECT
+			DETL_CD_NM
+		FROM
+			V_TCM_COMMCD_LINK
+		WHERE
+			CL_CD = #{clCd}
+	</select>
+	
+	
+</mapper>

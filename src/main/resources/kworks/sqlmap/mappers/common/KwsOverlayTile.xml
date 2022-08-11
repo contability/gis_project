@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsOverlayTileMapper">
+
+	<resultMap id="kwsOverlayTileMap" type="kwsOverlayTile">
+		<id property="tileNo" column="TILE_NO" />
+		<result property="title" column="TITLE" />
+		<result property="description" column="DESCRIPTION" />
+		<result property="srs" column="SRS" />
+		<result property="originX" column="ORIGIN_X" />
+		<result property="originY" column="ORIGIN_Y" />
+		<result property="extension" column="EXTENSION" />
+		<result property="height" column="HEIGHT" />
+		<result property="width" column="WIDTH" />
+		<result property="requestFormat" column="REQUEST_FORMAT" />
+		<result property="minX" column="MIN_X" />
+		<result property="minY" column="MIN_Y" />
+		<result property="maxX" column="MAX_X" />
+		<result property="maxY" column="MAX_Y" />
+		<result property="host" column="HOST" />
+		<result property="port" column="port" />
+		<collection property="kwsOverlayTileLevels" column="TILE_NO" javaType="java.util.ArrayList" ofType="kwsOverlayTileLevel" select="kr.co.gitt.kworks.mappers.KwsOverlayTileLevelMapper.selectByTileNo" ></collection>
+	</resultMap>
+
+	<!-- 전체 목록 -->
+	<select id="listAll" resultMap="kwsOverlayTileMap">
+		SELECT 
+			TILE_NO,
+			TITLE,
+			DESCRIPTION,
+			SRS,
+			ORIGIN_X,
+			ORIGIN_Y,
+			EXTENSION,
+			HEIGHT,
+			WIDTH,
+			REQUEST_FORMAT,
+			MIN_X,
+			MIN_Y,
+			MAX_X,
+			MAX_Y,
+			HOST,
+			PORT
+		FROM
+			KWS_OVERLAY_TILE
+		ORDER BY 
+			TITLE ASC
+	</select>
+
+</mapper>

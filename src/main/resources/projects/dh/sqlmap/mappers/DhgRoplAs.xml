@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.DhgRoplAsMapper">
+
+	<!-- 수정 -->
+	<update id="update">
+		UPDATE 
+			DHG_ROPL_AS
+		SET 
+			UPR_NAM = #{data.uprNam, jdbcType=VARCHAR},
+			UPR_GRD = #{data.uprGrd, jdbcType=VARCHAR},
+			UPR_TYP = #{data.uprTyp, jdbcType=VARCHAR},
+			UPR_NUM = #{data.uprNum, jdbcType=VARCHAR},
+			UPR_FNC = #{data.uprFnc, jdbcType=VARCHAR},		
+			UPR_YMD = #{data.uprYmd, jdbcType=VARCHAR},
+			UPR_STR = #{data.uprStr, jdbcType=VARCHAR},
+			UPR_END = #{data.uprEnd, jdbcType=VARCHAR},
+			UPR_PA01 = #{data.uprPa01, jdbcType=REAL},
+			UPR_PA02 = #{data.uprPa02, jdbcType=REAL},
+			UPR_PA04 = #{data.uprPa04, jdbcType=REAL},
+			UPR_PA06 = #{data.uprPa06, jdbcType=REAL},
+			UPR_PA08 = #{data.uprPa08, jdbcType=REAL},
+			UPR_PA10 = #{data.uprPa10, jdbcType=REAL},
+			UPR_UN01 = #{data.uprUn01, jdbcType=REAL},
+			UPR_UN02 = #{data.uprUn02, jdbcType=REAL},
+			UPR_UN04 = #{data.uprUn04, jdbcType=REAL},
+			UPR_UN06 = #{data.uprUn06, jdbcType=REAL},
+			UPR_UN08 = #{data.uprUn08, jdbcType=REAL},
+			UPR_UN10 = #{data.uprUn10, jdbcType=REAL},
+			UPR_UNOP = #{data.uprUnop, jdbcType=REAL},
+			UPR_UNSE = #{data.uprUnse, jdbcType=REAL},
+			UPR_WOK = #{data.uprWok, jdbcType=VARCHAR},
+			UPR_WID = #{data.uprWid, jdbcType=VARCHAR},
+			UPR_SLE = #{data.uprSle, jdbcType=REAL},
+			UPR_HGT = #{data.uprHgt, jdbcType=REAL},
+			UPR_WKL = #{data.uprWkl, jdbcType=REAL},
+			UPR_WKR = #{data.uprWkr, jdbcType=REAL},
+			MNUM = #{data.mnum, jdbcType=VARCHAR},
+			REMARK = #{data.remark, jdbcType=VARCHAR}
+		WHERE
+			FTR_IDN = #{ftrIdn}
+	</update>
+
+</mapper>

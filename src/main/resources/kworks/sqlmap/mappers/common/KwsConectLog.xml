@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsConectLogMapper">
+
+	<sql id="where">
+		<where>
+			<if test="searchStartDt != null and searchStartDt != ''">
+				AND LOGIN_DT <![CDATA[>]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD')
+			</if>
+			<if test="searchEndDt != null and searchEndDt != ''">
+				AND LOGIN_DT <![CDATA[<]]> TO_DATE(#{searchEndDt}, 'YYYY-MM-DD')
+			</if>
+		</where>
+	</sql>
+	
+	<select id="list" parameterType="kwsConectLog" resultType="kwsConectLog">
+		SELECT
+			USER_ID,
+			DEPT_CODE,
+			USER_IP,
+			LOGIN_DT,
+			LOGOUT_DT,
+			SESSION_ID
+		FROM KWS_CONECT_LOG
+		WHERE LOGIN_DT = #{loginDt}
+		ORDER BY LOGIN_DT
+	</select>
+	
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT
+			COUNT(*) AS ROWCOUNT
+		FROM KWS_CONECT_LOG
+		<include refid="where" />
+	</select>
+	
+	<select id="listSearch" parameterType="SearchDTO" resultType="kwsConectLog">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			 SELECT USER_NM, LOGIN_DT
+			FROM KWS_CONECT_LOG
+			<include refid="where" />
+			ORDER BY LOGIN_DT DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<select id="listTodayGroupByHourCount" resultType="kwsConectLog">
+		SELECT
+			T1.HOUR,
+			COUNT(*) AS CNT
+		FROM
+		(
+			SELECT  
+				TO_CHAR(LOGIN_DT,'HH24') AS HOUR
+			FROM KWS_CONECT_LOG T1
+			WHERE TO_CHAR(LOGIN_DT,'YYYYMMDD') = TO_CHAR(<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,'YYYYMMDD')
+		)T1
+		GROUP BY T1.HOUR
+		ORDER BY T1.HOUR		
+	</select>
+
+	<select id="nowConectCount" resultType="Integer">
+		SELECT
+			COUNT(*) AS CNT
+		FROM KWS_CONECT_LOG
+		WHERE TO_CHAR(LOGIN_DT,'YYYYMMDD') = TO_CHAR(<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,'YYYYMMDD')
+			AND LOGOUT_DT IS NOT NULL		
+	</select>
+	
+	<select id="listGroupByDay" resultType="kwsConectLog">
+		SELECT
+			T1.DAY,
+			COUNT(*) AS CNT
+		FROM
+		(
+			SELECT 
+				TO_CHAR(LOGIN_DT,'YYYY-MM-DD') AS DAY
+			FROM KWS_CONECT_LOG
+			WHERE LOGIN_DT <![CDATA[>=]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') AND LOGIN_DT <![CDATA[<=]]> (TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1)
+		)T1
+		GROUP BY T1.DAY
+		ORDER BY T1.DAY	
+	</select>
+	
+	<select id="listGroupByMonth" resultType="kwsConectLog">
+		SELECT
+			T1.DAY,
+			COUNT (*) AS CNT
+		FROM
+		(
+			SELECT 
+			TO_CHAR(LOGIN_DT,'YYYY-MM') AS DAY
+			FROM KWS_CONECT_LOG
+			WHERE LOGIN_DT <![CDATA[>=]]> TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') AND LOGIN_DT <![CDATA[<=]]> (TO_DATE(#{searchEndDt}, 'YYYY-MM-DD')+1)
+		)T1
+		GROUP BY T1.DAY
+		ORDER BY T1.DAY
+	</select>
+	
+	<select id="listGroupByWeek" resultType="kwsConectLog">
+		SELECT
+			T1.WEEK,
+			COUNT (*) AS CNT
+		FROM
+		(
+			SELECT 
+			TO_CHAR(LOGIN_DT,'D') AS WEEK
+			FROM KWS_CONECT_LOG
+			WHERE LOGIN_DT BETWEEN TO_DATE(#{searchStartDt}, 'YYYY-MM-DD') AND (TO_DATE(#{searchEndDt}, 'YYYY-MM-DD') + 1)
+		)T1
+		GROUP BY T1.WEEK	
+		ORDER BY T1.WEEK
+	</select>
+	<!-- 세션 아이디 체크 -->
+	<select id="checkSession" parameterType="String" resultType="Integer" >
+		SELECT COUNT(*)
+		FROM KWS_CONECT_LOG
+		WHERE SESSION_ID = #{sessionId}
+	</select>
+	
+	<insert id="insert" parameterType="kwsConectLog">
+		INSERT INTO KWS_CONECT_LOG (
+			LOG_NO,
+			USER_ID,
+			USER_NM,
+			DEPT_CODE,
+			DEPT_NM,
+			USER_IP,
+			LOGIN_DT,
+			SESSION_ID,
+			DAY_OF_WEEK
+		)
+		VALUES (
+			#{logNo, jdbcType=BIGINT},
+			#{userId, jdbcType=VARCHAR},
+			#{userNm, jdbcType=VARCHAR},
+			#{deptCode, jdbcType=VARCHAR},
+			(SELECT DEPT_NM FROM KWS_DEPT WHERE #{deptCode, jdbcType=VARCHAR} = DEPT_CODE),
+			#{userIp, jdbcType=VARCHAR},
+			#{loginDt, jdbcType=TIMESTAMP},
+			#{sessionId, jdbcType=VARCHAR},
+			#{dayOfWeek, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="update" parameterType="kwsConectLog">
+		UPDATE KWS_CONECT_LOG
+		SET
+			LOGOUT_DT = #{logoutDt, jdbcType=TIMESTAMP}
+		WHERE
+			<if test="userId != null and userId != ''">
+				USER_ID = #{userId}
+			</if>
+			<if test="sessionId != null and sessionId != ''">
+				SESSION_ID = #{sessionId}
+			</if>
+	</insert>
+	
+	<!-- 접속로그 엑셀다운로드용 리스트 조회 -->
+	<select id="listConectLogExcel" parameterType="SearchDTO" resultType="kwsConectLog">
+		SELECT 
+			KWS_CONECT_LOG.USER_NM, 
+			KWS_CONECT_LOG.LOGIN_DT
+		FROM KWS_CONECT_LOG
+		LEFT JOIN KWS_USER ON KWS_CONECT_LOG.USER_ID = KWS_USER.USER_ID
+		<include refid="where" />
+		ORDER BY LOGIN_DT ASC
+	</select>
+	
+</mapper>

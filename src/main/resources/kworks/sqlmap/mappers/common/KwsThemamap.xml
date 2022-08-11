@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsThemamapMapper">
+
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="themamapSearchDTO" resultType="kwsThemamap">
+		SELECT
+			THEMAMAP_ID,
+			THEMAMAP_NM,
+			THEMAMAP_DC,
+			THEMAMAP_TY,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE
+		FROM KWS_THEMAMAP
+		<where>
+			<if test="themamapTys != null and themamapTys.size > 0">
+				AND THEMAMAP_TY IN 
+				<foreach collection="themamapTys" item="themamapTy" open="(" close=")" separator=",">
+					#{themamapTy}
+				</foreach>
+			</if>
+			<!-- 사용자 주제도 & 시스템 주제도 -->
+			<if test="wrterId != null and wrterId != ''">
+				OR THEMAMAP_TY = 'USER' AND WRTER_ID = #{wrterId}
+			</if>
+		</where>
+		ORDER BY THEMAMAP_ID DESC
+	</select>
+	
+	<!-- 검색 결과 맵 -->
+	<resultMap id="kwsThemamapMap" type="kwsThemamap">
+		<id property="themamapId" column="THEMAMAP_ID" />
+		<result property="themamapNm" column="THEMAMAP_NM"/>
+		<result property="themamapDc" column="THEMAMAP_DC"/>
+		<result property="themamapTy" column="THEMAMAP_TY"/>
+		<result property="wrterId" column="WRTER_ID"/>
+		<result property="frstRgsde" column="FRST_RGSDE"/>
+		<result property="updusrId" column="UPDUSR_ID"/>
+		<result property="lastUpdde" column="LAST_UPDDE"/>
+		<collection property="kwsThemamapLyrs" ofType="kwsThemamapLyr">
+			<id property="themamapId" column="THEMAMAP_ID" />
+			<id property="lyrId" column="LYR_ID" />
+			<result property="sortOrdr" column="SORT_ORDR"/>
+			<result property="lyrStyle" column="LYR_STYLE"/>
+		</collection>
+	</resultMap>
+
+	<!-- 단 건 검색 -->
+	<select id="selectOne" parameterType="themamapSearchDTO" resultMap="kwsThemamapMap">
+		SELECT
+			THEMAMAP.THEMAMAP_ID,
+			THEMAMAP.THEMAMAP_NM,
+			THEMAMAP.THEMAMAP_DC,
+			THEMAMAP.THEMAMAP_TY,
+			THEMAMAP.WRTER_ID,
+			THEMAMAP.FRST_RGSDE,
+			THEMAMAP.UPDUSR_ID,
+			THEMAMAP.LAST_UPDDE,
+			THEMAMAPLYR.LYR_ID,
+			THEMAMAPLYR.SORT_ORDR,
+			THEMAMAPLYR.LYR_STYLE
+		FROM KWS_THEMAMAP THEMAMAP
+			 LEFT OUTER JOIN KWS_THEMAMAP_LYR THEMAMAPLYR ON THEMAMAP.THEMAMAP_ID = THEMAMAPLYR.THEMAMAP_ID
+			 INNER JOIN KWS_LYR LYR ON THEMAMAPLYR.LYR_ID = LYR.LYR_ID
+		WHERE
+			THEMAMAP.THEMAMAP_ID = #{themamapId}
+			<if test="authorGroupNos != null and authorGroupNos.size > 0">
+				AND LYR.DATA_ID IN (SELECT DATA_ID FROM KWS_DATA_AUTHOR DTA WHERE AUTHOR_GROUP_NO IN 
+				<foreach collection="authorGroupNos" item="authorGroupNo" open="(" close=")" separator=",">
+					#{authorGroupNo}
+				</foreach>
+				AND INDICT_AT = 'Y')
+			</if>
+		ORDER BY THEMAMAPLYR.SORT_ORDR
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsThemamap">
+		INSERT INTO KWS_THEMAMAP (
+			THEMAMAP_ID,
+			THEMAMAP_NM,
+			THEMAMAP_DC,
+			THEMAMAP_TY,
+			WRTER_ID,
+			FRST_RGSDE,
+			UPDUSR_ID,
+			LAST_UPDDE
+		)
+		VALUES (
+			#{themamapId, jdbcType=BIGINT},
+			#{themamapNm, jdbcType=VARCHAR},
+			#{themamapDc, jdbcType=VARCHAR},
+			#{themamapTy, jdbcType=VARCHAR},
+			#{wrterId, jdbcType=VARCHAR},
+			<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />,
+			#{updusrId, jdbcType=VARCHAR},
+			<include refid="kr.co.gitt.kworks.mappers.DialectMapper.now" />
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="Long">
+		DELETE FROM KWS_THEMAMAP
+		WHERE THEMAMAP_ID = #{themamapId}
+	</delete>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsExportDataMapper">
+
+	<!-- 총 건수 -->
+	<select id="listCount" parameterType="searchDTO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM 
+			KWS_EXPORT_DATA
+	</select>
+	
+	<!-- 목록 검색 -->
+	<select id="list" parameterType="searchDTO" resultType="kwsExportData">
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPrefix" />
+			SELECT
+				EXPORT_NO,
+				DATA_ID
+			FROM KWS_EXPORT_DATA
+			ORDER BY EXPORT_NO DESC
+		<include refid="kr.co.gitt.kworks.mappers.DialectMapper.pagingPostfix" />
+	</select>
+	
+	<!-- 전체 목록 검색 -->
+	<select id="listAll" parameterType="java.util.Map" resultType="kwsExportData">
+		SELECT
+ 			EXPORT_NO,
+ 			DATA_ID
+		FROM KWS_EXPORT_DATA
+		WHERE
+			EXPORT_NO = #{exportNo}
+	</select>
+		
+	<!-- 등록 -->
+	<insert id="insert" parameterType="kwsExportData">
+		INSERT INTO KWS_EXPORT_DATA (
+			EXPORT_NO,
+			DATA_ID
+		) 
+		VALUES (
+			#{exportNo, jdbcType=BIGINT},
+			#{dataId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

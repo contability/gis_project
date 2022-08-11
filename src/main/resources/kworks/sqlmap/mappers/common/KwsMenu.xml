@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.mappers.KwsMenuMapper">
+
+	<!-- 목록 검색 -->
+	<select id="listAll" parameterType="kwsMenu" resultType="kwsMenu">
+		SELECT
+			MENU_ID,
+			MENU_NM,
+			UPPER_MENU_ID,
+			MENU_ORDR,
+			USE_AT,
+			URL,
+			SYS_ID,
+			FNCT_ID
+		FROM
+			KWS_MENU
+		<where>
+			<if test="sysId != null and sysId != ''">
+				AND SYS_ID = #{sysId}
+				AND USE_AT = 'Y'
+			</if>
+			<if test="fnctId eq 'NotGroup'">
+				AND FNCT_ID != 'GROUP'
+			</if>
+		</where>
+		ORDER BY MENU_ORDR
+	</select>
+
+</mapper>

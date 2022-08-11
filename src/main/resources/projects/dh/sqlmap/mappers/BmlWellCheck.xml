@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.dh.mappers.BmlWellCheckMapper">
+
+	<!-- 검색 조건 -->
+	<sql id="where">
+		<where>
+			<!-- 관리번호 -->
+			<if test="ftrIdn != null and ftrIdn != ''">
+				AND FTR_IDN = #{ftrIdn}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 점검이력 리스트 조회 -->
+	<select id="list" parameterType="bmlWellCheck" resultType="bmlWellCheck">
+		SELECT 
+			CHK_IDN,
+			FTR_CDE,
+			CHK_CDE,
+			CHK_YMD,
+			CHK_USR,
+			CHK_DES,
+			REG_YMD,
+			FTR_IDN
+		FROM BML_WELL_CHECK
+		<include refid="where" />
+		ORDER BY CHK_IDN ASC
+	</select>
+	
+	<!-- 점검정비이력 조회 -->
+	<select id="selectOne" parameterType="String" resultType="bmlWellCheck">
+		SELECT 
+			CHK_IDN,
+			FTR_CDE,
+			CHK_CDE,
+			CHK_YMD,
+			CHK_USR,
+			CHK_DES,
+			REG_YMD,
+			FTR_IDN
+		FROM BML_WELL_CHECK
+		WHERE CHK_IDN = #{chkIdn}
+	</select>
+	
+	<!-- 점검정비이력 수정 -->
+	<update id="update" parameterType="bmlWellCheck">
+		UPDATE BML_WELL_CHECK SET 
+			CHK_CDE = #{chkCde, jdbcType=VARCHAR},
+			CHK_YMD = #{chkYmd, jdbcType=VARCHAR},
+			CHK_USR = #{chkUsr, jdbcType=VARCHAR},
+			CHK_DES = #{chkDes, jdbcType=VARCHAR}
+		WHERE
+			CHK_IDN = #{chkIdn}
+	</update>
+	
+	<!-- 점검정비이력 삭제 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM BML_WELL_CHECK
+		WHERE
+			CHK_IDN = #{chkIdn}
+	</delete>
+	
+	<!-- 점검정비이력 등록 -->
+	<insert id="insert" parameterType="bmlWellCheck">
+		INSERT INTO BML_WELL_CHECK (
+			CHK_IDN,
+			FTR_CDE,
+			CHK_CDE,
+			CHK_YMD,
+			CHK_USR,
+			CHK_DES,
+			REG_YMD,
+			FTR_IDN
+		)
+		VALUES (
+			#{chkIdn, jdbcType=VARCHAR},
+			'BW001',
+			#{chkCde, jdbcType=VARCHAR},
+			#{chkYmd, jdbcType=VARCHAR},
+			#{chkUsr, jdbcType=VARCHAR},
+			#{chkDes, jdbcType=VARCHAR},
+			#{regYmd, jdbcType=VARCHAR},
+			#{ftrIdn, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+</mapper>

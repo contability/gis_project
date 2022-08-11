@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gitt.kworks.projects.gn.mappers.PplJmupAsMapper">
+
+	<insert id="buildJmup">
+		INSERT INTO PPL_JMUP_AS(OBJECTID, GEOM, PRT_IDN, PBP_KND, OCP_IDN, OCP_ADR, MEANS_NM, BML_CDE, MOK_CDE, RJIMOK_NM, CNR_QTA2)
+		(SELECT (SELECT NVL(MAX(OBJECTID)+1,1) FROM PPL_JMUP_AS), BOA.GEOM, BPA.PRT_IDN, BPA.PBP_KND, BOA.OCP_IDN, BOA.OCP_ADR, BOA.MEANS_NM, BPA.BML_CDE, BPA.MOK_CDE, BPA.RJIMOK_NM, BPA.CNR_QTA2 FROM BML_PROP_AS BPA JOIN BML_OCCP_AS BOA ON BPA.PRT_IDN = BOA.PRT_IDN)
+	</insert>
+	
+	<delete id="deleteJmup">
+		TRUNCATE TABLE PPL_JMUP_AS
+	</delete>
+</mapper>
